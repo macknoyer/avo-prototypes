@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ЧДП">
+<meta name="theme-color" content="#f1f2f5">
+<title>ЧДП микрозайма</title>
+<meta name="description" content="Частичное досрочное погашение микрозайма AVO: счёт, выбор суммы, предупреждение, статус. Прототип 1:1 по Figma «ЧДП».">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/proto.css">
+<link rel="stylesheet" href="kit/components.css">
+<style>
+  /* --- 435324: экран микрозайма --- */
+  .acc{display:flex;flex-direction:column;gap:16px;padding:16px 16px 24px}
+  .deposit-widget{display:flex;flex-direction:column;align-items:center}
+  .dw-header{display:flex;flex-direction:column;gap:16px;padding:16px;width:100%}
+  .dw-head{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+  .dw-row{display:flex;height:18px;align-items:center;justify-content:space-between;width:100%}
+  .dw-edit{position:relative;width:42px;height:42px;border-radius:20px;flex:none}
+  .dw-edit img{position:absolute;right:9px;top:50%;transform:translateY(-50%)}
+  .dw-main{display:flex;flex-direction:column;gap:2px;width:100%}
+  .dw-sum{display:flex;gap:4px;align-items:flex-end;white-space:nowrap}
+  .dw-cur{display:flex;align-items:center;height:32px}
+  .dw-dl{padding:0 16px 16px;width:100%}
+  .dw-status{display:flex;flex-direction:column;gap:10px;padding:4px 16px 20px;width:100%}
+  .balance-actions{display:flex;gap:8px;justify-content:center;padding:16px}
+  .ba{width:75.5px;display:flex;flex-direction:column;gap:8px;align-items:center;font-size:12px;line-height:16px;text-align:center}
+  .account-details{display:flex;flex-direction:column;gap:12px;padding:16px}
+
+  /* --- _concept-credit: внести платёж --- */
+  .pay{display:flex;flex-direction:column;gap:16px;padding:16px 16px 24px}
+  .pay-title{text-align:center;white-space:break-spaces;font-size:18px;line-height:22px;font-weight:600}
+  .pay-body{display:flex;flex-direction:column;gap:32px}
+  .pay-options{display:flex;flex-direction:column;gap:16px}
+  .group-label{font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
+  .method{display:flex;flex-direction:column;gap:8px;width:100%}
+  .sc-tab{border-radius:8px 8px 0 0;padding:8px 8px 25px;margin-bottom:-17px}
+  .cwl{position:relative;display:flex;align-items:center;padding:0 16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+  .cwl-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:8px;justify-content:center;padding:16px 0}
+  .cwl-label{display:flex;gap:8px;align-items:flex-start;width:100%}
+  .cwl-label p{flex:1;min-width:1px;font-size:14px;line-height:18px;font-weight:500}
+  .cwl-row{display:flex;gap:10px;align-items:center;width:100%}
+  .cwl-sum{flex:1;min-width:1px;display:flex;gap:2px;align-items:flex-end;white-space:nowrap}
+  .cwl-sum .num{font-size:18px;line-height:22px;font-weight:600}
+  .cwl-sum .cur{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:1px;font-size:14px;line-height:18px;font-weight:600}
+  .cwl-desc{font-size:14px;line-height:17px;color:var(--text-neutral-bold600)}
+
+  /* --- 435331: погасить частично --- */
+  .partial{display:flex;flex-direction:column;gap:24px;align-items:center;padding:24px 0}
+  .partial>*{width:100%;padding:0 16px}
+  .deposit-details{display:flex;flex-direction:column;overflow:hidden}
+  .dd-body{display:flex;flex-direction:column;gap:8px;padding:16px}
+  .form{display:flex;flex-direction:column;gap:16px}
+  .request-info{display:flex;flex-direction:column;gap:8px;align-items:center;padding:16px;border-radius:8px;background:var(--bg-neutral-calm000);overflow:hidden}
+  .request-info[hidden],.status-colored[hidden],.dl[hidden]{display:none}
+
+  /* шторка ЧДП: фон кнопок прозрачный */
+  .modal-notification .btn-combo{background:none}
+
+  .push{left:5.5px;right:5.5px}
+</style>
+</head>
+<body>
+<div class="device">
+
+  <!-- ============ 435324 · Микрозайм ============ -->
+  <section class="screen" id="s-account" data-title="Микрозайм">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button></div>
+    </header>
+    <div class="scroll">
+      <div class="acc">
+        <div class="card deposit-widget">
+          <div class="dw-header">
+            <div class="dw-head">
+              <div class="dw-row">
+                <p class="title-x-small-medium nowrap">AVO микрозайм на 3 мес</p>
+                <div class="dw-edit"><img class="ic24" src="assets/edit.svg" alt=""></div>
+              </div>
+              <span class="tag tag-s tag-positive"><img class="ic16" src="assets/info-white.svg" alt="">Защита от штрафов</span>
+            </div>
+            <div class="dw-main">
+              <p class="body-small-l-regular c-600">Следующий платеж</p>
+              <div class="dw-sum"><span class="title-large-h1">16 000 000</span><span class="dw-cur title-large-h3">UZS</span></div>
+            </div>
+          </div>
+          <div class="dw-dl">
+            <div class="dl">
+              <div class="dl-item"><div class="dl-title">Дата платежа<img src="assets/info.svg" alt=""></div><div class="dl-value">25.08.2025</div></div>
+              <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>1 250 000</span><span>UZS</span></div></div>
+            </div>
+          </div>
+          <div class="dw-status">
+            <div class="status-colored sc-positive is-center">
+              <img class="ic24" src="assets/fire.svg" alt="">
+              <div class="sc-content"><p class="sc-title">Погашение займа без переплат</p><p class="sc-sub">До 25 августа</p></div>
+              <img class="ic20" src="assets/arrow.svg" alt="">
+            </div>
+            <button class="btn btn-m btn-primary" data-go="pay">Внести платеж</button>
+          </div>
+          <div class="divider"></div>
+          <div class="balance-actions">
+            <div class="ba"><img class="ic24" src="assets/pie-chart.svg" alt=""><p>График</p></div>
+            <div class="ba"><img class="ic24" src="assets/clock.svg" alt=""><p>История</p></div>
+          </div>
+        </div>
+        <div class="card account-details">
+          <div class="list-arrows">
+            <div class="list-arrow"><div class="la-icon"><img src="assets/note.svg" alt=""></div><p class="la-text">Заказать справку</p><img class="ic24" src="assets/chevron-right.svg" alt=""></div>
+            <div class="list-arrow"><div class="la-icon"><img src="assets/document-menu.svg" alt=""></div><p class="la-text">Реквизиты</p><img class="ic24" src="assets/chevron-right.svg" alt=""></div>
+            <div class="list-arrow pressable" data-act="open-partial"><div class="la-icon"><img src="assets/limit.svg" alt=""></div><p class="la-text">Погасить частично</p><img class="ic24" src="assets/chevron-right.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div class="home-indicator"></div></div>
+  </section>
+
+  <!-- ============ _concept-credit · Внести платёж ============ -->
+  <section class="screen" id="s-pay" data-title="Внести платеж">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button></div>
+    </header>
+    <div class="scroll">
+      <div class="pay">
+        <p class="pay-title">Внесите следующий платеж
+до 25 августа</p>
+        <div class="pay-body">
+          <div class="method">
+            <p class="group-label">Способ оплаты</p>
+            <div class="bankcard-item">
+              <div class="bc-content">
+                <div class="bc-icon"><div class="bank-logo bank-kapital"><i class="abs"><img src="assets/kapitalbank-mark.svg" alt=""></i></div></div>
+                <div class="bc-main">
+                  <div class="bc-amount"><span class="num">100 000 000</span><span class="cur">UZS</span></div>
+                  <div class="bc-info"><span class="bc-bank">Kapitalbank</span><span class="bc-pan">•••• 3596</span><span class="bc-ps"><i class="abs"><img src="assets/uzcard.svg" alt=""></i></span></div>
+                </div>
+              </div>
+              <img class="ic24" src="assets/chevron-down.svg" alt="">
+            </div>
+          </div>
+          <div class="pay-options">
+            <div>
+              <div class="status-colored sc-positive is-center sc-tab">
+                <img class="ic24" src="assets/safe.svg" alt="">
+                <div class="sc-content"><p class="sc-title">Защита от штрафов на 60 дней</p></div>
+                <img class="ic20" src="assets/arrow.svg" alt="">
+              </div>
+              <div class="cwl" data-act="pick" data-option="next">
+                <div class="cwl-content">
+                  <div class="cwl-label"><p>Следующий платеж</p><img class="ic24 radio" src="assets/radio-on.svg" alt=""></div>
+                  <div class="cwl-row">
+                    <div class="cwl-sum"><span class="num">16 000 000</span><span class="cur">UZS</span></div>
+                    <span class="tag tag-m tag-neutral">до 25 августа</span>
+                  </div>
+                  <p class="cwl-desc">Внесите вовремя, чтобы избежать штрафов</p>
+                </div>
+              </div>
+            </div>
+            <div class="cwl" data-act="pick" data-option="all">
+              <div class="cwl-content">
+                <div class="cwl-label"><p>Погасить весь долг</p><span class="tag tag-m tag-positive">0%</span><img class="ic24 radio" src="assets/radio-off.svg" alt=""></div>
+                <div class="cwl-row"><div class="cwl-sum"><span class="num">43 500 000</span><span class="cur">UZS</span></div></div>
+                <p class="cwl-desc">Кредит закроется сразу после погашения</p>
+                <div class="btn-text">Подробнее<img class="ic20" src="assets/chevron-down-blue.svg" alt=""></div>
+              </div>
+            </div>
+            <div class="list-widget pressable" data-act="open-partial">
+              <div class="la-icon"><img src="assets/limit.svg" alt=""></div>
+              <p class="la-text">Погасить частично</p>
+              <img class="ic24" src="assets/chevron-right.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary">Внести платеж</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку {ButtonName}, подтверждаю, что выполняю операцию самостоятельно, без влияния мошенников, и ознакомлен с <a>тарифами банка</a></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 435331 / 435408 / 435332 / 435333 / 435409–435411 · Погасить частично ============ -->
+  <section class="screen" id="s-partial" data-title="Погасить частично">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <div class="appbar-title title-small-semibold">Погасить задолженность частично</div>
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="partial">
+        <div>
+          <div class="card deposit-details">
+            <div class="bankcard-item is-top">
+              <div class="bc-content">
+                <div class="bc-icon"><div class="bank-logo bank-avo-micro"><i class="abs"><img src="assets/avo-microzaim-logo.svg" alt=""></i></div></div>
+                <div class="bc-main"><div class="bc-info"><span class="bc-name">AVO микрозайм на 3 месяцев</span></div></div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="dd-body">
+              <div class="dl">
+                <div class="dl-item"><div class="dl-title">Общая задолженность<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>14 750 000</span><span>UZS</span></div></div>
+                <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>1 250 000</span><span>UZS</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="method">
+          <p class="group-label">Способ оплаты</p>
+          <div class="bankcard-item pressable" data-act="card">
+            <div class="bc-content">
+              <div class="bc-icon"><div class="bank-logo bank-kapital"><i class="abs"><img src="assets/kapitalbank-mark.svg" alt=""></i></div></div>
+              <div class="bc-main">
+                <div class="bc-amount"><span class="num" id="card-amount">100 000 000</span><span class="cur">UZS</span></div>
+                <div class="bc-info"><span class="bc-bank">Kapitalbank</span><span class="bc-pan">•••• 3596</span><span class="bc-ps"><i class="abs"><img src="assets/uzcard.svg" alt=""></i></span></div>
+              </div>
+            </div>
+            <img class="ic24" src="assets/chevron-down.svg" alt="">
+          </div>
+        </div>
+        <div class="form">
+          <div class="input" id="amount-field">
+            <label class="input-label" for="amount">Погасить частично</label>
+            <div class="input-uzs no-hint">
+              <input id="amount" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="От 16 000 000 до 40 000 000" maxlength="15">
+              <span class="input-suffix">UZS</span>
+              <img class="input-line" src="assets/input-error-line.svg" alt="">
+            </div>
+            <p class="input-prompt">Недостаточно средств</p>
+          </div>
+          <div class="status-colored sc-primary" id="partial-info">
+            <img class="ic24" src="assets/alert-circle-blue.svg" alt="">
+            <div class="sc-content"><p class="sc-title">~15 000 000 UZS новый ежемесячный платеж</p><p class="sc-sub" id="partial-info-sub">Досрочное погашение не отменяет ежемесячный платёж</p></div>
+          </div>
+          <div class="request-info" id="request-info">
+            <div class="title-action" data-act="accordion">
+              <p class="ta-title">Порядок погашения</p>
+              <div class="ta-btn"><img class="ic20" id="accordion-icon" src="assets/chevron-up.svg" alt=""></div>
+            </div>
+            <div class="dl" id="request-list">
+              <div class="dl-item"><div class="dl-title">Начисленные проценты</div><div class="dl-value"><span>500 000</span><span>UZS</span></div></div>
+              <div class="dl-item"><div class="dl-title">Досрочное погашение</div><div class="dl-value"><span id="early-amount">16 000 000</span><span>UZS</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" id="repay-btn" data-sheet="how">Погасить досрочно</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку {ButtonName}, подтверждаю, что выполняю операцию самостоятельно, без влияния мошенников, и ознакомлен с <a>тарифами банка</a></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 1022 / 1023 · Статус платежа ============ -->
+  <section class="screen" id="s-success" data-title="Выполнено" data-theme-color="#19191f">
+    <div class="pay-status-top">
+      <header class="appbar"><div class="statusbar on-dark"></div></header>
+      <div class="pay-status-logo"><div class="logo"><img src="assets/avo-logo-white.svg" alt="AVO"></div></div>
+      <div class="pay-status-badge"><img class="bg" src="assets/status-bg.svg" alt=""><img class="icon" src="assets/status-success.svg" alt=""></div>
+    </div>
+    <div class="pay-status-content">
+      <div class="ps-top">
+        <p class="ps-status">Выполнено</p>
+        <div class="ps-sum">
+          <div class="row"><span class="num" id="success-amount">– 16 500 000</span><span class="cur"><span>UZS</span></span></div>
+          <div class="fee"><span>Комиссия </span><span>0</span><span>UZS</span></div>
+        </div>
+        <div class="payment-card">
+          <div class="pc-content">
+            <div class="avatar-48"><div class="avo-a"><img src="assets/a-logo.svg" alt=""></div></div>
+            <div class="pc-title"><p class="pc-name" id="success-title">Частичное погашение микрозайма</p><p class="pc-sub">Оплата услуг</p></div>
+          </div>
+        </div>
+        <div class="dl ps-dl">
+          <div class="dl-item">
+            <div class="dl-title">Списание с</div>
+            <div class="dl-value"><span class="bank-sq"><span class="sq"><i class="abs"><img src="assets/avo-microzaim-logo-sm.svg" alt=""></i></span></span><span id="success-from">AVO микрозайм на 3 месяцев</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-actions" style="display:flex;flex-direction:column;gap:8px;justify-content:flex-end">
+        <div class="op-history-actions"></div>
+        <div class="btn-combo on-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v">
+              <button class="btn btn-l btn-primary">Сохранить в избранное</button>
+              <button class="btn btn-l btn-secondary" data-act="done">Готово</button>
+            </div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ modalNotification · «Показываем перед совершением операции» ============ -->
+  <div class="sheet-layer" id="sheet-how">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="mn-main">
+          <img src="assets/alert-circle-64.svg" width="64" height="64" alt="">
+          <div class="mn-content">
+            <p class="mn-title">Как работает частичное досрочное погашение</p>
+            <div class="bullet-list">
+              <div class="bullet-item"><img class="ic24" src="assets/alert-circle-gray.svg" alt=""><p class="bi-text is-strong">Частичное досрочное погашение не отменяет  ежемесячный платеж</p></div>
+              <div class="bullet-item"><img class="ic24" src="assets/alert-circle-gray.svg" alt=""><p class="bi-text">Размер ежемесячного платежа по графику изменится не сразу, обычно на следующий рабочий день</p></div>
+              <div class="bullet-item"><img class="ic24" src="assets/check-gray.svg" alt=""><p class="bi-text">После частичного досрочного погашения, дата следующего платежа по графику не изменится </p></div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v">
+              <button class="btn btn-l btn-primary" data-act="confirm">Погасить досрочно</button>
+              <button class="btn btn-l btn-secondary" data-close>Вернуться</button>
+            </div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Notification - Collapsed ============ -->
+  <div class="push" id="push-done">
+    <div class="ios-notification">
+      <div class="app-icon"><i class="abs"><img src="assets/a-logo-push.svg" alt=""></i></div>
+      <div class="body">
+        <div class="text"><b>Частичное погашение микроз...</b><span id="push-text">Платёж 1 000 000 UZS по AVO микрозайм на 6 месяцев обработан, сформирован новый график платежей</span></div>
+        <div class="time">9:41 AM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="kit/proto.js"></script>
+<script>
+const P = Proto;
+const CARDS = { main: 100000000, low: 10000000 };
+const MAX = 40000000, INTEREST = 500000;
+const SUB = {
+  regular: 'Досрочное погашение не отменяет ежемесячный платёж',
+  dd: 'Сначала спишется платёж по графику, затем сумма досрочного погашения',
+  full: 'Кредит закроется сразу после погашения',
+};
+// when: regular — обычный день; dd — до или в дату платежа (435409/435410); full — вся задолженность (435411)
+const S = { amount: '', card: 'main', open: true, when: 'regular', option: 'next' };
+
+const $ = s => document.querySelector(s);
+const input = $('#amount');
+
+function render() {
+  const v = P.num(S.amount);
+  if (document.activeElement !== input || P.fmt(input.value) !== P.fmt(S.amount)) input.value = S.amount ? P.fmt(S.amount) : '';
+  $('#card-amount').textContent = P.fmt(CARDS[S.card]);
+  const full = S.when === 'full' || v >= MAX;
+  const state = !v ? 'empty' : v > CARDS[S.card] ? 'error' : 'ok';
+  $('#amount-field').classList.toggle('is-error', state === 'error');
+  $('#partial-info').hidden = state !== 'ok';
+  $('#partial-info-sub').textContent = full ? SUB.full : SUB[S.when] || SUB.regular;
+  $('#request-info').hidden = state === 'empty';
+  const open = state === 'ok' && S.open;
+  $('#request-list').hidden = !open;
+  $('#accordion-icon').src = open ? 'assets/chevron-up.svg' : 'assets/chevron-down-accordion.svg';
+  $('#early-amount').textContent = P.fmt(Math.max(v - INTEREST, 0));
+  $('#repay-btn').disabled = state !== 'ok';
+  // статус и пуш
+  $('#success-amount').textContent = '– ' + P.fmt(v || 0);
+  $('#success-title').textContent = full ? 'Полное погашение микрозайма' : 'Частичное погашение микрозайма';
+  $('#success-from').textContent = full ? 'AVO микрозайм на 6 месяцев' : 'AVO микрозайм на 3 месяцев';
+  $('#push-text').textContent = `Платёж ${P.fmt(v || 0)} UZS по AVO микрозайм на 6 месяцев обработан, сформирован новый график платежей`;
+  // радио на «Внести платёж»
+  document.querySelectorAll('#s-pay .cwl').forEach(c => c.querySelector('.radio').src = 'assets/radio-' + (c.dataset.option === S.option ? 'on' : 'off') + '.svg');
+}
+
+input.addEventListener('input', () => {
+  const digits = input.value.replace(/\D/g, '').slice(0, 12);
+  S.amount = digits; input.value = digits ? P.fmt(digits) : '';
+  render();
+});
+document.querySelector('.input-uzs').addEventListener('click', () => input.focus());
+
+P.on('open-partial', () => { Object.assign(S, { amount: '', card: 'main', open: true }); render(); P.go('partial'); })
+ .on('card', () => { S.card = S.card === 'main' ? 'low' : 'main'; render(); })
+ .on('accordion', () => { if (P.num(S.amount) && !$('#amount-field').classList.contains('is-error')) { S.open = !S.open; render(); } })
+ .on('pick', el => { S.option = el.dataset.option; render(); })
+ .on('confirm', () => {
+   input.blur(); P.go('success', 'fade');
+   if (!(S.when === 'full' || P.num(S.amount) >= MAX)) P.notify('done', { delay: 1200 });
+ })
+ .on('done', () => { P.hideNotifications(); Object.assign(S, { amount: '', card: 'main', open: true }); render(); P.reset('account'); });
+
+const partial = (o) => () => { Object.assign(S, { amount: '16500000', card: 'main', open: true, when: 'regular' }, o); render(); P.stack = ['account']; P.go('partial', null); };
+P.states([
+  { id: 'account',     group: 'Основной флоу', title: 'Микрозайм', figma: '435324', node: '14484:1031', height: 844, apply: () => { render(); P.reset('account', null); } },
+  { id: 'empty',       group: 'Основной флоу', title: 'Погасить частично — пусто', figma: '435332', node: '14484:950', height: 925, apply: partial({ amount: '' }) },
+  { id: 'filled',      group: 'Основной флоу', title: 'Сумма введена', figma: '435331', node: '14484:920', height: 925, apply: partial({}) },
+  { id: 'collapsed',   group: 'Основной флоу', title: 'Порядок погашения свёрнут', figma: '435408', node: '14576:43525', height: 925, apply: partial({ open: false }) },
+  { id: 'sheet',       group: 'Основной флоу', title: 'Как работает ЧДП (шторка)', figma: 'modal', node: '14484:1024', selector: '#sheet-how .modal-notification', height: 925, apply: (p) => { partial({})(); p.openSheet('how'); } },
+  { id: 'success',     group: 'Основной флоу', title: 'Выполнено', figma: '1022', node: '14484:1022', height: 844, apply: () => { partial({})(); P.go('success', null); } },
+  { id: 'push',        group: 'Основной флоу', title: 'Пуш об обработке', figma: 'push', node: '14484:1043', selector: '#push-done .ios-notification', height: 844, apply: () => { partial({ amount: '1000000' })(); P.go('success', null); P.notify('done', { delay: 0, hide: 0 }); } },
+  { id: 'error',       group: 'Ошибки', title: 'Недостаточно средств', figma: '435333', node: '14484:965', height: 925, apply: partial({ card: 'low' }) },
+  { id: 'dd-before',   group: 'Сценарии даты', title: 'ЧДП до даты платежа', figma: '435409', node: '14576:43743', height: 925, apply: partial({ when: 'dd' }) },
+  { id: 'dd-on',       group: 'Сценарии даты', title: 'ЧДП в дату платежа', figma: '435410', node: '14576:43951', height: 925, apply: partial({ when: 'dd' }) },
+  { id: 'full',        group: 'Сценарии даты', title: 'Вносит всю задолженность', figma: '435411', node: '14576:44159', height: 925, apply: partial({ when: 'full' }) },
+  { id: 'success-full',group: 'Сценарии даты', title: 'Выполнено — полное погашение', figma: '1023', node: '14484:1023', height: 844, apply: () => { partial({ when: 'full' })(); P.go('success', null); } },
+  { id: 'pay',         group: 'Концепт', title: 'Внести платеж (концепт)', figma: 'concept', node: '14484:832', height: 1009, apply: () => { render(); P.reset('account', null); P.go('pay', null); } },
+]);
+render();
+P.start('account');
+</script>
+</body>
+</html>

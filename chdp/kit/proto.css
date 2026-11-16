@@ -1,0 +1,123 @@
+/* Runtime прототипа: устройство, экраны, шторка, пуш, хотспоты, карта экранов.
+   Источник — .claude/skills/figma-prototype/kit/. В папке прототипа лежит копия, её не правим. */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--text-neutral-bold950);
+  background:#2b2b31;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+  /* Метрики SF UI Display из Figma: без оптического размера системный SF рисует Display-вариант.
+     С ним (по умолчанию) мелкий текст шире на 4–6 % и строки переносятся не так, как в макете. */
+  font-optical-sizing:none;
+  -webkit-tap-highlight-color:transparent;
+  overflow:hidden;
+}
+img{display:block;max-width:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+input{font:inherit;color:inherit;border:0;outline:0;background:none;min-width:0}
+p{overflow-wrap:break-word}
+
+/* ---------- Устройство ----------
+   phone  — открыто на телефоне: на весь экран, системные статус-бар и home indicator
+   desk   — открыто на компьютере: рамка 390×844 по центру, QR-код для телефона
+   figma  — ?mode=figma: ровно кадр Figma для попиксельной сверки                          */
+.device{position:relative;overflow:hidden;background:var(--surface-neutral-calm100);isolation:isolate}
+html.m-phone .device{width:100vw;height:100vh;height:100dvh}
+html.m-desk body{display:flex;align-items:center;justify-content:center;gap:48px}
+html.m-desk .device{width:390px;height:844px;border-radius:44px;box-shadow:0 0 0 10px #111114,0 0 0 11px #3a3a40,0 30px 80px rgba(0,0,0,.55)}
+html.m-figma body{background:#fff}
+html.m-figma .device{width:390px;height:var(--frame-h,844px);border-radius:24px}
+
+/* Статус-бар и home indicator рисуем только там, где нет системных */
+:root{--sb-h:54px;--hi-h:34px}
+html.m-phone{--sb-h:env(safe-area-inset-top,0px);--hi-h:max(env(safe-area-inset-bottom,0px),12px)}
+html.m-phone .statusbar>*,html.m-phone .home-indicator::after{display:none}
+
+.statusbar{position:relative;height:var(--sb-h);flex:none;overflow:hidden}
+.statusbar .sb-left,.statusbar .sb-right{position:absolute;top:0;width:122px;display:flex;align-items:center;justify-content:center;padding:18px 0 13px;overflow:hidden}
+.statusbar .sb-left{left:10px}
+.statusbar .sb-right{right:10px}
+.statusbar .sb-time{font-family:"SF Pro",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-weight:590;font-size:18px;line-height:23px;letter-spacing:-.44px;text-align:center;white-space:nowrap;color:var(--text-neutral-bold950)}
+.statusbar.on-dark .sb-time{color:var(--text-neutral-static-calm000)}
+.statusbar .sb-icons{display:flex;gap:3px;align-items:flex-start}
+.sb-cell{position:relative;width:27px;height:23px}
+.sb-cell .bars{position:absolute;inset:13.04% 9.65% 24.27% 7.41%;overflow:hidden}
+.sb-cell i{position:absolute;display:block}
+.sb-cell i img{width:100%;height:100%}
+.sb-wifi{position:relative;width:23px;height:23px}
+.sb-wifi img{position:absolute;left:2px;top:4px;width:19.114px;height:13.804px}
+.sb-batt{position:relative;width:36px;height:23px}
+.sb-batt img{position:absolute;left:3px;top:4px;width:30.848px;height:13.955px}
+
+.home-indicator{position:relative;height:var(--hi-h);flex:none;width:100%}
+.home-indicator::after{content:"";position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:100px;background:var(--bg-neutral-bold950)}
+
+/* ---------- Экраны ---------- */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--surface-neutral-calm100);visibility:hidden;z-index:1}
+.screen.is-active{visibility:visible;z-index:2}
+.screen.is-leaving{visibility:visible;z-index:1}
+.screen>.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.screen>.scroll::-webkit-scrollbar{display:none}
+.screen>.footer{flex:none}
+
+/* Переходы как в iOS: push справа, back обратно */
+.anim-push-in{animation:pushIn .34s cubic-bezier(.2,.8,.2,1) both}
+.anim-push-out{animation:pushOut .34s cubic-bezier(.2,.8,.2,1) both}
+.anim-pop-in{animation:popIn .34s cubic-bezier(.2,.8,.2,1) both}
+.anim-pop-out{animation:popOut .34s cubic-bezier(.2,.8,.2,1) both;z-index:3!important}
+.anim-fade-in{animation:fadeIn .25s ease both}
+@keyframes pushIn{from{transform:translateX(100%)}to{transform:none}}
+@keyframes pushOut{from{transform:none}to{transform:translateX(-30%)}}
+@keyframes popIn{from{transform:translateX(-30%)}to{transform:none}}
+@keyframes popOut{from{transform:none}to{transform:translateX(100%)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+html.m-figma *{animation:none!important;transition:none!important}
+
+/* ---------- Шторка (bottom sheet) ---------- */
+.sheet-layer{position:absolute;inset:0;z-index:50;visibility:hidden}
+.sheet-layer.is-open{visibility:visible}
+.sheet-scrim{position:absolute;inset:0;background:var(--overlay-neutral-boldest);opacity:0;transition:opacity .28s ease}
+.sheet-layer.is-open .sheet-scrim{opacity:1}
+.sheet{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .34s cubic-bezier(.2,.8,.2,1);will-change:transform;max-height:calc(100% - var(--sb-h) - 8px);overflow-y:auto}
+.sheet-layer.is-open .sheet{transform:none}
+.sheet.is-dragging{transition:none}
+
+/* ---------- Пуш-уведомление ---------- */
+.push{position:absolute;left:8px;right:8px;top:calc(var(--sb-h) * 0 + 8px);z-index:60;transform:translateY(-140%);transition:transform .45s cubic-bezier(.2,.9,.25,1)}
+html.m-phone .push{top:calc(env(safe-area-inset-top,0px) + 8px)}
+.push.is-shown{transform:none}
+
+/* ---------- Хотспоты: тап мимо — подсвечиваем, куда можно нажать (как в Figma) ---------- */
+[data-go],[data-back],[data-sheet],[data-close],[data-act]{cursor:pointer}
+.device.show-hotspots [data-go],.device.show-hotspots [data-back],.device.show-hotspots [data-sheet],.device.show-hotspots [data-close],.device.show-hotspots [data-act]{
+  box-shadow:inset 0 0 0 9999px rgba(32,85,207,.16),0 0 0 2px rgba(32,85,207,.55)!important}
+.pressable{transition:opacity .12s ease,transform .12s ease}
+.pressable:active{opacity:.7}
+
+/* ---------- Карта экранов ---------- */
+.proto-fab{position:absolute;right:8px;top:calc(var(--sb-h) + 6px);z-index:80;width:28px;height:28px;border-radius:14px;background:rgba(25,25,31,.55);color:#fff;font-size:14px;line-height:28px;text-align:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:.4}
+.proto-fab:active{opacity:1}
+html.m-figma .proto-fab{display:none}
+.proto-map{position:absolute;inset:0;z-index:90;background:rgba(25,25,31,.6);display:none}
+.proto-map.is-open{display:block}
+.proto-map .panel{position:absolute;left:0;right:0;bottom:0;max-height:80%;overflow:auto;background:#fff;border-radius:16px 16px 0 0;padding:16px 16px calc(var(--hi-h) + 8px)}
+.proto-map h3{font-size:16px;line-height:20px;font-weight:600;margin:0 0 4px}
+.proto-map .hint{font-size:12px;line-height:16px;color:var(--text-neutral-bold600);margin-bottom:12px}
+.proto-map .group{font-size:12px;line-height:16px;color:var(--text-neutral-bold600);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.proto-map .item{display:flex;justify-content:space-between;gap:8px;width:100%;padding:10px 12px;border-radius:10px;background:var(--bg-neutral-calm100);margin-bottom:6px;font-size:14px;line-height:18px}
+.proto-map .item small{color:var(--text-neutral-bold600);font-size:12px;white-space:nowrap}
+.proto-map .item.is-current{outline:2px solid var(--text-primary-bold600)}
+.proto-map .row{display:flex;gap:8px;margin-top:12px}
+.proto-map .row button{flex:1;padding:10px;border-radius:10px;background:var(--bg-neutral-static-bold950);color:#fff;font-size:14px;text-align:center}
+
+/* ---------- Десктоп: подпись и QR ---------- */
+.desk-aside{display:none;color:#e9e9ee;max-width:260px;font-size:14px;line-height:20px}
+html.m-desk .desk-aside{display:block}
+.desk-aside h1{font-size:22px;line-height:28px;font-weight:600;margin-bottom:8px;color:#fff}
+.desk-aside p{color:#a9a9b2;margin-bottom:16px}
+.desk-aside .qr{background:#fff;border-radius:16px;padding:12px;width:184px;height:184px}
+.desk-aside .qr svg,.desk-aside .qr img{width:160px;height:160px;display:block}
+.desk-aside a{color:#c9d7ff}
