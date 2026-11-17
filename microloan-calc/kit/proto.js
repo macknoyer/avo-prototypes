@@ -16,6 +16,7 @@
   const mode = qs.get('mode') || (phone ? 'phone' : 'desk');
   html.classList.add('m-' + mode);
   if (qs.get('map') === '1') html.classList.add('with-map');
+  if (qs.get('still') === '1') html.classList.add('m-still');  // без анимаций: скриншоты конечного состояния
 
   const P = window.Proto = {
     mode, stack: [], handlers: {}, _states: [], sheet: null,
@@ -131,13 +132,33 @@
 
   /* ---------- клавиатура ---------- */
   const KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ']];
+  // Поле ввода — к верху видимой области: снизу клавиатура и кнопка, поле не должно за ними прятаться.
+  // Запас снизу (.kb-spacer внутри контента) нужен, чтобы короткий экран тоже можно было прокрутить до поля.
+  function scrollToField(input, smooth) {
+    const sc = input.closest('.scroll'); if (!sc) return;
+    let sp = sc.querySelector(':scope > .kb-spacer');
+    if (!sp) { sp = document.createElement('div'); sp.className = 'kb-spacer'; sc.appendChild(sp); }
+    sp.style.height = P.$('.device').clientHeight + 'px';
+    const anchor = input.closest('[data-scroll-anchor], .input') || input;
+    const top = sc.scrollTop + anchor.getBoundingClientRect().top - sc.getBoundingClientRect().top - 16;
+    sc.scrollTo({ top: Math.max(0, top), behavior: smooth && animOn() ? 'smooth' : 'auto' });
+  }
+  function releaseScroll(sc) {
+    const sp = sc && sc.querySelector(':scope > .kb-spacer'); if (!sp) return;
+    const max = sc.scrollHeight - sp.offsetHeight - sc.clientHeight;
+    if (sc.scrollTop > max) sc.scrollTo({ top: Math.max(0, max), behavior: animOn() ? 'smooth' : 'auto' });
+    setTimeout(() => sp.remove(), animOn() ? 360 : 0);
+  }
   P.keyboard = {
     show(input) {
       const d = P.$('.device'); clearTimeout(d._kbT); d.classList.remove('kb-closing'); d.classList.add('kb-open'); if (mode !== 'phone') d.classList.add('kb-fake');
       P.kbInput = input; const box = input.closest('.input-text, .input-uzs'); if (box) box.classList.add('is-focused');
+      requestAnimationFrame(() => scrollToField(input, true));
+      setTimeout(() => { if (P.kbInput === input) scrollToField(input, true); }, 380);  // после выезда клавиатуры
     },
     hide() {
       const d = P.$('.device'); d.classList.remove('kb-open');
+      if (P.kbInput) releaseScroll(P.kbInput.closest('.scroll'));
       P.$$('.is-focused').forEach(b => b.classList.remove('is-focused')); P.kbInput = null;
       if (d.classList.contains('kb-fake') && P.animOn()) {
         d.classList.add('kb-closing');
@@ -176,12 +197,16 @@
   function fitViewport() {
     if (mode !== 'phone' || !window.visualViewport) return;
     const vv = visualViewport;
-    const fit = () => { html.style.setProperty('--vvh', vv.height + 'px'); html.style.setProperty('--vvt', vv.offsetTop + 'px'); };
+    let t;
+    const fit = () => {
+      html.style.setProperty('--vvh', vv.height + 'px'); html.style.setProperty('--vvt', vv.offsetTop + 'px');
+      clearTimeout(t); t = setTimeout(() => { if (P.kbInput) scrollToField(P.kbInput, true); }, 120);  // системная клавиатура доехала
+    };
     vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
   }
 
   /* ---------- анимации: списки и значения ---------- */
-  const animOn = () => mode !== 'figma' && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const animOn = () => mode !== 'figma' && !html.classList.contains('m-still') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   P.animOn = animOn;
   function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
   // Список с ключами. Новые элементы раскрываются, лишние схлопываются, соседи сдвигаются плавно.

@@ -74,7 +74,7 @@ html.m-phone .statusbar>*,html.m-phone .home-indicator::after{display:none}
 @keyframes popIn{from{transform:translateX(-30%)}to{transform:none}}
 @keyframes popOut{from{transform:none}to{transform:translateX(100%)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-html.m-figma *,html.m-figma *::before,html.m-figma *::after{animation:none!important;transition:none!important}
+html.m-figma *,html.m-figma *::before,html.m-figma *::after,html.m-still *,html.m-still *::before,html.m-still *::after{animation:none!important;transition:none!important}
 
 /* ---------- Шторка (bottom sheet) ---------- */
 .sheet-layer{position:absolute;inset:0;z-index:50;visibility:hidden}
@@ -147,3 +147,7 @@ html.m-phone .fake-kb{display:none!important}
 .p-pop{animation:pPop var(--t2) var(--ease) both}
 @keyframes pSwap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @keyframes pPop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:none}}
+
+/* При вводе над клавиатурой — только главная кнопка: тексты-слоты и дисклеймеры прячутся */
+.device.kb-open .screen.is-active>.footer .slot,
+.device.kb-open .screen.is-active>.footer .checkbox-confirm{display:none}
