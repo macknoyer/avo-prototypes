@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Калькулятор">
+<meta name="theme-color" content="#f1f2f5">
+<title>Калькулятор микрозайма 4.0</title>
+<meta name="description" content="Калькулятор микрозайма 4.0: одобренная сумма, ввод суммы, выбор срока. Прототип 1:1 по Figma «Калькулятор 4.0».">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/proto.css">
+<link rel="stylesheet" href="kit/components.css">
+<style>
+  html{--frame-r:30px}
+  /* KL_offer */
+  .offer{display:flex;flex-direction:column;gap:24px;align-items:center;padding:16px 16px 24px}
+  .terms{display:flex;flex-direction:column;gap:12px;width:100%}
+  .terms-list{display:flex;flex-direction:column;gap:16px;width:100%}
+  .group-label{width:100%;font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
+</style>
+</head>
+<body>
+<div class="device">
+
+  <!-- ============ 68516:39019 / 41004 / 39117 · Ваше предложение ============ -->
+  <section class="screen" id="s-offer" data-title="Ваше предложение">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <div class="appbar-title title-small-semibold nowrap">Ваше предложение</div>
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="offer">
+        <div class="status-colored sc-positive">
+          <img class="ic24" src="assets/money.svg" alt="">
+          <div class="sc-content"><p class="sc-title" id="approved-title">10 000 000 UZS уже одобрены!</p><p class="sc-sub">Выбери сумму займа и подберите удобный ежемесячный платеж</p></div>
+        </div>
+        <div class="input">
+          <label class="input-label" for="amount">Одобреная сумма</label>
+          <div class="input-text no-hint">
+            <input id="amount" type="text" inputmode="numeric" data-kb="numeric" autocomplete="off" enterkeyhint="done" maxlength="15" value="10 000 000">
+            <span class="it-icon"><img src="assets/edit.svg" alt=""></span>
+          </div>
+        </div>
+        <div class="terms">
+          <p class="group-label">Срок займа</p>
+          <div class="terms-list" id="terms"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <p class="slot" id="slot">Вы оформляете микрозайм на сумму {сумма} UZS</p>
+        <div class="btn-group-v"><button class="btn btn-l btn-primary">Получить деньги</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+</div>
+
+<script src="kit/proto.js"></script>
+<script>
+const P = Proto;
+const $ = s => document.querySelector(s);
+const input = $('#amount');
+
+// Сценарии из макета. A — кадры 68516:39019 и 41004: одобрено 10 000 000, два срока, платежи из макета.
+// B — кадр 68516:39117: одобрено 2 000 000, пять сроков, платежи грузятся (скелетоны; значений в макете нет).
+// Платёж для другой суммы: аннуитет пропорционален сумме при том же сроке, коэффициент — из макета (144 000 / 10 000 000).
+const SCEN = {
+  A: { approved: 10000000, terms: [
+    { m: 36, label: '36 месяцев', k: 144000 / 10000000 },
+    { m: 24, label: '24 месяца', k: 183000 / 10000000 } ] },
+  B: { approved: 2000000, loadingOnly: true, terms: [
+    { m: 36, label: '36 месяцев' }, { m: 24, label: '24 месяца' }, { m: 12, label: '12 месяцев' },
+    { m: 6, label: '6 месяцев' }, { m: 3, label: '3 месяца' } ] },
+};
+const S = { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false };
+let lastValid = S.amount;
+
+function render() {
+  const sc = SCEN[S.scen];
+  $('#approved-title').textContent = `${P.fmt(sc.approved)} UZS уже одобрены!`;
+  if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
+  $('#terms').innerHTML = sc.terms.map(t => {
+    const pay = t.k ? Math.round(S.amount * t.k / 1000) * 1000 : 0;
+    const showSkeleton = sc.loadingOnly || S.loading;
+    return `<div class="cwl-concept" data-act="term" data-m="${t.m}">
+      <img class="radio" src="assets/radio-${t.m === S.term && !S.editing ? 'on' : 'off'}.svg" alt="">
+      <div class="cc-content">
+        <p class="cc-label">${t.label}</p>
+        <div class="cc-row"><span class="cc-row-label">Ежемесячный платеж</span>
+          <span class="cc-sum"${showSkeleton ? ' style="visibility:hidden"' : ''}><span class="num">${P.fmt(pay)}</span><span class="cur">UZS</span></span>${showSkeleton ? '<span class="skeleton"></span>' : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Ввод суммы: только цифры, не больше одобренной
+input.addEventListener('input', () => {
+  let v = P.num(input.value);
+  const max = SCEN[S.scen].approved;
+  if (v > max) v = max;
+  S.amount = v;
+  input.value = v ? P.fmt(v) : '';
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(v)} UZS`;
+});
+// Ввод суммы: пока клавиатура открыта, срок не выбран (кадр 68516:41004)
+input.addEventListener('focus', () => { if (!S.editing) { S.editing = true; render(); } });
+// Сумма введена (клавиатура закрыта): пересчёт платежей со скелетоном, как в кадре 68516:39117
+input.addEventListener('proto:done', () => {
+  S.editing = false;
+  if (!S.amount) S.amount = lastValid;
+  if (S.amount === lastValid) return render();
+  lastValid = S.amount; S.loading = true; render();
+  clearTimeout(input._t); input._t = setTimeout(() => { S.loading = false; render(); }, 900);
+});
+document.querySelector('.input-text').addEventListener('click', () => input.focus());
+
+P.on('term', el => { S.term = Number(el.dataset.m); render(); });
+
+const set = o => () => { Object.assign(S, { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false }, o); lastValid = S.amount; render(); P.reset('offer', null); };
+P.states([
+  { id: 'default',  group: 'Основной флоу', title: 'Предложение по умолчанию', figma: '68516:39019', node: '68516:39019', height: 844, apply: set({}) },
+  { id: 'keyboard', group: 'Основной флоу', title: 'Ввод суммы', figma: '68516:41004', node: '68516:41004', height: 844, apply: () => { set({ editing: true })(); P.keyboard.show(input); } },
+  { id: 'loading',  group: 'Сценарии', title: 'Одобрено 2 000 000: пять сроков, загрузка', figma: '68516:39117', node: '68516:39117', height: 1001, apply: set({ scen: 'B', amount: 1000000 }) },
+]);
+render();
+P.start('offer');
+</script>
+</body>
+</html>
