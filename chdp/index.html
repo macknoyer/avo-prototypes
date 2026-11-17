@@ -135,16 +135,7 @@
         <div class="pay-body">
           <div class="method">
             <p class="group-label">Способ оплаты</p>
-            <div class="bankcard-item">
-              <div class="bc-content">
-                <div class="bc-icon"><div class="bank-logo bank-kapital"><i class="abs"><img src="assets/kapitalbank-mark.svg" alt=""></i></div></div>
-                <div class="bc-main">
-                  <div class="bc-amount"><span class="num">100 000 000</span><span class="cur">UZS</span></div>
-                  <div class="bc-info"><span class="bc-bank">Kapitalbank</span><span class="bc-pan">•••• 3596</span><span class="bc-ps"><i class="abs"><img src="assets/uzcard.svg" alt=""></i></span></div>
-                </div>
-              </div>
-              <img class="ic24" src="assets/chevron-down.svg" alt="">
-            </div>
+            <div class="bankcard-item pressable source-row" data-sheet="source"></div>
           </div>
           <div class="pay-options">
             <div>
@@ -220,16 +211,7 @@
         </div>
         <div class="method">
           <p class="group-label">Способ оплаты</p>
-          <div class="bankcard-item pressable" data-act="card">
-            <div class="bc-content">
-              <div class="bc-icon"><div class="bank-logo bank-kapital"><i class="abs"><img src="assets/kapitalbank-mark.svg" alt=""></i></div></div>
-              <div class="bc-main">
-                <div class="bc-amount"><span class="num" id="card-amount">100 000 000</span><span class="cur">UZS</span></div>
-                <div class="bc-info"><span class="bc-bank">Kapitalbank</span><span class="bc-pan">•••• 3596</span><span class="bc-ps"><i class="abs"><img src="assets/uzcard.svg" alt=""></i></span></div>
-              </div>
-            </div>
-            <img class="ic24" src="assets/chevron-down.svg" alt="">
-          </div>
+          <div class="bankcard-item pressable source-row" data-sheet="source"></div>
         </div>
         <div class="form">
           <div class="input" id="amount-field">
@@ -309,6 +291,26 @@
     </div>
   </section>
 
+  <!-- ============ cardsModal (ДС 8375:28950) · выбор источника списания ============ -->
+  <div class="sheet-layer" id="sheet-source">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="cards-modal">
+        <div class="grabber"></div>
+        <div class="cm-content">
+          <div class="cm-body">
+            <div class="title-action"><p class="ta-title">Способ оплаты</p></div>
+            <div class="cm-list">
+              <div id="source-list" style="display:contents"></div>
+              <div class="action-block"><div class="ab-btn"><img class="ic20" src="assets/plus-blue.svg" alt="">Добавить новую карту</div></div>
+            </div>
+          </div>
+          <div class="cm-footer"><div class="home-indicator"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ modalNotification · «Показываем перед совершением операции» ============ -->
   <div class="sheet-layer" id="sheet-how">
     <div class="sheet-scrim"></div>
@@ -354,7 +356,25 @@
 <script src="kit/proto.js"></script>
 <script>
 const P = Proto;
-const CARDS = { main: 100000000, low: 10000000 };
+// Источники списания. kapital — карта из кадров ЧДП, platinum — скрытый второй bankcardItem в Figma (14491:3555),
+// low — та же карта с балансом из кадра 435333 «Недостаточно средств» (только для сверки и карты экранов).
+const SOURCES = {
+  kapital:  { balance: 100000000, logo: 'kapital', name: 'Kapitalbank', pan: '•••• 3596', ps: true },
+  platinum: { balance: 500000,    logo: 'avo-account', name: 'AVO platinum' },
+  low:      { balance: 10000000,  logo: 'kapital', name: 'Kapitalbank', pan: '•••• 3596', ps: true },
+};
+const PICKER = ['kapital', 'platinum'];
+const LOGO = { kapital: ['bank-kapital', 'assets/kapitalbank-mark.svg'], 'avo-account': ['bank-avo-account', 'assets/avo-account-logo.svg'] };
+function cardHTML(src, chevron) {
+  const [cls, img] = LOGO[src.logo];
+  return `<div class="bc-content"><div class="bc-icon"><div class="bank-logo ${cls}"><i class="abs"><img src="${img}" alt=""></i></div></div>` +
+    `<div class="bc-main"><div class="bc-amount"><span class="num">${P.fmt(src.balance)}</span><span class="cur">UZS</span></div>` +
+    `<div class="bc-info"><span class="bc-bank">${src.name}</span>${src.pan ? `<span class="bc-pan">${src.pan}</span>` : ''}` +
+    `${src.ps ? '<span class="bc-ps"><i class="abs"><img src="assets/uzcard.svg" alt=""></i></span>' : ''}</div></div></div>` +
+    (chevron ? '<img class="ic24" src="assets/chevron-down.svg" alt="">' : '');
+}
+document.getElementById('source-list').innerHTML = PICKER.map(id =>
+  `<button class="bankcard-item" data-act="pick-source" data-source="${id}">${cardHTML(SOURCES[id], false)}</button>`).join('');
 const MAX = 40000000, INTEREST = 500000;
 const SUB = {
   regular: 'Досрочное погашение не отменяет ежемесячный платёж',
@@ -362,7 +382,7 @@ const SUB = {
   full: 'Кредит закроется сразу после погашения',
 };
 // when: regular — обычный день; dd — до или в дату платежа (435409/435410); full — вся задолженность (435411)
-const S = { amount: '', card: 'main', open: true, when: 'regular', option: 'next' };
+const S = { amount: '', card: 'kapital', open: true, when: 'regular', option: 'next' };
 
 const $ = s => document.querySelector(s);
 const input = $('#amount');
@@ -370,9 +390,9 @@ const input = $('#amount');
 function render() {
   const v = P.num(S.amount);
   if (document.activeElement !== input || P.fmt(input.value) !== P.fmt(S.amount)) input.value = S.amount ? P.fmt(S.amount) : '';
-  $('#card-amount').textContent = P.fmt(CARDS[S.card]);
+  document.querySelectorAll('.source-row').forEach(el => el.innerHTML = cardHTML(SOURCES[S.card], true));
   const full = S.when === 'full' || v >= MAX;
-  const state = !v ? 'empty' : v > CARDS[S.card] ? 'error' : 'ok';
+  const state = !v ? 'empty' : v > SOURCES[S.card].balance ? 'error' : 'ok';
   $('#amount-field').classList.toggle('is-error', state === 'error');
   $('#partial-info').hidden = state !== 'ok';
   $('#partial-info-sub').textContent = full ? SUB.full : SUB[S.when] || SUB.regular;
@@ -398,23 +418,24 @@ input.addEventListener('input', () => {
 });
 document.querySelector('.input-uzs').addEventListener('click', () => input.focus());
 
-P.on('open-partial', () => { Object.assign(S, { amount: '', card: 'main', open: true }); render(); P.go('partial'); })
- .on('card', () => { S.card = S.card === 'main' ? 'low' : 'main'; render(); })
+P.on('open-partial', () => { Object.assign(S, { amount: '', card: 'kapital', open: true }); render(); P.go('partial'); })
+ .on('pick-source', el => { S.card = el.dataset.source; render(); P.closeSheet(); })
  .on('accordion', () => { if (P.num(S.amount) && !$('#amount-field').classList.contains('is-error')) { S.open = !S.open; render(); } })
  .on('pick', el => { S.option = el.dataset.option; render(); })
  .on('confirm', () => {
    input.blur(); P.go('success', 'fade');
    if (!(S.when === 'full' || P.num(S.amount) >= MAX)) P.notify('done', { delay: 1200 });
  })
- .on('done', () => { P.hideNotifications(); Object.assign(S, { amount: '', card: 'main', open: true }); render(); P.reset('account'); });
+ .on('done', () => { P.hideNotifications(); Object.assign(S, { amount: '', card: 'kapital', open: true }); render(); P.reset('account'); });
 
-const partial = (o) => () => { Object.assign(S, { amount: '16500000', card: 'main', open: true, when: 'regular' }, o); render(); P.stack = ['account']; P.go('partial', null); };
+const partial = (o) => () => { Object.assign(S, { amount: '16500000', card: 'kapital', open: true, when: 'regular' }, o); render(); P.stack = ['account']; P.go('partial', null); };
 P.states([
   { id: 'account',     group: 'Основной флоу', title: 'Микрозайм', figma: '435324', node: '14484:1031', height: 844, apply: () => { render(); P.reset('account', null); } },
   { id: 'empty',       group: 'Основной флоу', title: 'Погасить частично — пусто', figma: '435332', node: '14484:950', height: 925, apply: partial({ amount: '' }) },
   { id: 'filled',      group: 'Основной флоу', title: 'Сумма введена', figma: '435331', node: '14484:920', height: 925, apply: partial({}) },
   { id: 'collapsed',   group: 'Основной флоу', title: 'Порядок погашения свёрнут', figma: '435408', node: '14576:43525', height: 925, apply: partial({ open: false }) },
   { id: 'sheet',       group: 'Основной флоу', title: 'Как работает ЧДП (шторка)', figma: 'modal', node: '14484:1024', selector: '#sheet-how .modal-notification', height: 925, apply: (p) => { partial({})(); p.openSheet('how'); } },
+  { id: 'source',      group: 'Основной флоу', title: 'Выбор источника', figma: 'cardsModal', node: '8375:28950', selector: '#sheet-source .cards-modal', height: 925, apply: (p) => { partial({})(); p.openSheet('source'); } },
   { id: 'success',     group: 'Основной флоу', title: 'Выполнено', figma: '1022', node: '14484:1022', height: 844, apply: () => { partial({})(); P.go('success', null); } },
   { id: 'push',        group: 'Основной флоу', title: 'Пуш об обработке', figma: 'push', node: '14484:1043', selector: '#push-done .ios-notification', height: 844, apply: () => { partial({ amount: '1000000' })(); P.go('success', null); P.notify('done', { delay: 0, hide: 0 }); } },
   { id: 'error',       group: 'Ошибки', title: 'Недостаточно средств', figma: '435333', node: '14484:965', height: 925, apply: partial({ card: 'low' }) },

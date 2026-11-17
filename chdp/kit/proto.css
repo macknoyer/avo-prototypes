@@ -22,12 +22,12 @@ p{overflow-wrap:break-word}
 
 /* ---------- Устройство ----------
    phone  — открыто на телефоне: на весь экран, системные статус-бар и home indicator
-   desk   — открыто на компьютере: рамка 390×844 по центру, QR-код для телефона
+   desk   — открыто на компьютере: только экран 390 px по центру, без рамки и скруглений
    figma  — ?mode=figma: ровно кадр Figma для попиксельной сверки                          */
 .device{position:relative;overflow:hidden;background:var(--surface-neutral-calm100);isolation:isolate}
 html.m-phone .device{width:100vw;height:100vh;height:100dvh}
-html.m-desk body{display:flex;align-items:center;justify-content:center;gap:48px}
-html.m-desk .device{width:390px;height:844px;border-radius:44px;box-shadow:0 0 0 10px #111114,0 0 0 11px #3a3a40,0 30px 80px rgba(0,0,0,.55)}
+html.m-desk body{display:flex;align-items:center;justify-content:center}
+html.m-desk .device{width:390px;height:min(844px,100vh)}
 html.m-figma body{background:#fff}
 html.m-figma .device{width:390px;height:var(--frame-h,844px);border-radius:24px}
 
@@ -100,7 +100,7 @@ html.m-phone .push{top:calc(env(safe-area-inset-top,0px) + 8px)}
 /* ---------- Карта экранов ---------- */
 .proto-fab{position:absolute;right:8px;top:calc(var(--sb-h) + 6px);z-index:80;width:28px;height:28px;border-radius:14px;background:rgba(25,25,31,.55);color:#fff;font-size:14px;line-height:28px;text-align:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:.4}
 .proto-fab:active{opacity:1}
-html.m-figma .proto-fab{display:none}
+html:not(.with-map) .proto-fab{display:none}
 .proto-map{position:absolute;inset:0;z-index:90;background:rgba(25,25,31,.6);display:none}
 .proto-map.is-open{display:block}
 .proto-map .panel{position:absolute;left:0;right:0;bottom:0;max-height:80%;overflow:auto;background:#fff;border-radius:16px 16px 0 0;padding:16px 16px calc(var(--hi-h) + 8px)}
@@ -112,12 +112,3 @@ html.m-figma .proto-fab{display:none}
 .proto-map .item.is-current{outline:2px solid var(--text-primary-bold600)}
 .proto-map .row{display:flex;gap:8px;margin-top:12px}
 .proto-map .row button{flex:1;padding:10px;border-radius:10px;background:var(--bg-neutral-static-bold950);color:#fff;font-size:14px;text-align:center}
-
-/* ---------- Десктоп: подпись и QR ---------- */
-.desk-aside{display:none;color:#e9e9ee;max-width:260px;font-size:14px;line-height:20px}
-html.m-desk .desk-aside{display:block}
-.desk-aside h1{font-size:22px;line-height:28px;font-weight:600;margin-bottom:8px;color:#fff}
-.desk-aside p{color:#a9a9b2;margin-bottom:16px}
-.desk-aside .qr{background:#fff;border-radius:16px;padding:12px;width:184px;height:184px}
-.desk-aside .qr svg,.desk-aside .qr img{width:160px;height:160px;display:block}
-.desk-aside a{color:#c9d7ff}

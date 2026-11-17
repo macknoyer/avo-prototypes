@@ -5,7 +5,8 @@
      data-reset="<id>"     — на экран, стек сброшен   data-sheet="<id>"   — открыть #sheet-<id>
      data-close            — закрыть шторку           data-act="<name>"   — Proto.on(name, fn)
    Состояния для карты экранов и сверки: Proto.states([{id, title, group, node, apply}])
-   Режимы: телефон / компьютер (рамка + QR) / ?mode=figma (кадр Figma для сверки) */
+   Режимы: телефон / компьютер (только экран 390 px) / ?mode=figma (кадр Figma для сверки).
+   ?map=1 — показать кнопку ☰ с картой состояний; ссылка на состояние: #@<id>. */
 (function () {
   const html = document.documentElement;
   const qs = new URLSearchParams(location.search);
@@ -14,6 +15,7 @@
     (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 600);
   const mode = qs.get('mode') || (phone ? 'phone' : 'desk');
   html.classList.add('m-' + mode);
+  if (qs.get('map') === '1') html.classList.add('with-map');
 
   const P = window.Proto = {
     mode, stack: [], handlers: {}, _states: [], sheet: null,
@@ -160,26 +162,12 @@
     map.addEventListener('touchend', () => clearTimeout(lp));
   }
 
-  /* ---------- десктоп: подпись и QR ---------- */
-  function buildDeskAside() {
-    if (mode !== 'desk') return;
-    const url = location.href.split('#')[0].replace(/[?&]mode=[^&]*/, '');
-    const aside = document.createElement('aside'); aside.className = 'desk-aside';
-    const desc = (P.$('meta[name="description"]') || {}).content || '';
-    aside.innerHTML = `<h1>${document.title}</h1><p>${desc}</p><div class="qr" id="proto-qr"></div><p style="margin-top:12px">Наведите камеру телефона, чтобы открыть прототип на весь экран.<br><a href="${url}">${url}</a></p>`;
-    document.body.appendChild(aside);
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
-    s.onload = () => { try { const q = window.qrcode(0, 'M'); q.addData(url); q.make(); P.$('#proto-qr').innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); } catch (e) { } };
-    document.head.appendChild(s);
-  }
-
   /* ---------- старт ---------- */
   P.start = (first) => {
     P.$$('.statusbar').forEach(fillStatusBar);
     P.$$('.sheet-layer').forEach(wireSheetDrag);
     P.$$('.sheet-layer .sheet-scrim').forEach(s => s.addEventListener('click', () => P.closeSheet()));
-    buildMap(); buildDeskAside();
+    buildMap();
     const h = decodeURIComponent(location.hash.slice(1));
     if (h.startsWith('@') && P.applyState(h.slice(1))) return;
     const id = h && screenEl(h) ? h : first;

@@ -84,6 +84,8 @@
 .bank-kapital>.abs{inset:27.78% 27.78% 27.77% 27.78%}
 .bank-avo-micro{background:var(--bg-positive-calm500)}
 .bank-avo-micro>.abs{inset:38.89% 13.89% 37.28% 13.89%}
+.bank-avo-account{background:var(--bg-neutral-static-bold950)}
+.bank-avo-account>.abs{inset:38.89% 13.89% 37.28% 13.89%}
 .bc-main{flex:1;min-width:1px;display:flex;flex-direction:column;justify-content:center}
 .bc-amount{display:flex;gap:4px;align-items:flex-end;white-space:nowrap;color:var(--text-neutral-bold950)}
 .bc-amount .num{font-size:16px;line-height:20px;font-weight:500}
@@ -171,3 +173,14 @@
 .ios-notification .text{flex:1;min-width:1px;font-size:15px;line-height:20px;letter-spacing:-.23px;color:var(--text-neutral-bold950)}
 .ios-notification .text b{display:block;font-weight:590;height:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ios-notification .time{width:52px;text-align:right;font-size:13px;line-height:20px;color:var(--text-neutral-bold600);white-space:nowrap}
+
+/* cardsModal: шторка выбора карты / источника (ДС «000 Дизайн система», node 8375:28950) */
+.cards-modal{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:8px;border-radius:16px 16px 0 0;background:var(--bg-neutral-calm000)}
+.cm-content{display:flex;flex-direction:column;gap:16px;width:100%}
+.cm-body{display:flex;flex-direction:column;gap:12px;padding:24px 16px 0;width:100%}
+.cm-body .title-action{height:32px}
+.cm-list{display:flex;flex-direction:column;gap:8px;width:100%}
+.cm-list .bankcard-item{background:var(--bg-neutral-calm100)}
+.cm-footer{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:flex-end;width:100%;padding:0 16px;background:var(--bg-neutral-calm000)}
+.action-block{display:flex;align-items:center;width:100%;padding:14px 16px;border-radius:16px;background:var(--bg-neutral-calm100)}
+.action-block .ab-btn{flex:1;min-width:60px;display:flex;gap:8px;align-items:center;padding:12px 0;border-radius:12px;font-size:14px;line-height:20px;font-weight:500;color:var(--text-primary-bold600)}
