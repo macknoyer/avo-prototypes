@@ -56,21 +56,15 @@
   #s-offer .of-c700{color:var(--text-neutral-bold700)}
   #s-offer .of-cs700{color:var(--text-neutral-static-bold700)}
 
-  /* ===== 14598:36040 · modalNotification «60 дней без штрафов и пени» ===== */
-  /* tooltip стоит над шторкой (top −80): .sheet кита обрезает переполнение, у этой шторки оно видно */
-  #sheet-service .sheet{overflow:visible}
-  /* mainBlock px 24 → contentMain pt 24 → content gap 16 */
+  /* 14605:38039 — новый попап услуги */
   #sheet-service .sv-main{display:flex;flex-direction:column;align-items:center;width:100%;padding:24px 24px 0}
   #sheet-service .sv-content{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%}
-  /* docWidget: bg calm100, p 16; текст 242, Switcher справа */
-  #sheet-service .sv-widget{display:flex;align-items:center;justify-content:space-between;width:100%;padding:16px;border-radius:16px;background:var(--bg-neutral-calm100)}
-  #sheet-service .sv-text{display:flex;flex-direction:column;gap:6px;justify-content:center;width:242px;flex:none}
-  #sheet-service .sv-switch{position:relative;display:flex;align-items:center;width:43px;height:26.137px;flex:none;overflow:hidden}
-  #sheet-service .sv-switch img{width:43px;height:26.137px}
-  /* Bullet-list: 326, gap 16, без нижнего отступа */
+  #sheet-service .sv-offer{position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:113px;width:100%}
+  #sheet-service .sv-card{display:flex;gap:12px;align-items:center;width:100%;padding:24px 16px 20px;border-radius:16px;background:var(--bg-neutral-calm100)}
+  #sheet-service .sv-text{display:flex;flex-direction:column;gap:4px;flex:none}
+  #sheet-service .sv-sub{white-space:pre-wrap}
+  #sheet-service .sv-switch{position:relative;flex:1;min-width:1px;height:26.137px;overflow:hidden}
+  #sheet-service .sv-switch img{position:absolute;right:0;top:50%;transform:translateY(-50%);width:43px;height:26.137px}
+  #sheet-service .sv-tag{position:absolute;left:16px;bottom:87px}
   #sheet-service .sv-bullets{display:flex;flex-direction:column;gap:16px;width:326px}
-  /* кнопка «Закрыть» в Figma Semibold */
   #sheet-service .sv-close{font-weight:600}
-  /* 14603:37837 tooltip: 186×32, bg bold800, Shadow-lvl-3, pt 4, pb 6, px 12 */
-  #sheet-service .sv-tooltip{position:absolute;left:99px;top:-80px;z-index:1;width:186px;height:32px;display:flex;gap:10px;align-items:center;justify-content:center;padding:4px 12px 6px;border-radius:50px;background:var(--bg-neutral-bold800);box-shadow:var(--shadow-lvl-3);color:var(--text-neutral-calm000);text-align:center}
-  #sheet-service .is-hidden{display:none}

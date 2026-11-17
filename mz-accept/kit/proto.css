@@ -151,3 +151,8 @@ html.m-phone .fake-kb{display:none!important}
 /* При вводе над клавиатурой — только главная кнопка: тексты-слоты и дисклеймеры прячутся */
 .device.kb-open .screen.is-active>.footer .slot,
 .device.kb-open .screen.is-active>.footer .checkbox-confirm{display:none}
+
+/* ---------- Тост сверху экрана (P.toast) ----------
+   Короткое сообщение «Действие недоступно» и т. п.: выезжает сверху под статус-баром поверх всего, даже шторки. */
+.toast{position:absolute;left:50%;top:calc(var(--sb-h) + 8px);z-index:85;transform:translate(-50%,-160%);opacity:0;pointer-events:none;transition:transform var(--t3) var(--ease),opacity var(--t2) ease}
+.toast.is-shown{transform:translate(-50%,0);opacity:1}

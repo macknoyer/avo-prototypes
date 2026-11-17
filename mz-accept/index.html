@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Акцепт микрозайма</title>
 <meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
-<link rel="stylesheet" href="kit/tokens.css?v=1794935918">
-<link rel="stylesheet" href="kit/proto.css?v=1794935918">
-<link rel="stylesheet" href="kit/components.css?v=1794935918">
+<link rel="stylesheet" href="kit/tokens.css?v=1794937050">
+<link rel="stylesheet" href="kit/proto.css?v=1794937050">
+<link rel="stylesheet" href="kit/components.css?v=1794937050">
 <link rel="stylesheet" href="css/calc.css">
 <link rel="stylesheet" href="css/offer.css">
 <link rel="stylesheet" href="css/last-step.css">
@@ -90,7 +90,7 @@
           <button class="of-service-card pressable" type="button" data-sheet="service">
             <span class="of-sc-text">
               <span class="of-sc-title title-medium-semibold c-950">60 дней без штрафов и пени</span>
-              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br>55 000 000 UZS</span>
+              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br>7 700 000 UZS</span>
             </span>
             <img class="of-chevron" src="assets/offer-chevron-right.svg" width="22" height="22" alt="">
           </button>
@@ -330,7 +330,7 @@
     <div class="footer"><div class="home-indicator"></div></div>
   </section>
 
-  <!-- ============ 14598:36040 · modalNotification «60 дней без штрафов и пени» + 14603:37837 tooltip «Действие недоступно» ============ -->
+  <!-- ============ 14605:38039 · modalNotification «60 дней без штрафов и пени» (обновлён 17.11) ============ -->
   <div class="sheet-layer" id="sheet-service">
     <div class="sheet-scrim"></div>
     <div class="sheet">
@@ -338,15 +338,18 @@
         <div class="grabber"></div>
         <div class="sv-main">
           <div class="sv-content">
-            <!-- docWidget: услуга + Switcher (в Figma только вариант isOn=true) -->
-            <div class="sv-widget">
-              <div class="sv-text">
-                <p class="title-small-semibold c-950 nowrap">60 дней без штрафов и пени</p>
-                <p class="body-small-l-regular c-600 nowrap">Сумма к получению с учетом услуги <br>55 000 000 UZS</p>
+            <!-- offerCard + тег «Деньги под защитой» (тег поверх карточки, как в Figma) -->
+            <div class="sv-offer">
+              <div class="sv-card">
+                <div class="sv-text">
+                  <p class="title-small-semibold c-950">60 дней без штрафов и пени</p>
+                  <p class="body-small-l-regular c-600 sv-sub">Сумма к получению с учетом услуги <br>7 700 000 UZS</p>
+                </div>
+                <!-- Switcher: в Figma только вариант isOn=true; услугу выключить нельзя — тост сверху -->
+                <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="60 дней без штрафов и пени"><img src="assets/offer-switch-on.svg" width="43" height="26.137" alt=""></button>
               </div>
-              <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="60 дней без штрафов и пени"><img class="sv-sw-on" src="assets/offer-switch-on.svg" width="43" height="26.1373" alt=""></button>
+              <span class="tag tag-m tag-positive sv-tag"><img class="ic16" src="assets/offer-safe.svg" alt="">Деньги под защитой</span>
             </div>
-            <!-- Bullet-list -->
             <div class="sv-bullets">
               <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">30 дней без процентов</p></div>
               <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">Мгновенное зачисление средств</p></div>
@@ -361,8 +364,6 @@
           <div class="home-indicator"></div>
         </div>
       </div>
-      <!-- tooltip: в Figma на 99 px правее и на 80 px выше левого верхнего угла попапа -->
-      <div class="sv-tooltip is-hidden" id="tooltip-unavailable" role="status"><p class="body-large-l-regular nowrap">Действие недоступно</p></div>
     </div>
   </div>
 
@@ -390,9 +391,12 @@
       </div>
     </div>
   </div>
+
+  <!-- ============ 14603:37837 · тост «Действие недоступно» — сверху экрана, поверх шторки ============ -->
+  <div class="toast" id="toast-unavailable" role="status"><div class="toast-pill is-alert"><p class="body-large-l-regular nowrap">Действие недоступно</p></div></div>
 </div>
 
-<script src="kit/proto.js?v=1794935918"></script>
+<script src="kit/proto.js?v=1794937050"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
@@ -458,11 +462,7 @@ $('#s-calc .input-text').addEventListener('click', () => input.focus());
 P.on('term', el => { S.term = Number(el.dataset.m); renderCalc(); });
 
 /* ---------- 2. Оффер: услуга «Для своих» не отключается — подсказка «Действие недоступно» ---------- */
-P.on('service-toggle', () => {
-  const t = $('#tooltip-unavailable'); if (!t) return;
-  t.classList.remove('is-hidden'); clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.add('is-hidden'), 2000);
-});
+P.on('service-toggle', () => P.toast('unavailable'));
 
 /* ---------- 3. Последний шаг (435401 → 435402) ---------- */
 function renderChecks() {
@@ -500,7 +500,8 @@ const at = (id, o, before) => () => { reset(o); P.reset('calc', null); if (befor
 P.states([
   { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc') },
   { id: 'offer', group: 'Оффер', title: 'Принять условия кредита', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer') },
-  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14598:36040', node: '14598:36040', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer')(); p.openSheet('service'); } },
+  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer')(); p.openSheet('service'); } },
+  { id: 'service-toast', group: 'Оффер', title: 'Действие недоступно (тост сверху)', figma: '14603:37837', node: '14603:37837', height: 1572, selector: '#toast-unavailable .toast-pill', apply: p => { at('offer')(); p.openSheet('service'); p.toast('unavailable', 2e9); } },
   { id: 'last-step', group: 'Оффер', title: 'Последний шаг', figma: '435401', node: '14598:32273', height: 844, apply: at('last-step', null, ['offer']) },
   { id: 'last-step-ready', group: 'Оффер', title: 'Последний шаг — всё принято', figma: '435402', node: '14598:32317', height: 844, apply: at('last-step', { checks: [true, true, true, true, true] }, ['offer']) },
   { id: 'myid', group: 'Выдача', title: 'Пожалуйста, улыбнитесь', figma: 'MyID', node: '14598:32306', height: 844, apply: at('myid', null, ['offer', 'last-step']) },

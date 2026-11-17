@@ -230,3 +230,9 @@
 /* скелетон: перелив во время загрузки */
 .skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);animation:shimmer 1.2s ease-in-out infinite}
 @keyframes shimmer{to{transform:translateX(100%)}}
+
+/* tooltip / тост (Figma «tooltip»): отступы 4/12/6, радиус 50, Shadow-lvl-3, текст Body/Large/L Regular.
+   Базовый — тёмный (bold800, текст белый); .is-alert — «Действие недоступно» (14603:37837):
+   фон bg/alert/calm050, текст #a3043d — в Figma без токена. */
+.toast-pill{display:flex;gap:10px;align-items:center;justify-content:center;padding:4px 12px 6px;border-radius:50px;background:var(--bg-neutral-bold800);box-shadow:var(--shadow-lvl-3);color:var(--text-neutral-calm000);text-align:center;white-space:nowrap}
+.toast-pill.is-alert{background:var(--bg-alert-calm050);color:#a3043d}
