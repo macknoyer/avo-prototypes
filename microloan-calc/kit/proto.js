@@ -118,8 +118,6 @@
     clearTimeout(flashT); flashT = setTimeout(() => d.classList.remove('show-hotspots'), 650);
   }
   document.addEventListener('click', e => {
-    const ae = document.activeElement;  // тап мимо поля убирает фокус: у цифровой клавиатуры iOS нет «Готово»
-    if (ae && ae.matches && ae.matches('input[data-kb]') && !e.target.closest('.input-text, .input-uzs, .fake-kb')) ae.blur();
     const t = e.target.closest('[data-go],[data-back],[data-reset],[data-sheet],[data-close],[data-act],.push,input,textarea,label,.proto-fab,.proto-map,.no-hint');
     if (!t) { if (e.target.closest('.device')) flashHotspots(); return; }
     if (t.classList.contains('push')) { t.classList.remove('is-shown'); return; }
@@ -171,7 +169,7 @@
       inp.addEventListener('blur', () => setTimeout(() => {
         if (document.activeElement === inp) return;
         P.keyboard.hide(); inp.dispatchEvent(new CustomEvent('proto:done', { bubbles: true }));
-      }, 0));
+      }, 200));
     });
   }
   // Телефон: экран = видимая область (visualViewport), чтобы низ с кнопкой вставал над системной клавиатурой
@@ -228,6 +226,13 @@
   };
   // Смена текста/разметки элемента с анимацией появления
   P.swap = (el, html, cls = 'p-swap-in') => { if (el.innerHTML === html) return; el.innerHTML = html; if (animOn()) restart(el, cls); };
+
+  // Тап мимо поля убирает фокус и клавиатуру. Слушаем pointerdown: на iOS click по пустому месту не приходит,
+  // а у цифровой клавиатуры iOS нет кнопки «Готово».
+  document.addEventListener('pointerdown', e => {
+    const ae = document.activeElement;
+    if (ae && ae.matches && ae.matches('input[data-kb]') && !e.target.closest('.input-text, .input-uzs, .fake-kb')) ae.blur();
+  }, true);
 
   /* ---------- состояния: карта экранов и сверка с Figma ---------- */
   P.states = list => { P._states = list; return P; };
