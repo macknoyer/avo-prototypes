@@ -74,7 +74,7 @@ html.m-phone .statusbar>*,html.m-phone .home-indicator::after{display:none}
 @keyframes popIn{from{transform:translateX(-30%)}to{transform:none}}
 @keyframes popOut{from{transform:none}to{transform:translateX(100%)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-html.m-figma *{animation:none!important;transition:none!important}
+html.m-figma *,html.m-figma *::before,html.m-figma *::after{animation:none!important;transition:none!important}
 
 /* ---------- Шторка (bottom sheet) ---------- */
 .sheet-layer{position:absolute;inset:0;z-index:50;visibility:hidden}
@@ -124,3 +124,26 @@ html:not(.with-map) .proto-fab{display:none}
 .fake-kb{position:absolute;left:0;right:0;bottom:0;height:290px;z-index:40;display:none}
 .device.kb-fake .fake-kb{display:block}
 html.m-phone .fake-kb{display:none!important}
+
+/* ---------- Анимации ----------
+   Если в Figma заданы анимации прототипа (get_motion_context не пустой) — берём их значения.
+   Иначе работают эти, в духе iOS. ?mode=figma и «Уменьшить движение» в системе их выключают. */
+:root{--ease:cubic-bezier(.2,.8,.2,1);--ease-io:cubic-bezier(.4,0,.2,1);--t1:.15s;--t2:.25s;--t3:.35s}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* клавиатура выезжает снизу, экран ужимается вместе с ней */
+.device .screen.is-active{transition:bottom var(--t3) var(--ease)}
+.device.kb-fake .fake-kb{animation:kbIn var(--t3) var(--ease) both}
+.device.kb-closing{--kb-h:0px}
+.device.kb-closing .fake-kb{animation:kbOut .3s var(--ease-io) both}
+@keyframes kbIn{from{transform:translateY(100%)}to{transform:none}}
+@keyframes kbOut{from{transform:none}to{transform:translateY(100%)}}
+/* элементы списка (P.list): появление и уход — высота, прозрачность, сдвиг соседей */
+.p-item{position:relative}
+.p-item.p-enter{overflow:hidden;animation:pEnter var(--t3) var(--ease) both}
+.p-item.p-leave{overflow:hidden;pointer-events:none;transition:height var(--t3) var(--ease),margin var(--t3) var(--ease),opacity var(--t2) ease;opacity:0}
+@keyframes pEnter{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
+/* смена значения (data-swap внутри P.list или P.swap) */
+.p-swap-in{animation:pSwap var(--t2) var(--ease) both}
+.p-pop{animation:pPop var(--t2) var(--ease) both}
+@keyframes pSwap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes pPop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:none}}

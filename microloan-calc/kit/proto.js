@@ -135,12 +135,16 @@
   const KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ']];
   P.keyboard = {
     show(input) {
-      const d = P.$('.device'); d.classList.add('kb-open'); if (mode !== 'phone') d.classList.add('kb-fake');
+      const d = P.$('.device'); clearTimeout(d._kbT); d.classList.remove('kb-closing'); d.classList.add('kb-open'); if (mode !== 'phone') d.classList.add('kb-fake');
       P.kbInput = input; const box = input.closest('.input-text, .input-uzs'); if (box) box.classList.add('is-focused');
     },
     hide() {
-      const d = P.$('.device'); d.classList.remove('kb-open', 'kb-fake');
+      const d = P.$('.device'); d.classList.remove('kb-open');
       P.$$('.is-focused').forEach(b => b.classList.remove('is-focused')); P.kbInput = null;
+      if (d.classList.contains('kb-fake') && P.animOn()) {
+        d.classList.add('kb-closing');
+        clearTimeout(d._kbT); d._kbT = setTimeout(() => d.classList.remove('kb-fake', 'kb-closing'), 300);
+      } else d.classList.remove('kb-fake', 'kb-closing');
     },
   };
   function typeInto(input, key) {
@@ -177,6 +181,53 @@
     const fit = () => { html.style.setProperty('--vvh', vv.height + 'px'); html.style.setProperty('--vvt', vv.offsetTop + 'px'); };
     vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
   }
+
+  /* ---------- анимации: списки и значения ---------- */
+  const animOn = () => mode !== 'figma' && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  P.animOn = animOn;
+  function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  // Список с ключами. Новые элементы раскрываются, лишние схлопываются, соседи сдвигаются плавно.
+  // Внутри элемента data-swap="<значение>" — при смене значения элемент проигрывает p-swap-in (или data-swap-anim="pop").
+  P.list = (box, items, keyFn, htmlFn) => {
+    const anim = animOn() && box.dataset.ready === '1';
+    const gap = parseFloat(getComputedStyle(box).rowGap) || 0;
+    const old = new Map(P.$$(':scope > .p-item[data-key]', box).map(el => [el.dataset.key, el]));
+    const keep = new Set(items.map(it => String(keyFn(it))));
+    old.forEach((el, k) => {
+      if (keep.has(k)) return;
+      el.removeAttribute('data-key');
+      if (!anim) return el.remove();
+      el.style.height = el.offsetHeight + 'px'; void el.offsetHeight;
+      el.classList.add('p-leave'); el.style.height = '0px'; el.style.marginBottom = -gap + 'px';
+      setTimeout(() => el.remove(), 380);
+    });
+    let prev = null;
+    items.forEach(it => {
+      const k = String(keyFn(it)), html = htmlFn(it);
+      let el = old.get(k);
+      if (el) {
+        const before = P.$$('[data-swap]', el).map(n => n.dataset.swap);
+        if (el.innerHTML !== html) {
+          el.innerHTML = html;
+          if (anim) P.$$('[data-swap]', el).forEach((n, i) => { if (before[i] !== n.dataset.swap) restart(n, n.dataset.swapAnim === 'pop' ? 'p-pop' : 'p-swap-in'); });
+        }
+      } else {
+        el = document.createElement('div'); el.className = 'p-item'; el.dataset.key = k; el.innerHTML = html;
+        if (anim) {
+          el.classList.add('p-enter'); el.style.height = '0px'; el.style.marginBottom = -gap + 'px';
+          requestAnimationFrame(() => {
+            el.style.transition = 'height var(--t3) var(--ease), margin var(--t3) var(--ease)';
+            el.style.height = el.scrollHeight + 'px'; el.style.marginBottom = '0px';
+            setTimeout(() => { el.classList.remove('p-enter'); el.style.height = el.style.marginBottom = el.style.transition = ''; }, 380);
+          });
+        }
+      }
+      box.insertBefore(el, prev ? prev.nextSibling : box.firstChild); prev = el;
+    });
+    box.dataset.ready = '1';
+  };
+  // Смена текста/разметки элемента с анимацией появления
+  P.swap = (el, html, cls = 'p-swap-in') => { if (el.innerHTML === html) return; el.innerHTML = html; if (animOn()) restart(el, cls); };
 
   /* ---------- состояния: карта экранов и сверка с Figma ---------- */
   P.states = list => { P._states = list; return P; };

@@ -57,7 +57,7 @@
     <div class="footer btn-combo is-white">
       <div class="btn-combo-buttons">
         <p class="slot" id="slot">Вы оформляете микрозайм на сумму {сумма} UZS</p>
-        <div class="btn-group-v"><button class="btn btn-l btn-primary">Получить деньги</button></div>
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" id="get-money">Получить деньги</button></div>
         <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
       </div>
       <div class="home-indicator"></div>
@@ -71,17 +71,20 @@ const P = Proto;
 const $ = s => document.querySelector(s);
 const input = $('#amount');
 
-// Сценарии из макета. A — кадры 68516:39019 и 41004: одобрено 10 000 000, два срока, платежи из макета.
-// B — кадр 68516:39117: одобрено 2 000 000, пять сроков, платежи грузятся (скелетоны; значений в макете нет).
-// Платёж для другой суммы: аннуитет пропорционален сумме при том же сроке, коэффициент — из макета (144 000 / 10 000 000).
-const SCEN = {
-  A: { approved: 10000000, terms: [
-    { m: 36, label: '36 месяцев', k: 144000 / 10000000 },
-    { m: 24, label: '24 месяца', k: 183000 / 10000000 } ] },
-  B: { approved: 2000000, loadingOnly: true, terms: [
-    { m: 36, label: '36 месяцев' }, { m: 24, label: '24 месяца' }, { m: 12, label: '12 месяцев' },
-    { m: 6, label: '6 месяцев' }, { m: 3, label: '3 месяца' } ] },
-};
+// Сроки и их доступность — правила «Rule dev» из «Калькулятор 3.0» (Figma 55845:95107):
+//   1–2 млн → 36, 24, 12, 6, 3 · 3 млн → 36, 24, 12, 6 · 4 млн → 36, 24, 12 · 7 млн → 36, 24 · 10 млн → 36.
+// Исключение: при 10 млн оставлен срок 24 месяца — так в кадре 4.0 «по умолчанию» (68516:39019).
+// Платёж = сумма × коэффициент; коэффициенты — платежи из макета на 10 000 000 (4.0: 36/24 мес., 3.0 кадр 55845:95296: 12/6/3 мес.).
+const TERMS = [
+  { m: 36, label: '36 месяцев', pay: 144000, max: Infinity },
+  { m: 24, label: '24 месяца',  pay: 183000, max: 10000000 },
+  { m: 12, label: '12 месяцев', pay: 307000, max: 4000000 },
+  { m: 6,  label: '6 месяцев',  pay: 370000, max: 3000000 },
+  { m: 3,  label: '3 месяца',   pay: 711000, max: 2000000 },
+];
+const termsFor = amount => TERMS.filter(t => amount <= t.max);
+const payFor = (t, amount) => Math.round(amount * t.pay / 10000000 / 1000) * 1000;
+const SCEN = { A: { approved: 10000000 }, B: { approved: 2000000 } };  // B — кадр 4.0 68516:39117
 const S = { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false };
 let lastValid = S.amount;
 
@@ -90,19 +93,28 @@ function render() {
   $('#approved-title').textContent = `${P.fmt(sc.approved)} UZS уже одобрены!`;
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
   $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
-  $('#terms').innerHTML = sc.terms.map(t => {
-    const pay = t.k ? Math.round(S.amount * t.k / 1000) * 1000 : 0;
-    const showSkeleton = sc.loadingOnly || S.loading;
+  const list = termsFor(S.amount);
+  if (!list.some(t => t.m === S.term)) S.term = list[0].m;
+  P.list($('#terms'), list, t => t.m, t => {
+    const on = t.m === S.term && !S.editing;
+    const val = S.loading ? 'sk' : String(payFor(t, S.amount));
     return `<div class="cwl-concept" data-act="term" data-m="${t.m}">
-      <img class="radio" src="assets/radio-${t.m === S.term && !S.editing ? 'on' : 'off'}.svg" alt="">
+      <img class="radio" src="assets/radio-${on ? 'on' : 'off'}.svg" alt="" data-swap="${on}" data-swap-anim="pop">
       <div class="cc-content">
         <p class="cc-label">${t.label}</p>
         <div class="cc-row"><span class="cc-row-label">Ежемесячный платеж</span>
-          <span class="cc-sum"${showSkeleton ? ' style="visibility:hidden"' : ''}><span class="num">${P.fmt(pay)}</span><span class="cur">UZS</span></span>${showSkeleton ? '<span class="skeleton"></span>' : ''}
+          <span class="cc-sum" data-swap="${val}"${S.loading ? ' style="visibility:hidden"' : ''}><span class="num">${P.fmt(payFor(t, S.amount))}</span><span class="cur">UZS</span></span>${S.loading ? '<span class="skeleton"></span>' : ''}
         </div>
       </div>
     </div>`;
-  }).join('');
+  });
+  // «Кнопка становится активной после подгрузки сумм» — Rule dev, Калькулятор 3.0
+  $('#get-money').disabled = S.loading;
+}
+
+function loadPayments(ms = 900) {
+  S.loading = true; render();
+  clearTimeout(loadPayments.t); loadPayments.t = setTimeout(() => { S.loading = false; render(); }, ms);
 }
 
 // Ввод суммы: только цифры, не больше одобренной
@@ -121,18 +133,20 @@ input.addEventListener('proto:done', () => {
   S.editing = false;
   if (!S.amount) S.amount = lastValid;
   if (S.amount === lastValid) return render();
-  lastValid = S.amount; S.loading = true; render();
-  clearTimeout(input._t); input._t = setTimeout(() => { S.loading = false; render(); }, 900);
+  lastValid = S.amount; loadPayments();
 });
 document.querySelector('.input-text').addEventListener('click', () => input.focus());
 
 P.on('term', el => { S.term = Number(el.dataset.m); render(); });
 
-const set = o => () => { Object.assign(S, { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false }, o); lastValid = S.amount; render(); P.reset('offer', null); };
+const set = o => () => { clearTimeout(loadPayments.t); Object.assign(S, { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false }, o); lastValid = S.amount; render(); P.reset('offer', null); };
 P.states([
   { id: 'default',  group: 'Основной флоу', title: 'Предложение по умолчанию', figma: '68516:39019', node: '68516:39019', height: 844, apply: set({}) },
   { id: 'keyboard', group: 'Основной флоу', title: 'Ввод суммы', figma: '68516:41004', node: '68516:41004', height: 844, apply: () => { set({ editing: true })(); P.keyboard.show(input); } },
-  { id: 'loading',  group: 'Сценарии', title: 'Одобрено 2 000 000: пять сроков, загрузка', figma: '68516:39117', node: '68516:39117', height: 1001, apply: set({ scen: 'B', amount: 1000000 }) },
+  { id: 'loading',  group: 'Сценарии', title: 'Одобрено 2 000 000: пять сроков, загрузка', figma: '68516:39117', node: '68516:39117', height: 1001, apply: () => { set({ scen: 'B', amount: 1000000 })(); loadPayments(1500); } },
+  { id: 'amount-3m', group: 'Сроки по сумме', title: '3 000 000 → 4 срока', apply: set({ amount: 3000000 }) },
+  { id: 'amount-4m', group: 'Сроки по сумме', title: '4 000 000 → 3 срока', apply: set({ amount: 4000000 }) },
+  { id: 'amount-7m', group: 'Сроки по сумме', title: '7 000 000 → 2 срока', apply: set({ amount: 7000000 }) },
 ]);
 render();
 P.start('offer');
