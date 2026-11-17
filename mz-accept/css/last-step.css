@@ -1,0 +1,32 @@
+  /* ===== 14598:32273 / 14598:32317 · Последний шаг ===== */
+  #s-last-step{background:var(--surface-neutral-calm000)}
+  /* контент: top 104 = appbar 94 + 10; заголовок и список через gap 24 */
+  #s-last-step .ls-body{display:flex;flex-direction:column;gap:24px;padding:10px 16px 0}
+  #s-last-step .ls-head{display:flex;flex-direction:column;gap:12px}
+  #s-last-step .ls-title{white-space:nowrap}
+  /* itemList_01: пункты 56 (одна строка, по центру) и 69 (две строки, по верху) */
+  #s-last-step .ls-list{display:flex;flex-direction:column;padding:0 12px}
+  #s-last-step .ls-item{display:flex;gap:10px;align-items:center;padding:12px 0}
+  #s-last-step .ls-item.is-top{align-items:flex-start}
+  /* withLabel_01: чекбокс 24 + текст 16/22 */
+  #s-last-step .ls-label{flex:1;min-width:1px;display:flex;gap:8px;align-items:flex-start}
+  #s-last-step .ls-label .cb{width:24px;height:24px;flex:none}
+  #s-last-step .ls-text{display:block;flex:1;min-width:1px;padding-top:1px;font-size:16px;line-height:22px;font-weight:400;color:var(--text-neutral-bold950)}
+  /* Button primary 32×32 с иконкой info 20 */
+  #s-last-step .ls-info{width:32px;height:32px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:8px;background:var(--bg-neutral-calm100)}
+  /* кнопка: «Принять все условия» — чёрная L, Semibold */
+  #s-last-step #accept-btn{font-weight:600}
+  /* все пункты отмечены (14598:32317): «Продолжить» — жёлтая, 48, радиус 12 */
+  #s-last-step #accept-btn.is-ready{height:48px;padding:12px 24px;border-radius:12px;background:var(--bg-secondary-calm300);color:var(--text-neutral-static-bold950)}
+
+  /* ===== 14598:32306 · 8. Онбординг КУС – MyID ===== */
+  #s-myid{background:var(--surface-neutral-calm000)}
+  /* кадр Figma со скруглением 30 (у «Последнего шага» 24) — для ?mode=figma */
+  html.m-figma .device:has(#s-myid.is-active){--frame-r:30px}
+  /* логотип top 101, подпись top 187, фото top 257 */
+  #s-myid .myid-body{display:flex;flex-direction:column;align-items:center;padding-top:7px}
+  #s-myid .myid-logo{width:100px;height:33px;flex:none}
+  #s-myid .myid-hint{margin-top:53px;text-align:center;white-space:nowrap;color:var(--colortext-body)}
+  #s-myid .myid-photo{margin-top:48px;width:356px;height:456px;flex:none}
+  /* HomeIndicator: чёрный, сдвинут на 1 px вправо (left:1px в Figma) */
+  #s-myid .home-indicator::after{margin-left:-66px;background:var(--labels-primary)}

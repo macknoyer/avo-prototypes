@@ -1,0 +1,232 @@
+/* Компоненты «000 Дизайн система», перенесённые из get_design_context 1:1.
+   Имена классов = имена компонентов Figma в kebab-case. Источник — kit/, копию в прототипе не правим.
+   Новый компонент сначала сверяется с Figma (скриншот + diff), потом попадает сюда. */
+
+/* утилиты */
+.abs{position:absolute;display:block}
+.abs>img{width:100%;height:100%}
+.ic16{width:16px;height:16px;flex:none}
+.ic20{width:20px;height:20px;flex:none}
+.ic24{width:24px;height:24px;flex:none}
+.nowrap{white-space:nowrap}
+.c-950{color:var(--text-neutral-bold950)}
+.c-600{color:var(--text-neutral-bold600)}
+.c-primary{color:var(--text-primary-bold600)}
+.c-alert{color:var(--text-alert-calm500)}
+.card{background:var(--bg-neutral-calm000);border-radius:16px}
+.divider{height:1px;width:100%;flex:none;background:var(--border-neutral-calm200)}
+
+/* AppBar: статус-бар 54 + строка действий 40 */
+.appbar{flex:none;display:flex;flex-direction:column;width:100%}
+.appbar-actions{position:relative;height:40px;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 16px}
+.appbar-left{position:absolute;left:16px;top:0;height:40px;display:flex;align-items:center;gap:4px}
+.appbar-left::before{content:"";position:absolute;inset:-2px -12px -2px -16px}
+.appbar-title{width:204px;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+
+/* Button */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-width:100px;text-align:center;white-space:nowrap;transition:opacity .12s ease,background-color var(--t2) var(--ease),color var(--t2) var(--ease),transform var(--t1) var(--ease)}
+.btn:active{opacity:.82;transform:scale(.985)}
+.btn-l{padding:16px 24px;border-radius:16px;font-size:16px;line-height:24px;font-weight:500}
+.btn-m{padding:12px 16px;border-radius:12px;min-width:80px;font-size:14px;line-height:20px;font-weight:500}
+.btn-primary{background:var(--bg-neutral-static-bold950);color:var(--text-neutral-calm000)}
+.btn-secondary{background:var(--bg-neutral-calm100);color:var(--text-neutral-static-bold950)}
+.btn[disabled],.btn.is-disabled{background:var(--bg-neutral-calm200);color:#5d5d63;pointer-events:none}
+.btn-text{display:flex;gap:6px;align-items:center;justify-content:center;min-width:50px;padding:6px 0;border-radius:8px;font-size:14px;line-height:20px;font-weight:500;color:var(--text-primary-bold600)}
+
+/* buttonCombination-checkbox: низ экрана */
+.btn-combo{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:flex-end;width:100%;background:var(--bg-neutral-calm100)}
+.btn-combo.on-white{background:var(--bg-neutral-calm000);padding:0 16px}
+.btn-combo-buttons{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;padding:16px 16px 0}
+.btn-combo.on-white .btn-combo-buttons{padding:16px 0 0}
+.btn-group-v{display:flex;flex-direction:column;gap:16px;width:100%}
+.checkbox-confirm{width:100%;text-align:center;font-size:12px;line-height:16px;color:var(--text-neutral-bold600)}
+.checkbox-confirm a{color:var(--text-primary-bold600);text-decoration:none}
+
+/* tags */
+.tag{display:inline-flex;align-items:center;justify-content:center;gap:4px;border-radius:500px;white-space:nowrap;flex:none}
+.tag-s{padding:2px 8px 2px 4px;gap:2px;font-size:12px;line-height:16px;font-weight:600}
+.tag-m{padding:4px 8px;font-size:14px;line-height:18px;font-weight:600}
+.tag-positive{background:var(--bg-positive-calm500);color:var(--text-neutral-static-calm000)}
+.tag-neutral{background:var(--bg-neutral-calm100);color:var(--text-neutral-static-bold950)}
+
+/* Data-list / Item_List_horizontal */
+.dl{display:flex;flex-direction:column;width:100%}
+.dl-item{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.dl-title{flex:1;min-width:1px;display:flex;gap:4px;align-items:flex-start;padding-top:1px;font-size:14px;line-height:17px;color:var(--text-neutral-bold600);white-space:nowrap}
+.dl-title img{width:16px;height:16px;flex:none;align-self:center}
+.dl-value{width:130px;flex:none;display:flex;gap:4px;justify-content:flex-end;font-size:14px;line-height:18px;font-weight:500;text-align:right;white-space:nowrap;color:var(--text-neutral-bold950)}
+
+/* statusColored */
+.status-colored{display:flex;gap:8px;align-items:flex-start;padding:8px;border-radius:8px;width:100%}
+.status-colored.is-center{align-items:center}
+.sc-positive{background:var(--bg-positive-calm050)}
+.sc-primary{background:var(--bg-primary-calm100)}
+.sc-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:4px}
+.sc-title{font-size:14px;line-height:18px;font-weight:500}
+.sc-sub{padding-bottom:2px;font-size:14px;line-height:18px;color:var(--text-neutral-bold600)}
+
+/* List_w_arrows / List_widget */
+.list-arrows{display:flex;flex-direction:column;gap:8px;width:100%}
+.list-arrow{display:flex;gap:8px;align-items:center;width:100%}
+.la-icon{width:24px;padding:8px 2px;flex:none;border-radius:18px;overflow:hidden}
+.la-icon img{width:20px;height:20px}
+.la-text{flex:1;min-width:1px;padding:1px 0;font-size:14px;line-height:18px;font-weight:500}
+.list-widget{display:flex;gap:8px;align-items:center;padding:16px;border-radius:16px;background:var(--bg-neutral-calm000);width:100%}
+
+/* bankcardItem */
+.bankcard-item{display:flex;gap:16px;align-items:center;width:100%;padding:12px 16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+.bankcard-item.is-top{border-radius:16px 16px 0 0}
+.bc-content{flex:1;min-width:1px;display:flex;gap:16px;align-items:center}
+.bc-icon{position:relative;width:36px;height:24px;flex:none;border-radius:4px;overflow:hidden}
+.bc-icon>.bank-logo{position:absolute;left:0;top:50%;transform:translateY(-50%)}
+.bank-logo{position:relative;width:36px;height:36px;overflow:hidden;flex:none}
+.bank-kapital{background:#fdd42e}
+.bank-kapital>.abs{inset:27.78% 27.78% 27.77% 27.78%}
+.bank-avo-micro{background:var(--bg-positive-calm500)}
+.bank-avo-micro>.abs{inset:38.89% 13.89% 37.28% 13.89%}
+.bank-avo-account{background:var(--bg-neutral-static-bold950)}
+.bank-avo-account>.abs{inset:38.89% 13.89% 37.28% 13.89%}
+.bc-main{flex:1;min-width:1px;display:flex;flex-direction:column;justify-content:center}
+.bc-amount{display:flex;gap:4px;align-items:flex-end;white-space:nowrap;color:var(--text-neutral-bold950)}
+.bc-amount .num{font-size:16px;line-height:20px;font-weight:500}
+.bc-amount .cur{font-size:12px;line-height:16px;font-weight:600}
+.bc-info{display:flex;gap:4px;align-items:center;height:24px;white-space:nowrap}
+.bc-bank{font-size:12px;line-height:16px;letter-spacing:-.12px;color:var(--text-neutral-bold950)}
+.bc-pan{font-size:12px;line-height:16px;color:var(--text-neutral-bold600)}
+.bc-name{font-size:14px;line-height:18px;font-weight:500;color:var(--text-neutral-bold950)}
+.bc-ps{position:relative;width:24px;height:24px;border-radius:4px;overflow:hidden;flex:none}
+.bc-ps>.abs{top:16.67%;bottom:15.52%;left:25%;right:25%}
+
+/* Input (Input_UZS) */
+.input{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}
+.input-label{width:100%;font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
+.input-uzs{position:relative;display:flex;gap:8px;align-items:center;width:100%;padding:13px 16px;border-radius:8px;background:var(--bg-neutral-calm000);overflow:hidden;cursor:text}
+.input-uzs input{flex:1;height:22px;font-size:16px;line-height:22px;color:var(--text-neutral-bold950);caret-color:var(--text-primary-bold600)}
+.input-uzs input::placeholder{color:var(--text-neutral-bold600);opacity:1}
+.input-suffix{font-size:16px;line-height:22px;color:var(--text-neutral-bold600);white-space:nowrap}
+.input-line{position:absolute;left:0;right:0;bottom:0;height:1.5px;width:100%;display:none}
+.input-prompt{width:100%;font-size:14px;line-height:17px;display:none}
+.input.is-error input{color:var(--text-alert-calm500)}
+.input.is-error .input-suffix{color:var(--text-neutral-calm400)}
+.input.is-error .input-line,.input.is-error .input-prompt{display:block}
+.input.is-error .input-prompt{color:var(--text-alert-calm500)}
+
+/* titleAction + аккордеон */
+.title-action{display:flex;gap:3px;align-items:center;width:100%}
+.title-action .ta-title{flex:1;min-width:1px;padding-bottom:2px;font-size:16px;line-height:20px;font-weight:600;white-space:nowrap}
+.title-action .ta-btn{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:50px;padding:6px 0;border-radius:8px}
+
+/* modalNotification (шторка) */
+.modal-notification{display:flex;flex-direction:column;align-items:flex-start;padding-top:8px;border-radius:16px 16px 0 0;background:var(--bg-neutral-calm000)}
+.grabber{display:flex;justify-content:center;width:100%}
+.grabber::before{content:"";width:36px;height:5px;border-radius:2.5px;background:var(--icon-neutral-calm400)}
+.mn-main{display:flex;flex-direction:column;align-items:center;gap:24px;width:100%;padding:24px 16px 0}
+.mn-content{display:flex;flex-direction:column;width:100%;padding:0 8px}
+.mn-title{padding-bottom:16px;text-align:center;font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.22px}
+.bullet-list{display:flex;flex-direction:column;gap:16px;padding-bottom:24px;width:100%}
+.bullet-item{display:flex;gap:12px;align-items:flex-start;width:100%}
+.bullet-item .bi-text{flex:1;min-width:1px;align-self:stretch;display:flex;align-items:center;font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
+.bullet-item .bi-text.is-strong{font-weight:600;line-height:20px;white-space:pre-wrap}
+
+/* Payment-status-card: шапка + контент */
+.pay-status-top{flex:none;display:flex;flex-direction:column;gap:1px;background:var(--bg-neutral-static-bold950)}
+.pay-status-top .appbar{padding-bottom:4px}
+.pay-status-logo{display:flex;justify-content:center;padding:12px 0}
+.pay-status-logo .logo{position:relative;width:120px;height:40px}
+.pay-status-logo .logo img{position:absolute;left:0;top:calc(50% - .2px);width:120px;height:39.6px;transform:translateY(-50%)}
+.pay-status-badge{position:relative;height:73.687px;width:100%}
+.pay-status-badge .bg{position:absolute;left:0;right:0;top:31.69px;height:42px;width:100%}
+.pay-status-badge .icon{position:absolute;left:50%;top:0;width:64px;height:64px;margin-left:-32px}
+.pay-status-content{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;background:var(--bg-neutral-calm000)}
+.pay-status-content .ps-top{display:flex;flex-direction:column;gap:24px;align-items:center;padding:8px 24px 0;overflow-y:auto}
+.ps-status{width:100%;text-align:center;font-size:18px;line-height:22px;font-weight:600}
+.ps-sum{display:flex;flex-direction:column;align-items:center;width:100%}
+.ps-sum .row{display:flex;gap:6px;align-items:flex-end}
+.ps-sum .num{font-size:32px;line-height:36px;font-weight:600;white-space:nowrap}
+.ps-sum .cur{align-self:stretch;display:flex;align-items:center;justify-content:center;padding-top:6px}
+.ps-sum .cur span{width:47px;height:100%;text-align:center;font-size:24px;line-height:28px;font-weight:600;letter-spacing:-.408px}
+.ps-sum .fee{display:flex;gap:4px;justify-content:center;width:100%;font-size:16px;line-height:22px;color:var(--text-neutral-bold600);white-space:nowrap}
+.payment-card{display:flex;align-items:center;width:100%;padding:16px;border-radius:16px;border:1px solid var(--border-neutral-calm100);background:var(--bg-neutral-calm000)}
+.payment-card .pc-content{flex:1;min-width:1px;display:flex;gap:12px;align-items:center}
+.avatar-48{position:relative;width:48px;height:48px;border-radius:500px;border:1px solid var(--border-neutral-bold600);overflow:hidden;flex:none}
+.avatar-48 .avo-a{position:absolute;left:50%;top:50%;width:48px;height:48px;transform:translate(-50%,-50%);background:#faff00}
+.avatar-48 .avo-a img{position:absolute;left:50%;top:50%;width:28px;height:28px;transform:translate(-50%,-50%)}
+.payment-card .pc-title{flex:1;min-width:1px;display:flex;flex-direction:column;justify-content:center}
+.payment-card .pc-name{font-size:18px;line-height:22px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.payment-card .pc-sub{font-size:14px;line-height:18px;color:var(--text-neutral-bold600)}
+.ps-dl{width:100%}
+.ps-dl .dl-item{padding:8px 0}
+.ps-dl .dl-title{padding-top:2px}
+.ps-dl .dl-value{align-self:stretch;align-items:center;gap:8px;padding-top:1px}
+.bank-sq{position:relative;width:24px;height:16px;border-radius:2px;overflow:hidden;flex:none}
+.bank-sq .sq{position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);background:var(--bg-positive-calm500)}
+.bank-sq .sq .abs{inset:38.89% 13.89% 37.28% 13.89%}
+.op-history-actions{height:13px;width:100%;background:var(--bg-neutral-calm000)}
+
+/* iOS Notification - Collapsed */
+.ios-notification{position:relative;display:flex;gap:10px;align-items:flex-start;padding:14px;border-radius:24px;overflow:hidden;font-optical-sizing:auto;
+  /* Figma: rgba(166,166,166,.7) + #333 color-dodge поверх фона = 145 + 0.375·фон. То же в CSS без color-dodge: */
+  background:rgba(207,207,207,.7);backdrop-filter:blur(30px) brightness(1.25);-webkit-backdrop-filter:blur(30px) brightness(1.25)}
+.ios-notification .app-icon{position:relative;width:38px;height:38px;border-radius:8.5px;overflow:hidden;background:#faff00;flex:none}
+.ios-notification .app-icon .abs{inset:18.33%}
+.ios-notification .body{flex:1;min-width:1px;display:flex;gap:5px;align-items:flex-start}
+.ios-notification .text{flex:1;min-width:1px;font-size:15px;line-height:20px;letter-spacing:-.23px;color:var(--text-neutral-bold950)}
+.ios-notification .text b{display:block;font-weight:590;height:21px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ios-notification .time{width:52px;text-align:right;font-size:13px;line-height:20px;color:var(--text-neutral-bold600);white-space:nowrap}
+
+/* cardsModal: шторка выбора карты / источника (ДС «000 Дизайн система», node 8375:28950) */
+.cards-modal{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:8px;border-radius:16px 16px 0 0;background:var(--bg-neutral-calm000)}
+.cm-content{display:flex;flex-direction:column;gap:16px;width:100%}
+.cm-body{display:flex;flex-direction:column;gap:12px;padding:24px 16px 0;width:100%}
+.cm-body .title-action{height:32px}
+.cm-list{display:flex;flex-direction:column;gap:8px;width:100%}
+.cm-list .bankcard-item{background:var(--bg-neutral-calm100)}
+.cm-footer{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:flex-end;width:100%;padding:0 16px;background:var(--bg-neutral-calm000)}
+.action-block{display:flex;align-items:center;width:100%;padding:14px 16px;border-radius:16px;background:var(--bg-neutral-calm100)}
+.action-block .ab-btn{flex:1;min-width:60px;display:flex;gap:8px;align-items:center;padding:12px 0;border-radius:12px;font-size:14px;line-height:20px;font-weight:500;color:var(--text-primary-bold600)}
+
+/* buttonCombination-checkbox на белом с текстом-слотом над кнопкой */
+.btn-combo.is-white{background:var(--bg-neutral-calm000)}
+.btn-combo .slot{width:100%;text-align:center;font-size:12px;line-height:16px;color:var(--text-neutral-bold600)}
+
+/* Input_Text: значение 18 Medium и иконка справа; в фокусе фон calm200 */
+.input-text{position:relative;display:flex;gap:8px;align-items:center;width:100%;padding:13px 16px;border-radius:8px;background:var(--bg-neutral-calm000);overflow:hidden;cursor:text}
+.input-text input{flex:1;min-width:1px;height:22px;font-size:18px;line-height:22px;font-weight:500;color:var(--text-neutral-bold950);caret-color:var(--text-primary-bold600)}
+.input-text .it-icon{display:flex;padding:0 3px;flex:none}
+.input-text .it-icon img{width:22px;height:22px}
+.input-text.is-focused{background:var(--bg-neutral-calm200)}
+
+/* _ControlWithLabel-concept: радио слева, подпись и строка значения */
+.cwl-concept{display:flex;gap:16px;align-items:flex-start;width:100%;padding:16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+.cwl-concept .radio{width:24px;height:24px;flex:none}
+.cwl-concept .cc-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.cwl-concept .cc-label{font-size:14px;line-height:18px;font-weight:500}
+.cwl-concept .cc-row{position:relative;display:flex;align-items:center;justify-content:space-between}
+.cwl-concept .cc-row-label{font-size:14px;line-height:17px;color:var(--text-neutral-bold600);white-space:nowrap}
+.cwl-concept .cc-sum{display:flex;gap:2px;align-items:flex-end;white-space:nowrap}
+.cwl-concept .cc-sum .num{font-size:16px;line-height:20px;font-weight:600}
+.cwl-concept .cc-sum .cur{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:1px;font-size:12px;line-height:16px;font-weight:600}
+
+/* Скелетон загрузки значения: прямоугольник 106×20 поверх значения (Figma «Rectangle») */
+.skeleton{position:absolute;right:0;top:0;width:106px;height:20px;border-radius:16px;background:var(--bg-neutral-calm100);overflow:hidden}
+
+/* iOS NumericKeyboard (на компьютере и в ?mode=figma; на телефоне — системная) */
+.ios-numpad{position:relative;height:290px;background:#d1d3d9;-webkit-backdrop-filter:blur(54px);backdrop-filter:blur(54px);font-optical-sizing:auto}
+.ios-numpad .row{position:absolute;left:6px;right:6px;height:46px;display:flex;gap:5px}
+.ios-numpad .key{position:relative;flex:1;min-width:1px;height:100%;border-radius:4.6px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.3);color:#030303;text-align:center}
+.ios-numpad .key:active{background:#bcbec4}
+.ios-numpad .key .d{position:absolute;left:0;right:0;top:calc(50% - 8px);transform:translateY(-50%);font-size:25px;line-height:normal;letter-spacing:.2912px}
+.ios-numpad .key .l{position:absolute;left:0;right:0;top:62.5%;bottom:8.93%;font-size:10px;line-height:normal;font-weight:700;letter-spacing:2px}
+.ios-numpad .key.zero .d{top:50%}
+.ios-numpad .key.empty,.ios-numpad .key.del{background:none;box-shadow:none}
+.ios-numpad .key.del img{position:absolute;inset:0;width:100%;height:100%}
+.ios-numpad .home-indicator{position:absolute;left:0;right:0;bottom:0;height:34px}
+.ios-numpad .home-indicator::after{background:#030303}
+
+/* анимации компонентов: фокус поля, нажатие карточек */
+.input-text,.input-uzs{transition:background-color var(--t2) var(--ease)}
+.cwl-concept,.cwl,.list-widget,.bankcard-item,.list-arrow,.payment-card{transition:transform var(--t1) var(--ease)}
+.cwl-concept:active,.cwl:active,.list-widget:active,.bankcard-item.pressable:active,.cm-list .bankcard-item:active{transform:scale(.98)}
+/* скелетон: перелив во время загрузки */
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);animation:shimmer 1.2s ease-in-out infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}

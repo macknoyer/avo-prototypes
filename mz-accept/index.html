@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Акцепт МЗ">
+<meta name="theme-color" content="#f1f2f5">
+<title>Акцепт микрозайма</title>
+<meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
+<link rel="stylesheet" href="kit/tokens.css?v=1794935918">
+<link rel="stylesheet" href="kit/proto.css?v=1794935918">
+<link rel="stylesheet" href="kit/components.css?v=1794935918">
+<link rel="stylesheet" href="css/calc.css">
+<link rel="stylesheet" href="css/offer.css">
+<link rel="stylesheet" href="css/last-step.css">
+<link rel="stylesheet" href="css/issue.css">
+<style>html{--frame-r:24px} .is-hidden{display:none!important}</style>
+</head>
+<body>
+<div class="device">
+
+  <section class="screen" id="s-calc" data-title="Ваше предложение">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <div class="appbar-title title-small-semibold nowrap">Ваше предложение</div>
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/calc-chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="calc-body">
+        <div class="status-colored sc-positive">
+          <img class="ic24" src="assets/calc-money.svg" alt="">
+          <div class="sc-content"><p class="sc-title" id="approved-title">10 000 000 UZS уже одобрены!</p><p class="sc-sub">Выбери сумму займа и подберите удобный ежемесячный платеж</p></div>
+        </div>
+        <div class="input">
+          <label class="input-label" for="amount">Одобреная сумма</label>
+          <div class="input-text no-hint">
+            <input id="amount" type="text" inputmode="numeric" data-kb="numeric" autocomplete="off" enterkeyhint="done" maxlength="15" value="7 000 000">
+            <span class="it-icon"><img src="assets/calc-edit.svg" alt=""></span>
+          </div>
+        </div>
+        <div class="terms">
+          <p class="group-label">Срок займа</p>
+          <div class="terms-list" id="terms"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <p class="slot" id="slot">Вы оформляете микрозайм на сумму {сумма} UZS</p>
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" id="get-money" data-go="offer">Получить деньги</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:34809 · оффер p30 · Принять условия кредита ============ -->
+  <section class="screen" id="s-offer" data-title="Принять условия кредита">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <div class="appbar-title title-small-semibold c-950 nowrap">Принять условия кредита</div>
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/offer-chevron-left.svg" alt=""></button>
+        <span class="of-appbar-right"><img class="ic24" src="assets/offer-more-horizontal.svg" alt=""></span>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="of-body">
+        <!-- KL_offer: баннер + сумма -->
+        <div class="of-hero">
+          <div class="of-banner"><img src="assets/offer-banner.png" alt=""></div>
+          <div class="of-limit">
+            <div class="of-sum"><p class="title-large-h1 c-950 nowrap">50 000 000</p><div class="of-cur"><p class="title-large-h3 c-950 nowrap">UZS</p></div></div>
+            <p class="body-small-l-regular c-600 nowrap">Сумма к получению</p>
+          </div>
+        </div>
+        <!-- offerCard × 2 -->
+        <div class="of-cards">
+          <div class="of-card"><p class="title-medium-semibold c-950 nowrap">Без процентов</p><p class="of-card-sub body-small-l-regular c-600">при погашении <br>в первый месяц</p></div>
+          <div class="of-card"><p class="title-medium-semibold c-950 nowrap">12 месяцев</p><p class="of-card-sub body-small-l-regular c-600">срок использования <br>займа</p></div>
+        </div>
+        <!-- услуга «Для своих»: offerCard + tags «Деньги под защитой» -->
+        <div class="of-service">
+          <button class="of-service-card pressable" type="button" data-sheet="service">
+            <span class="of-sc-text">
+              <span class="of-sc-title title-medium-semibold c-950">60 дней без штрафов и пени</span>
+              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br>55 000 000 UZS</span>
+            </span>
+            <img class="of-chevron" src="assets/offer-chevron-right.svg" width="22" height="22" alt="">
+          </button>
+          <span class="of-tag tag tag-m tag-positive"><img class="ic16" src="assets/offer-safe.svg" alt="">Деньги под защитой</span>
+        </div>
+        <!-- Offer conditions: основные условия -->
+        <div class="of-block">
+          <div class="title-action"><p class="ta-title c-950">Основные условия</p></div>
+          <div class="dl of-dl">
+            <div class="dl-item"><div class="dl-title is-center"><p>Льготный период до</p><img class="ic16" src="assets/offer-info.svg" alt=""></div><div class="dl-value"><p> 21.02.2026</p></div></div>
+            <div class="dl-item"><div class="dl-title"><p>Ежемесячный платеж</p></div><div class="dl-value"><p>4 583 000</p><p>UZS</p></div></div>
+            <div class="dl-item"><div class="dl-title"><p>Дата платежа</p></div><div class="dl-value"><p>21.02.2026</p></div></div>
+            <div class="dl-item"><div class="dl-title"><p>Процентная ставка</p></div><div class="dl-value"><p>34,9 %</p></div></div>
+          </div>
+        </div>
+        <!-- Offer conditions: договор и график платежей (превью документа) -->
+        <div class="of-block">
+          <div class="title-action"><p class="ta-title c-950">Договор и график платежей</p></div>
+          <p class="of-note body-small-l-regular c-600">Внимательно ознакомьтесь с документом перед принятием условий</p>
+          <div class="of-doc">
+            <div class="of-doc-head">
+              <div class="of-doc-brand">
+                <img src="assets/offer-doc-logo.svg" width="59.302" height="19.254" alt="">
+                <i class="of-doc-bar"></i>
+                <p class="of-doc-text">ООО «AVO SERVICES AND TECHNOLOGY» <br>Республика Узбекистан, г. Ташкент, ул. Нукус, 29а<br>ИНН 309440142 • Рег. номер 1113342</p>
+              </div>
+              <div class="of-doc-contacts">
+                <p class="of-doc-text">+998 78 888-78-87<br>info@avotech.uz</p>
+                <img class="of-doc-ic is-phone" src="assets/offer-doc-phone.svg" alt="">
+                <img class="of-doc-ic is-mail" src="assets/offer-doc-mail.svg" alt="">
+              </div>
+            </div>
+            <i class="of-doc-cover"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- buttonCombination-checkbox -->
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" data-go="last-step">Принять условия</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку Принять условия я даю согласие, что <span class="of-c700">ознакомился</span><span class="c-primary"> </span><span class="of-cs700">с </span>Индивидуальными условиями Микрозайма<span class="of-cs700">, </span><span class="c-primary">Общими условиями Микрозайма, Тарифами Банка</span></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32273 (не отмечено) / 14598:32317 (всё отмечено) · Последний шаг ============ -->
+  <section class="screen" id="s-last-step" data-title="Последний шаг">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="ls-body">
+        <div class="ls-head">
+          <p class="ls-title title-large-h2 c-950">Последний шаг</p>
+          <p class="body-large-l-regular c-600">Ознакомьтесь с условиями и рисками перед финальным принятием предложения</p>
+        </div>
+        <div class="ls-list">
+          <div class="ls-item">
+            <button class="ls-label" type="button" data-act="check" data-i="0"><img class="cb" src="assets/ls-checkbox-off.svg" alt=""><span class="ls-text">Кредит – это расходы</span></button>
+            <span class="ls-info"><img class="ic20" src="assets/ls-info.svg" alt=""></span>
+          </div>
+          <div class="ls-item">
+            <button class="ls-label" type="button" data-act="check" data-i="1"><img class="cb" src="assets/ls-checkbox-off.svg" alt=""><span class="ls-text">Я внимательно изучил(а) график </span></button>
+            <span class="ls-info"><img class="ic20" src="assets/ls-info.svg" alt=""></span>
+          </div>
+          <div class="ls-item is-top">
+            <button class="ls-label" type="button" data-act="check" data-i="2"><img class="cb" src="assets/ls-checkbox-off.svg" alt=""><span class="ls-text">Мой заработок позволяет оплачивать кредит</span></button>
+            <span class="ls-info"><img class="ic20" src="assets/ls-info.svg" alt=""></span>
+          </div>
+          <div class="ls-item is-top">
+            <button class="ls-label" type="button" data-act="check" data-i="3"><img class="cb" src="assets/ls-checkbox-off.svg" alt=""><span class="ls-text">Я осведомлён(а) о последствиях просрочки платежей</span></button>
+            <span class="ls-info"><img class="ic20" src="assets/ls-info.svg" alt=""></span>
+          </div>
+          <div class="ls-item">
+            <button class="ls-label" type="button" data-act="check" data-i="4"><img class="cb" src="assets/ls-checkbox-off.svg" alt=""><span class="ls-text">Я самостоятельно подаю заявку </span></button>
+            <span class="ls-info"><img class="ic20" src="assets/ls-info.svg" alt=""></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" id="accept-btn" data-act="accept">Принять все условия</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку, подтверждаю согласие с условиями и рисками, а также оценку своей финансовой нагрузки</p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32306 · 8. Онбординг КУС – MyID ============ -->
+  <section class="screen" id="s-myid" data-title="Пожалуйста, улыбнитесь">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="myid-body">
+        <img class="myid-logo" src="assets/myid-logo.svg" alt="AVO">
+        <p class="myid-hint body-large-l-regular">Пожалуйста, улыбнитесь</p>
+        <img class="myid-photo" src="assets/myid-photo.png" width="356" height="456" alt="">
+      </div>
+    </div>
+    <div class="footer">
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32350 · Обрабатываем ваши данные ============ -->
+  <section class="screen" id="s-processing" data-title="Обрабатываем ваши данные" data-theme-color="#ffffff">
+    <header class="appbar"><div class="statusbar"></div></header>
+    <div class="scroll">
+      <div class="iss">
+        <div class="iss-title">
+          <div class="banner"><img src="assets/iss-processing.png" alt=""></div>
+          <div class="iss-content">
+            <p class="title-large-h4 iss-h">Обрабатываем ваши данные</p>
+            <p class="body-large-l-regular iss-p">Дождитесь окончания проверки — это займет всего несколько минут</p>
+          </div>
+        </div>
+        <div class="bl">
+          <div class="bl-item">
+            <div class="bl-icon"><div class="loader"><img class="spin" src="assets/iss-loader-24.svg" alt=""></div></div>
+            <p class="bl-text title-small-medium c-950">Обработка данных</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32359 · Активируйте кредит ============ -->
+  <section class="screen" id="s-activate" data-title="Активируйте кредит" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><button class="appbar-left" data-act="close-flow" aria-label="Закрыть"><img class="ic24" src="assets/iss-close-circle.svg" alt=""></button></div>
+    </header>
+    <div class="scroll">
+      <div class="iss">
+        <div class="iss-title">
+          <div class="banner"><img src="assets/iss-activate.png" alt=""></div>
+          <div class="iss-content">
+            <p class="title-large-h4 iss-h">Активируйте кредит</p>
+            <p class="body-large-l-regular iss-p">Просто позвоните в контакт-центр — активация займёт меньше минуты или дождитесь звонка оператора</p>
+          </div>
+          <div class="iss-link"><p class="button-medium c-primary nowrap">Какая информация потребуется?</p></div>
+        </div>
+        <div class="bl">
+          <div class="bl-item is-done">
+            <div class="bl-icon"><img src="assets/iss-check.svg" alt=""></div>
+            <p class="bl-text body-large-l-regular c-600">Принятие условий</p>
+          </div>
+          <div class="bl-item">
+            <div class="bl-icon"><img src="assets/iss-alert-circle.svg" alt=""></div>
+            <p class="bl-text title-small-medium c-950">Активация кредита</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" data-act="call">Позвонить</button></div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32373 · Зачисляем кредит на счет ============ -->
+  <section class="screen" id="s-crediting" data-title="Зачисляем кредит на счет" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/iss-chevron-left.svg" alt=""></button></div>
+    </header>
+    <div class="scroll">
+      <div class="iss">
+        <div class="iss-title">
+          <div class="banner"><img src="assets/iss-crediting.png" alt=""></div>
+          <div class="iss-content">
+            <p class="title-large-h4 iss-h">Зачисляем кредит на счет</p>
+            <p class="body-large-l-regular iss-p">Обычно это занимает меньше минуты</p>
+          </div>
+        </div>
+        <div class="bl">
+          <div class="bl-item">
+            <div class="bl-icon"><img class="spin" src="assets/iss-loader-20.svg" alt=""></div>
+            <p class="bl-text title-small-medium c-950">Зачисление кредита</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" data-act="close-crediting">Закрыть</button></div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14598:32384 (435403) · Текущий счёт ============ -->
+  <section class="screen" id="s-account" data-title="Текущий счёт">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="assets/iss-chevron-left.svg" alt=""></button></div>
+    </header>
+    <div class="scroll">
+      <div class="acc">
+        <div class="card acc-widget">
+          <div class="acc-header">
+            <div class="acc-head">
+              <p class="title-x-small-medium nowrap">Текущий счёт</p>
+              <div class="acc-edit"><img class="ic24" src="assets/acc-edit.svg" alt=""></div>
+            </div>
+            <div class="acc-main">
+              <p class="body-small-l-regular c-600">Доступный баланс</p>
+              <div class="acc-sum"><span class="title-large-h1">50 000 000</span><span class="acc-cur title-large-h3">UZS</span></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="balance-actions">
+            <div class="ba"><img class="ic24" src="assets/acc-balance-in.svg" alt=""><p class="body-medium-m">Пополнить</p></div>
+            <div class="ba"><img class="ic24" src="assets/acc-balance-transfer.svg" alt=""><p class="body-medium-m">Перевести</p></div>
+            <div class="ba"><img class="ic24" src="assets/acc-clock.svg" alt=""><p class="body-medium-m">История</p></div>
+          </div>
+        </div>
+        <div class="card acc-menu">
+          <div class="list-arrows">
+            <div class="list-arrow"><div class="la-icon"><img src="assets/acc-document-menu.svg" alt=""></div><p class="la-text">Реквизиты</p><img class="ic24" src="assets/acc-chevron-right.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><div class="home-indicator"></div></div>
+  </section>
+
+  <!-- ============ 14598:36040 · modalNotification «60 дней без штрафов и пени» + 14603:37837 tooltip «Действие недоступно» ============ -->
+  <div class="sheet-layer" id="sheet-service">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="sv-main">
+          <div class="sv-content">
+            <!-- docWidget: услуга + Switcher (в Figma только вариант isOn=true) -->
+            <div class="sv-widget">
+              <div class="sv-text">
+                <p class="title-small-semibold c-950 nowrap">60 дней без штрафов и пени</p>
+                <p class="body-small-l-regular c-600 nowrap">Сумма к получению с учетом услуги <br>55 000 000 UZS</p>
+              </div>
+              <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="60 дней без штрафов и пени"><img class="sv-sw-on" src="assets/offer-switch-on.svg" width="43" height="26.1373" alt=""></button>
+            </div>
+            <!-- Bullet-list -->
+            <div class="sv-bullets">
+              <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">30 дней без процентов</p></div>
+              <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">Мгновенное зачисление средств</p></div>
+              <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">60 дней без штрафов</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo is-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v"><button class="btn btn-l btn-primary sv-close" data-close>Закрыть</button></div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+      <!-- tooltip: в Figma на 99 px правее и на 80 px выше левого верхнего угла попапа -->
+      <div class="sv-tooltip is-hidden" id="tooltip-unavailable" role="status"><p class="body-large-l-regular nowrap">Действие недоступно</p></div>
+    </div>
+  </div>
+
+  <!-- ============ modalNotification (14598:32392) · Поздравляем! ============ -->
+  <div class="sheet-layer" id="sheet-congrats">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="mn-main">
+          <div class="banner"><img src="assets/iss-crediting.png" alt=""></div>
+          <div class="mn-content">
+            <div class="mn-tb">
+              <p class="title-large-h4">Поздравляем! Деньги уже на вашем счете</p>
+              <p class="body-large-l-regular c-600">Выводите моментально на любую карту</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo is-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v"><button class="btn btn-l btn-primary" data-close>Понятно</button></div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="kit/proto.js?v=1794935918"></script>
+<script>
+const P = Proto;
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ---------- 1. Калькулятор (кадр 14598:32260, копия выгрузки «сумма 7 000 000») ----------
+   Сроки по сумме — правила «Rule dev» Калькулятора 3.0, как в прототипе microloan-calc.
+   Платежи кадра: 336 000 и 427 000 на 7 000 000; короткие сроки — в той же пропорции, что в 3.0 (144/307/370/711). */
+const K36 = 336000 / 7000000, K24 = 427000 / 7000000;
+const TERMS = [
+  { m: 36, label: '36 месяцев', k: K36, max: Infinity },
+  { m: 24, label: '24 месяца', k: K24, max: 10000000 },
+  { m: 12, label: '12 месяцев', k: K36 * 307 / 144, max: 4000000 },
+  { m: 6, label: '6 месяцев', k: K36 * 370 / 144, max: 3000000 },
+  { m: 3, label: '3 месяца', k: K36 * 711 / 144, max: 2000000 },
+];
+const APPROVED = 10000000;
+const termsFor = a => TERMS.filter(t => a <= t.max);
+const payFor = (t, a) => Math.round(a * t.k / 1000) * 1000;
+const S = { amount: 7000000, term: 36, loading: false, editing: false, checks: [false, false, false, false, false] };
+let lastValid = S.amount;
+const input = $('#amount');
+
+function renderCalc() {
+  if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
+  const list = termsFor(S.amount);
+  if (!list.some(t => t.m === S.term)) S.term = list[0].m;
+  P.list($('#terms'), list, t => t.m, t => {
+    const on = t.m === S.term && !S.editing;
+    const val = S.loading ? 'sk' : String(payFor(t, S.amount));
+    return `<div class="cwl-concept" data-act="term" data-m="${t.m}">
+      <img class="radio" src="assets/calc-radio-${on ? 'on' : 'off'}.svg" alt="" data-swap="${on}" data-swap-anim="pop">
+      <div class="cc-content">
+        <p class="cc-label">${t.label}</p>
+        <div class="cc-row"><span class="cc-row-label">Ежемесячный платеж</span>
+          <span class="cc-sum" data-swap="${val}"${S.loading ? ' style="visibility:hidden"' : ''}><span class="num">${P.fmt(payFor(t, S.amount))}</span><span class="cur">UZS</span></span>${S.loading ? '<span class="skeleton"></span>' : ''}
+        </div>
+      </div>
+    </div>`;
+  });
+  $('#get-money').disabled = S.loading;
+}
+function loadPayments(ms = 900) {
+  S.loading = true; renderCalc();
+  clearTimeout(loadPayments.t); loadPayments.t = setTimeout(() => { S.loading = false; renderCalc(); }, ms);
+}
+function applyAmount() { if (!S.amount || S.amount === lastValid) return; lastValid = S.amount; loadPayments(); }
+input.addEventListener('focus', () => { if (!S.editing) { S.editing = true; renderCalc(); } });
+input.addEventListener('input', () => {
+  let v = P.num(input.value); if (v > APPROVED) v = APPROVED;
+  S.amount = v; input.value = v ? P.fmt(v) : '';
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(v)} UZS`;
+  clearTimeout(input._d); input._d = setTimeout(applyAmount, 500);
+});
+input.addEventListener('proto:done', () => {
+  S.editing = false; clearTimeout(input._d);
+  if (!S.amount) S.amount = lastValid;
+  if (S.amount === lastValid) return renderCalc();
+  lastValid = S.amount; loadPayments();
+});
+$('#s-calc .input-text').addEventListener('click', () => input.focus());
+P.on('term', el => { S.term = Number(el.dataset.m); renderCalc(); });
+
+/* ---------- 2. Оффер: услуга «Для своих» не отключается — подсказка «Действие недоступно» ---------- */
+P.on('service-toggle', () => {
+  const t = $('#tooltip-unavailable'); if (!t) return;
+  t.classList.remove('is-hidden'); clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.add('is-hidden'), 2000);
+});
+
+/* ---------- 3. Последний шаг (435401 → 435402) ---------- */
+function renderChecks() {
+  $$('#s-last-step [data-act="check"]').forEach(el => {
+    const img = el.querySelector('img.cb'); if (!img) return;
+    const src = 'assets/ls-checkbox-' + (S.checks[Number(el.dataset.i)] ? 'on' : 'off') + '.svg';
+    if (!img.src.endsWith(src)) { img.src = src; img.classList.remove('p-pop'); void img.offsetWidth; if (P.animOn()) img.classList.add('p-pop'); }
+  });
+  const all = S.checks.every(Boolean), b = $('#accept-btn');
+  if (b) { b.classList.toggle('is-ready', all); b.textContent = all ? 'Продолжить' : 'Принять все условия'; }
+}
+P.on('check', el => { const i = Number(el.dataset.i); S.checks[i] = !S.checks[i]; renderChecks(); });
+P.on('accept', () => {
+  if (!S.checks.every(Boolean)) { S.checks = S.checks.map(() => true); renderChecks(); return; }   // «Принять все условия»
+  P.go('myid');                                                                                   // «Продолжить»
+});
+
+/* ---------- 4. Выдача: автопереходы, звонок, зачисление ---------- */
+const AUTO = { myid: ['processing', 2500], processing: ['activate', 2500], crediting: ['account', 2500] };
+let autoT;
+document.addEventListener('proto:enter', e => {
+  clearTimeout(autoT);
+  const id = e.target.id.replace(/^s-/, '');
+  if (P.mode === 'figma') return;                       // сверка с Figma — без автопереходов
+  if (AUTO[id]) autoT = setTimeout(() => { if (P.current === id) P.go(AUTO[id][0], 'fade'); }, AUTO[id][1]);
+  if (id === 'account') setTimeout(() => { if (P.current === 'account') P.openSheet('congrats'); }, 450);
+});
+P.on('call', () => P.go('crediting'));
+P.on('close-crediting', () => P.go('account', 'fade'));
+P.on('close-flow', () => { S.checks = S.checks.map(() => false); renderChecks(); P.reset('calc'); });
+
+/* ---------- состояния: карта экранов и сверка ---------- */
+const reset = o => { Object.assign(S, { amount: 7000000, term: 36, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
+const at = (id, o, before) => () => { reset(o); P.reset('calc', null); if (before) before.forEach(b => P.go(b, null)); if (id !== 'calc') P.go(id, null); };
+P.states([
+  { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc') },
+  { id: 'offer', group: 'Оффер', title: 'Принять условия кредита', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer') },
+  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14598:36040', node: '14598:36040', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer')(); p.openSheet('service'); } },
+  { id: 'last-step', group: 'Оффер', title: 'Последний шаг', figma: '435401', node: '14598:32273', height: 844, apply: at('last-step', null, ['offer']) },
+  { id: 'last-step-ready', group: 'Оффер', title: 'Последний шаг — всё принято', figma: '435402', node: '14598:32317', height: 844, apply: at('last-step', { checks: [true, true, true, true, true] }, ['offer']) },
+  { id: 'myid', group: 'Выдача', title: 'Пожалуйста, улыбнитесь', figma: 'MyID', node: '14598:32306', height: 844, apply: at('myid', null, ['offer', 'last-step']) },
+  { id: 'processing', group: 'Выдача', title: 'Обрабатываем ваши данные', figma: '14598:32350', node: '14598:32350', height: 844, apply: at('processing') },
+  { id: 'activate', group: 'Выдача', title: 'Активируйте кредит', figma: '14598:32359', node: '14598:32359', height: 844, apply: at('activate') },
+  { id: 'crediting', group: 'Выдача', title: 'Зачисляем кредит на счет', figma: '14598:32373', node: '14598:32373', height: 844, apply: at('crediting') },
+  { id: 'account', group: 'Выдача', title: 'Деньги на счёте', figma: '435403', node: '14598:32384', height: 844, apply: p => { at('account')(); p.openSheet('congrats'); } },
+]);
+renderCalc(); renderChecks();
+P.start('calc');
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+/* Выдача: Обрабатываем (14598:32350), Активируйте (14598:32359), Зачисляем (14598:32373),
+   Текущий счёт (14598:32384) и шторка «Поздравляем!». Значения — из get_design_context.
+   Файл лежит в css/, поэтому пути к ассетам — ../assets/. */
+
+/* ---------- Экраны 1–3: белый фон, статус-бар в кадрах Figma с opacity 0 ---------- */
+#s-processing,#s-activate,#s-crediting{background:var(--bg-neutral-calm000)}
+#s-processing .statusbar,#s-activate .statusbar,#s-crediting .statusbar{opacity:0}
+#s-processing .iss,#s-activate .iss,#s-crediting .iss{display:flex;flex-direction:column;gap:24px;padding:0 16px}
+/* у «Обрабатываем» AppBar — только статус-бар 54, контент начинается с y=94 */
+#s-processing .iss{padding-top:40px}
+#s-processing .iss-title,#s-activate .iss-title,#s-crediting .iss-title{display:flex;flex-direction:column;gap:24px;align-items:center;width:100%}
+#s-processing .iss-content,#s-activate .iss-content,#s-crediting .iss-content{display:flex;flex-direction:column;gap:24px;width:100%;text-align:center}
+/* Title-Active/Lightmode #030303 — токена нет; Body/Lightmode #5a5b73 = --colortext-body */
+#s-processing .iss-h,#s-activate .iss-h,#s-crediting .iss-h{color:#030303}
+#s-processing .iss-p,#s-activate .iss-p,#s-crediting .iss-p{color:var(--colortext-body)}
+#s-activate .iss-link{display:flex;gap:8px;align-items:center}
+
+/* ---------- Img_banner/242*144: картинка 144 px по высоте по центру ---------- */
+#s-processing .banner,#s-activate .banner,#s-crediting .banner,#sheet-congrats .banner{position:relative;width:242px;height:144px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;overflow:hidden}
+#s-processing .banner img,#s-activate .banner img,#s-crediting .banner img,#sheet-congrats .banner img{height:144px;flex:none;object-fit:cover}
+/* Card_11 и Card_10: маска-градиент 242×144 из Figma (в кадре затухание правее картинки) */
+#s-processing .banner img{width:160px;-webkit-mask:url(../assets/iss-banner-mask.svg) -41px 0/242px 144px no-repeat;mask:url(../assets/iss-banner-mask.svg) -41px 0/242px 144px no-repeat}
+#s-activate .banner img{width:144px;-webkit-mask:url(../assets/iss-banner-mask.svg) -49px 0/242px 144px no-repeat;mask:url(../assets/iss-banner-mask.svg) -49px 0/242px 144px no-repeat}
+/* Card_35 */
+#s-crediting .banner img,#sheet-congrats .banner img{width:170px}
+
+/* ---------- Bullet-list-bg ---------- */
+#s-processing .bl,#s-activate .bl,#s-crediting .bl{display:flex;flex-direction:column;gap:8px;width:100%}
+/* активный шаг: фон calm100, Content py 1 */
+#s-processing .bl-item,#s-activate .bl-item,#s-crediting .bl-item{display:flex;gap:8px;align-items:flex-start;width:100%;padding:17px 16px;border-radius:18px;background:var(--bg-neutral-calm100)}
+/* пройденный шаг: фон calm050, без py */
+#s-activate .bl-item.is-done{padding:16px;background:var(--bg-neutral-calm050)}
+#s-processing .bl-icon,#s-activate .bl-icon,#s-crediting .bl-icon{align-self:stretch;display:flex;align-items:flex-start;padding-top:1px;flex:none}
+#s-processing .bl-icon>img,#s-activate .bl-icon>img,#s-crediting .bl-icon>img{width:20px;height:20px}
+#s-processing .bl-text,#s-activate .bl-text,#s-crediting .bl-text{flex:1;min-width:1px;align-self:stretch;display:flex;align-items:center}
+/* Loader anim: рамка 20×20, внутри дуга 24×24 */
+#s-processing .loader{width:20px;height:20px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+#s-processing .loader img{width:24px;height:24px;flex:none}
+
+/* ---------- Спиннер: в Figma статичная дуга; вращаем вокруг центра её окружности ---------- */
+@keyframes spin{to{transform:rotate(360deg)}}
+#s-processing .spin,#s-crediting .spin{animation:spin 1s linear infinite;transform-origin:44.196% 55.804%}
+
+/* ---------- Текущий счёт (435403) ---------- */
+/* AppBar в кадре сдвинут: x=4, ширина 387 (right −1) */
+#s-account .appbar{width:auto;margin:0 -1px 0 4px}
+#s-account .acc{display:flex;flex-direction:column;gap:16px;padding:9px 16px 24px}
+#s-account .acc-widget{display:flex;flex-direction:column;align-items:center}
+#s-account .acc-header{display:flex;flex-direction:column;gap:16px;width:100%;padding:16px}
+#s-account .acc-head{display:flex;height:18px;align-items:center;justify-content:space-between;width:100%}
+#s-account .acc-edit{position:relative;width:42px;height:42px;border-radius:20px;flex:none}
+#s-account .acc-edit img{position:absolute;right:9px;top:50%;transform:translateY(-50%)}
+#s-account .acc-main{display:flex;flex-direction:column;gap:2px;justify-content:center;width:100%}
+#s-account .acc-sum{display:flex;gap:4px;align-items:flex-end;white-space:nowrap}
+#s-account .acc-cur{display:flex;align-items:center;height:32px}
+#s-account .balance-actions{display:flex;gap:8px;align-items:flex-start;justify-content:center;padding:16px}
+#s-account .ba{width:75.5px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+#s-account .acc-menu{padding:16px}
+
+/* ---------- Шторка «Поздравляем!» (modalNotification) ---------- */
+/* затемнение в кадре — Rectangle 85: overlay/neutral/bold (15 %), а не boldest кита */
+#sheet-congrats .sheet-scrim{background:var(--overlay-neutral-bold)}
+#sheet-congrats .mn-tb{display:flex;flex-direction:column;gap:16px;width:100%;padding-bottom:16px;text-align:center}
+/* «Понятно» в Figma — Semibold */
+#sheet-congrats .btn{font-weight:600}

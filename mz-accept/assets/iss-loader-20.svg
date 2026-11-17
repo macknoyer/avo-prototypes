@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="loading" clip-path="url(#clip0_0_132)">
+<path id="Intersect" d="M20 11.1607C20 11.614 19.9729 12.0609 19.9204 12.5L15.8564 12.5C15.9387 12.0662 15.9821 11.6185 15.9821 11.1607C15.9821 7.21582 12.7842 4.01786 8.83929 4.01786C8.38148 4.01786 7.93386 4.06154 7.5 4.14385V0.0797817C7.93911 0.0272661 8.38603 3.87295e-08 8.83929 5.8542e-08C15.0032 3.27974e-07 20 4.99682 20 11.1607Z" fill="#2055CF"/>
+</g>
+<defs>
+<clipPath id="clip0_0_132">
+<rect width="20" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>
