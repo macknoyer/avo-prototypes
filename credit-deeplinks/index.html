@@ -1,0 +1,1381 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Кредитные диплинки">
+<meta name="theme-color" content="#ffffff">
+<title>Кредитные диплинки: целевой флоу</title>
+<meta name="description" content="Онбординг по кредитному диплинку с явной заявкой: регистрация, пароль, биометрия, паспорт, MyID и продукт по метке диплинка. Прототип 1:1 по Figma.">
+<link rel="stylesheet" href="kit/tokens.css?v=1795003788">
+<link rel="stylesheet" href="kit/proto.css?v=1795003788">
+<link rel="stylesheet" href="kit/components.css?v=1795003788">
+<link rel="stylesheet" href="css/auth1.css">
+<link rel="stylesheet" href="css/auth2.css">
+<link rel="stylesheet" href="css/dash.css">
+<link rel="stylesheet" href="css/prod.css">
+<style>html{--frame-r:24px} .is-hidden{display:none!important}</style>
+</head>
+<body>
+<div class="device">
+
+  <!-- ============ 14052:34544 · 1. Splash (автопереход на phone — у координатора) ============ -->
+  <section class="screen" id="s-splash" data-title="Splash" data-theme-color="#faff00">
+    <header class="appbar"><div class="statusbar"></div></header>
+    <div class="splash-logo"><img src="assets/auth1-splash-logo.png" alt="AVO"></div>
+    <div class="home-indicator"></div>
+  </section>
+
+  <!-- ============ 14052:34545 / 14052:34547 · 4. Авторизация – Ввод номера ============ -->
+  <section class="screen" id="s-phone" data-title="Ввод номера" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <div class="lang-combobox">
+          <span class="lc-content"><img class="ic24" src="assets/auth1-flag-ru.svg" alt=""><span class="body-large-l-regular">Русский</span></span>
+          <img class="lc-chevron" src="assets/auth1-chevron-down.svg" alt="">
+        </div>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="auth-content" data-scroll-anchor>
+        <div class="auth-text">
+          <img class="auth-logo" src="assets/auth1-logo.svg" alt="AVO">
+          <div class="auth-titles">
+            <p class="title-large-h2">Добро пожаловать</p>
+            <p class="body-large-l-regular c-600">Введите номер телефона. Отправим SMS c кодом</p>
+          </div>
+        </div>
+        <label class="input-phone" for="phone-input">
+          <span class="ip-code">+998</span>
+          <span class="ip-main"><input id="phone-input" type="text" inputmode="numeric" data-kb="numeric" autocomplete="off" enterkeyhint="done" maxlength="14" placeholder="(00) 000 00 00"></span>
+        </label>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-48 btn-navy" id="phone-submit" data-go="otp" disabled>Войти</button></div>
+        <p class="checkbox-confirm">Нажимая кнопку «Войти», я принимаю условия <a>Пользовательского соглашения</a> и <a>Политики конфиденциальности</a></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34549 / 14052:34550 / 14052:34555 · OTP: код из SMS ============ -->
+  <section class="screen" id="s-otp" data-title="Введите код" data-theme-color="#ffffff">
+    <header class="appbar"><div class="statusbar"></div><div class="appbar-actions"></div></header>
+    <div class="otp-body">
+      <div class="otp-text">
+        <p class="otp-title title-large-h2">Введите код</p>
+        <p class="otp-sub body-large-l-regular">Отправили его на <span id="otp-phone">+998 (90) 000 00 00</span></p>
+      </div>
+      <div class="otp-cells">
+        <span class="otp-cell is-active"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span>
+        <input id="otp-input" type="text" inputmode="text" autocomplete="one-time-code" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="6" aria-label="Код из SMS">
+      </div>
+      <div class="otp-loader"><img src="assets/auth1-loading.svg" alt=""></div>
+    </div>
+    <div class="otp-bottom">
+      <div class="otp-resend">
+        <span class="rs-timer"><span class="c-600">Отправить код повторно через</span><span class="c-primary" id="otp-timer">00:58</span></span>
+        <button class="rs-link c-primary" data-act="otp-resend">Отправить код повторно</button>
+      </div>
+      <div class="kb-suggest" data-act="otp-fill"><span class="ks-from">From Messages</span><span class="ks-code">A8G6Y3</span></div>
+      <div class="ios-alpha-kb no-hint" id="otp-kb">
+        <div class="akb-keys">
+          <div class="akb-row akb-ten">
+            <button class="akb-key" data-k="1"><span>1</span></button><button class="akb-key" data-k="2"><span>2</span></button><button class="akb-key" data-k="3"><span>3</span></button><button class="akb-key" data-k="4"><span>4</span></button><button class="akb-key" data-k="5"><span>5</span></button><button class="akb-key" data-k="6"><span>6</span></button><button class="akb-key" data-k="7"><span>7</span></button><button class="akb-key" data-k="8"><span>8</span></button><button class="akb-key" data-k="9"><span>9</span></button><button class="akb-key" data-k="0"><span>0</span></button>
+          </div>
+          <div class="akb-row akb-ten r2">
+            <button class="akb-key"><span>-</span></button><button class="akb-key"><span>/</span></button><button class="akb-key s26"><span>:</span></button><button class="akb-key s26"><span>;</span></button><button class="akb-key s26"><span>(</span></button><button class="akb-key s26"><span>)</span></button><button class="akb-key"><span>$</span></button><button class="akb-key"><span>&amp;</span></button><button class="akb-key"><span>@</span></button><button class="akb-key"><span>“</span></button>
+          </div>
+          <div class="akb-row r3">
+            <button class="akb-key akb-shift"><span>#+=</span></button>
+            <div class="akb-mid"><button class="akb-key"><span>.</span></button><button class="akb-key"><span>,</span></button><button class="akb-key"><span>?</span></button><button class="akb-key"><span>!</span></button><button class="akb-key"><span>‘</span></button></div>
+            <button class="akb-del" data-k="del" aria-label="Стереть"><img src="assets/auth1-kb-delete.svg" alt=""></button>
+          </div>
+        </div>
+        <div class="akb-bottom"><button class="akb-key akb-wide"><span>ABC</span></button><button class="akb-key akb-space"><span>space</span></button><button class="akb-key akb-wide"><span>return</span></button></div>
+        <div class="akb-extra"><img class="akb-emoji" src="assets/auth1-kb-emoji.svg" alt=""><img class="akb-dictation" src="assets/auth1-kb-dictation.svg" alt=""></div>
+        <i class="akb-hi"></i>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34588 · Условия договора ============ -->
+  <section class="screen" id="s-terms" data-title="Условия договора" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"><div class="appbar-title"><p class="title-small-semibold">Ознакомьтесь с условиями Генерального договора</p></div></div>
+    </header>
+    <div class="terms-pop">
+      <div class="terms-doc"><img src="assets/auth1-terms-doc.png" alt="Генеральный договор комплексного банковского обслуживания физических лиц в АО «AVO bank»"></div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v">
+          <button class="btn btn-48 btn-navy terms-accept" data-go="pass">Согласен(а) и принимаю</button>
+          <button class="btn btn-48 btn-secondary terms-share"><img class="ic24" src="assets/auth1-share.svg" alt="">Поделиться</button>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34573 (пусто) / 14052:34557 (введён) · Авторизация – Пароль, 1 из 4 ============ -->
+  <section class="screen is-empty" id="s-pass" data-title="Придумайте пароль" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"></div>
+    </header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">1 из 4</p><div class="a2-bar"><i class="on"></i><i></i><i></i><i></i></div></div>
+      <div class="pw-body">
+        <div class="pw-top">
+          <div class="a2-text">
+            <p class="title-large-h2 a2-h">Придумайте пароль</p>
+            <p class="body-large-l-regular a2-sub">Он нужен для входа в приложение</p>
+          </div>
+          <div class="pw-code" id="pass-code"><div class="pw-row"><i></i><i></i><i></i><i></i></div></div>
+        </div>
+        <div class="pw-rules">
+          <div class="pw-rules-h"><img class="ic20" src="assets/auth2-info.svg" alt=""><span class="body-medium-l">Пароль подходит, если:</span></div>
+          <div class="pw-list">
+            <div class="pw-item"><img class="ic20" src="assets/auth2-tick.svg" alt=""><span class="body-medium-l">нет одинаковых цифр подряд</span></div>
+            <div class="pw-item"><img class="ic20" src="assets/auth2-tick.svg" alt=""><span class="body-medium-l">нет последовательностей, как 1234</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="ios-numpad">
+        <div class="row" style="top:6px"><button class="key" data-act="pass-key" data-key="1"><span class="d">1</span></button><button class="key" data-act="pass-key" data-key="2"><span class="d">2</span><span class="l">ABC</span></button><button class="key" data-act="pass-key" data-key="3"><span class="d">3</span><span class="l">DEF</span></button></div>
+        <div class="row" style="top:59px"><button class="key" data-act="pass-key" data-key="4"><span class="d">4</span><span class="l">GHI</span></button><button class="key" data-act="pass-key" data-key="5"><span class="d">5</span><span class="l">JKL</span></button><button class="key" data-act="pass-key" data-key="6"><span class="d">6</span><span class="l">MNO</span></button></div>
+        <div class="row" style="top:112px"><button class="key" data-act="pass-key" data-key="7"><span class="d">7</span><span class="l">PQRS</span></button><button class="key" data-act="pass-key" data-key="8"><span class="d">8</span><span class="l">TUV</span></button><button class="key" data-act="pass-key" data-key="9"><span class="d">9</span><span class="l">WXYZ</span></button></div>
+        <div class="row" style="top:165px"><span class="key empty"></span><button class="key zero" data-act="pass-key" data-key="0"><span class="d">0</span></button><button class="key del" data-act="pass-key" data-key="del" aria-label="Стереть"><img src="kit/icons/kb-delete.svg" alt=""></button></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34615 (введён повторно) / 14052:34597 (+ пуш «Вы зарегистрировались…») · Авторизация – Пароль введен повторно ============ -->
+  <section class="screen" id="s-pass2" data-title="Введите повторно" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions"></div>
+    </header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">1 из 4</p><div class="a2-bar"><i class="on"></i><i></i><i></i><i></i></div></div>
+      <div class="pw-body">
+        <div class="pw-top">
+          <div class="a2-text">
+            <p class="title-large-h2 a2-h">Введите повторно</p>
+            <p class="body-large-l-regular a2-sub">Он нужен для входа в приложение</p>
+          </div>
+          <div class="pw-code" id="pass2-code"><div class="pw-row is-first"><i></i><i></i><i></i><i></i></div><div class="pw-row is-repeat"><i></i><i></i><i></i><i></i></div></div>
+        </div>
+        <div class="pw-rules">
+          <div class="pw-rules-h"><img class="ic20" src="assets/auth2-info.svg" alt=""><span class="body-medium-l">Пароль подходит, если:</span></div>
+          <div class="pw-list">
+            <div class="pw-item"><img class="ic20" src="assets/auth2-tick.svg" alt=""><span class="body-medium-l">нет одинаковых цифр подряд</span></div>
+            <div class="pw-item"><img class="ic20" src="assets/auth2-tick.svg" alt=""><span class="body-medium-l">нет последовательностей, как 1234</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="ios-numpad">
+        <div class="row" style="top:6px"><button class="key" data-act="pass-key" data-key="1"><span class="d">1</span></button><button class="key" data-act="pass-key" data-key="2"><span class="d">2</span><span class="l">ABC</span></button><button class="key" data-act="pass-key" data-key="3"><span class="d">3</span><span class="l">DEF</span></button></div>
+        <div class="row" style="top:59px"><button class="key" data-act="pass-key" data-key="4"><span class="d">4</span><span class="l">GHI</span></button><button class="key" data-act="pass-key" data-key="5"><span class="d">5</span><span class="l">JKL</span></button><button class="key" data-act="pass-key" data-key="6"><span class="d">6</span><span class="l">MNO</span></button></div>
+        <div class="row" style="top:112px"><button class="key" data-act="pass-key" data-key="7"><span class="d">7</span><span class="l">PQRS</span></button><button class="key" data-act="pass-key" data-key="8"><span class="d">8</span><span class="l">TUV</span></button><button class="key" data-act="pass-key" data-key="9"><span class="d">9</span><span class="l">WXYZ</span></button></div>
+        <div class="row" style="top:165px"><span class="key empty"></span><button class="key zero" data-act="pass-key" data-key="0"><span class="d">0</span></button><button class="key del" data-act="pass-key" data-key="del" aria-label="Стереть"><img src="kit/icons/kb-delete.svg" alt=""></button></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="pw-dim"></div>
+  </section>
+
+  <!-- ============ 14052:34636 · iOS: Face ID вместо пароля, 2 из 4 ============ -->
+  <section class="screen" id="s-bio-ios" data-title="Face ID вместо пароля" data-theme-color="#ffffff">
+    <header class="appbar"><div class="statusbar"></div></header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">2 из 4</p><div class="a2-bar"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+      <div class="bio-main">
+        <div class="bio-banner"><div class="bio-ill"><img src="assets/auth2-faceid.png" alt=""></div></div>
+        <div class="bio-text">
+          <p class="title-large-h4">Face ID вместо пароля</p>
+          <p class="body-large-l-regular">Используйте его, чтобы не вводить пароль каждый раз</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v">
+          <button class="btn btn-l btn-primary" data-go="identity">Использовать</button>
+          <button class="btn btn-l btn-secondary" data-go="identity">Подключить позже</button>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34633 · Android: отпечаток пальца, 2 из 4 ============ -->
+  <section class="screen" id="s-bio-android" data-title="Отпечаток пальца" data-theme-color="#ffffff">
+    <header class="appbar"><div class="statusbar"></div></header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">2 из 4</p><div class="a2-bar"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+      <div class="bio-main">
+        <div class="bio-banner"><div class="bio-ill"><img src="assets/auth2-finger.png" alt=""></div></div>
+        <div class="bio-text">
+          <p class="title-large-h4">Отпечаток пальца</p>
+          <p class="body-large-l-regular">Используйте его, чтобы не вводить пароль каждый раз</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v">
+          <button class="btn btn-l btn-primary" data-go="identity">Использовать</button>
+          <button class="btn btn-l btn-secondary" data-go="identity">Подключить позже</button>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34639 (пусто) / 14052:34658 (заполнено) · Подтверждение личности, 3 из 4 ============
+       Ссылка «Зачем подтверждать свою личность?» и блок кнопок под полями в Figma скрыты (hidden) — не рисуем.
+       Дисклеймер в кадрах разный: «Нажимая «Продолжить», даю…» (пусто) и «Нажимая кнопку {buttonName} я даю…» (заполнено) — как в Figma. -->
+  <section class="screen" id="s-identity" data-title="Подтвердите личность" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-act="close-flow" aria-label="Закрыть"><img class="ic24" src="assets/auth2-close-circle.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">3 из 4</p><div class="a2-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+      <div class="a2-text id-text">
+        <p class="title-large-h2 a2-h">Подтвердите личность</p>
+        <p class="body-large-l-regular a2-sub">Введите данные паспорта, ID-карты или ПИНФЛ</p>
+      </div>
+      <div class="id-inputs">
+        <div class="input">
+          <p class="input-label">Серия и номер ID-карты, паспорта или ПИНФЛ</p>
+          <label class="input-text">
+            <input id="id-doc" type="text" placeholder="AA1234567 | ПИНФЛ" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="14">
+            <span class="it-icon"><img src="assets/auth2-scaner.svg" alt=""></span>
+          </label>
+        </div>
+        <div class="input">
+          <p class="input-label">Дата рождения</p>
+          <label class="input-text">
+            <input id="id-birth" type="text" inputmode="numeric" data-kb="numeric" placeholder="ДД.ММ.ГГГГ" autocomplete="off" maxlength="10">
+            <span class="it-icon"><img src="assets/auth2-calendar.svg" alt=""></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" id="identity-next" data-go="face" disabled>Продолжить</button></div>
+        <p class="checkbox-confirm"><span class="id-cc-empty">Нажимая «Продолжить», даю <a>согласие на обработку персональных данных</a> и <a>получение кредитного отчета из кредитного бюро</a></span><span class="id-cc-filled">Нажимая кнопку {buttonName} я даю <a>Согласие на обработку персональных данных</a> и <a>получение кредитного отчета из кредитного бюро</a></span></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34676 · Идентификация лица, 4 из 4 ============ -->
+  <section class="screen" id="s-face" data-title="Идентификация лица" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="a2-progress"><p class="title-medium-medium">4 из 4</p><div class="a2-bar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+      <div class="face-photos">
+        <div class="face-col">
+          <div class="face-ph"><img class="ph-bad" src="assets/auth2-face-bad.png" alt=""></div>
+          <span class="face-badge is-bad"><img class="ic24" src="assets/auth2-remove.svg" alt=""></span>
+        </div>
+        <div class="face-col">
+          <div class="face-ph"><img class="ph-good" src="assets/auth2-face-good.png" alt=""></div>
+          <span class="face-badge is-good"><img class="ic24" src="assets/auth2-tick-white.svg" alt=""></span>
+        </div>
+      </div>
+      <div class="face-title">
+        <p class="title-large-h2 a2-h">Идентификация лица</p>
+        <div>
+          <p class="body-large-l-regular face-tips-h">Несколько простых советов</p>
+          <div class="bullet-list">
+            <div class="bullet-item"><img class="ic24" src="assets/auth2-check.svg" alt=""><span class="bi-text">Лицо должно быть в рамке</span></div>
+            <div class="bullet-item"><img class="ic24" src="assets/auth2-check.svg" alt=""><span class="bi-text">Протрите фронтальную камеру</span></div>
+            <div class="bullet-item"><img class="ic24" src="assets/auth2-check.svg" alt=""><span class="bi-text">Хорошее освещение</span></div>
+            <div class="bullet-item"><img class="ic24" src="assets/auth2-check.svg" alt=""><span class="bi-text">Встаньте там, где светло</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-l btn-primary" data-go="myid">Продолжить</button></div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34700 · MyID ============ -->
+  <section class="screen" id="s-myid" data-title="Пожалуйста, улыбнитесь" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="myid-body">
+        <img class="myid-logo" src="assets/prod-myid-logo.svg" alt="AVO">
+        <p class="myid-hint body-large-l-regular">Пожалуйста, улыбнитесь</p>
+        <img class="myid-photo" src="assets/prod-myid-photo.png" width="356" height="456" alt="">
+      </div>
+    </div>
+    <div class="footer">
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:34712 · Обрабатываем ваши данные ============ -->
+  <section class="screen" id="s-processing" data-title="Обрабатываем ваши данные" data-theme-color="#ffffff">
+    <header class="appbar"><div class="statusbar"></div></header>
+    <div class="scroll">
+      <div class="wait">
+        <div class="wait-title">
+          <div class="wait-banner"><div class="abs"><img src="assets/prod-processing.png" alt=""></div></div>
+          <div class="wait-content">
+            <p class="title-large-h4 wait-h">Обрабатываем ваши данные</p>
+            <p class="body-large-l-regular wait-p">Дождитесь окончания проверки — это займет всего несколько минут</p>
+          </div>
+        </div>
+        <div class="bl">
+          <div class="bl-item">
+            <div class="bl-icon"><div class="loader"><img class="spin" src="assets/prod-loading.svg" alt=""></div></div>
+            <p class="bl-text title-small-medium c-950">Обработка данных</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:38587 · 435417 · Узнайте свои кредитные возможности ============ -->
+  <section class="screen" id="s-multi-intro" data-title="Узнайте свои кредитные возможности" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-act="close-flow" aria-label="Закрыть"><img class="ic24" src="assets/prod-close-circle.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="mi">
+        <div class="mi-banner"><div class="abs"><img src="assets/prod-multi-intro.png" alt=""></div></div>
+        <p class="title-large-h4 mi-title">Узнайте свои кредитные возможности</p>
+        <div class="offer-grid">
+          <div class="offer-row">
+            <div class="offer-card is-accent is-top"><p class="oc-title title-medium-semibold">100 млн</p><p class="oc-text body-small-l-regular">без залога и справок</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">На любые цели</p><p class="oc-text body-small-l-regular">Покупки, ремонт, учёба, отдых — решать вам</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без процентов</p><p class="oc-text body-small-l-regular">0% до 45 дней по кредитной карте и до 30 дней по микрозайму</p></div>
+            <div class="offer-card is-top"><p class="oc-title title-medium-semibold">Деньги сразу</p><p class="oc-text body-small-l-regular">Одно нажатие — и вы узнаете свой лимит</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без залога</p><p class="oc-text body-small-l-regular">Залог и поручители не&nbsp;нужны</p></div>
+            <div class="offer-card"><div class="apple-pay"><img class="ap-bg" src="assets/prod-applepay-group.svg" alt="Apple Pay"><i class="abs ap-x"><img src="assets/prod-applepay-xmlid3.svg" alt=""></i><i class="abs ap-g1"><img src="assets/prod-applepay-group1.svg" alt=""></i><i class="abs ap-g2"><img src="assets/prod-applepay-group2.svg" alt=""></i></div><p class="oc-text body-small-l-regular">Платите с телефона (только для iOS)</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-navy button-large" data-go="calc-wait">Хочу узнать</button></div>
+        <p class="checkbox-confirm">Нажимая на кнопку {ButtonName} я даю согласие на <span class="c-primary">получение кредитного отчета из кредитного бюро</span></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:38680 · 701 - 67 · Рассчитываем ваши кредитные возможности ============ -->
+  <section class="screen" id="s-calc-wait" data-title="Рассчитываем ваши кредитные возможности" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-act="close-flow" aria-label="Закрыть"><img class="ic24" src="assets/prod-close-circle-cw.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="wait">
+        <div class="wait-title">
+          <div class="wait-banner"><img src="assets/prod-calc-wait.png" alt=""></div>
+          <div class="wait-content">
+            <p class="title-large-h4 wait-h">Рассчитываем ваши кредитные возможности</p>
+            <p class="body-large-l-regular wait-p">Не закрывайте приложение, пока идет расчет</p>
+          </div>
+        </div>
+        <div class="bl">
+          <div class="bl-item">
+            <div class="bl-icon"><div class="loader"><img class="spin" src="assets/prod-loading.svg" alt=""></div></div>
+            <p class="bl-text title-small-medium c-950">Готовим лучшее предложение</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <!-- buttonCombination-info -->
+      <div class="cw-info">
+        <div class="content-block">
+          <img class="ic24" src="assets/prod-info.svg" alt="">
+          <p class="cb-text body-medium-l">Добавьте доверительные контакты пока идет расчет</p>
+          <div class="divider"></div>
+          <button class="btn btn-navy button-large">Добавить контакты</button>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14052:38691 · 1. Онбординг КУС – Дашборд (после онбординга по мультипродуктовому диплинку) ============
+       Слот баннера #dash-banner: preparing (14052:38656) · ready (14052:38668) · cc / mz (14331:44172) — window.dashBanner(v).
+       Таббар — новый вариант ДС «Home - new», как на дашборде гостя (14067:39334): один компонент на оба дашборда. -->
+  <section class="screen" id="s-dash" data-title="Главная" data-theme-color="#ffffff">
+    <div class="scroll">
+      <div class="d-page">
+        <!-- Frame 277132624: AppBar + Widget_balance -->
+        <div class="d-head">
+          <header class="appbar d-appbar">
+            <div class="statusbar"></div>
+            <div class="dp-row">
+              <div class="dp">
+                <div class="dp-avatar"><div class="dp-photo"><img src="assets/dash-avatar.png" alt=""></div></div>
+                <div class="dp-stories">
+                  <div class="dp-story"><div class="dp-sc is-dark"><i class="abs dp-s1"><img src="assets/dash-story1.svg" alt=""></i></div></div>
+                  <div class="dp-story"><div class="dp-sc is-blue"><div class="dp-s2"><img src="assets/dash-story2.png" alt=""></div></div></div>
+                  <div class="dp-story"><div class="dp-sc is-dark"><div class="dp-s3"><img src="assets/dash-story3.png" alt=""></div></div></div>
+                </div>
+                <div class="dp-bell"><img src="assets/dash-bell.svg" alt=""><span class="dp-badge">3</span></div>
+              </div>
+            </div>
+          </header>
+          <div class="d-balance">
+            <div class="db-row">
+              <div class="db-total">
+                <p class="db-label body-small-l-regular c-600">Общий баланс</p>
+                <div class="db-title">
+                  <div class="db-filter"><span class="db-filter-ic"><i class="abs"><img src="assets/dash-setting.svg" alt=""></i></span></div>
+                  <div class="db-sum"><span class="db-num">1 000 000</span><span class="db-cur">UZS</span></div>
+                  <div class="db-eye"><img class="ic20" src="assets/dash-eye-off.svg" alt=""></div>
+                </div>
+              </div>
+              <button class="db-cards"><span class="button-medium c-primary">Мои карты</span><img class="ic20" src="assets/dash-chevron-20a.svg" alt=""></button>
+            </div>
+            <div class="db-cardlist">
+              <!-- Bank_card · AVO platinum digital -->
+              <div class="bk bk-plat">
+                <div class="pl">
+                  <div class="pl-metal"><img src="assets/dash-plat-metal.png" alt=""></div>
+                  <div class="pl-rect1"><img src="assets/dash-plat-rect.png" alt=""></div>
+                  <div class="pl-bg4"></div>
+                  <div class="pl-bg3"></div>
+                  <div class="pl-rect2"><img src="assets/dash-plat-rect.png" alt=""></div>
+                  <i class="abs pl-yellow"><img src="assets/dash-plat-yellow.svg" alt=""></i>
+                  <div class="pl-pattern"><i class="abs"><img src="assets/dash-plat-pattern.svg" alt=""></i></div>
+                  <i class="abs pl-o3" style="inset:1.43% 48.67% 59.28% 7.77%"><img src="assets/dash-plat-g1.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:12.37% 92.94% 14.79% -23.63%"><img src="assets/dash-plat-g2.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:85.68% 86.62% -50.49% -22.7%"><img src="assets/dash-plat-g3.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:110.48% 46.43% -59.28% 12.4%"><img src="assets/dash-plat-g4.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:40.77% 34.18% -15.41% 45.74%"><img src="assets/dash-plat-g5.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:87.87% 52.05% -30.64% 23.53%"><img src="assets/dash-plat-g6.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:41.17% 49.18% 10.76% 31.86%"><img src="assets/dash-plat-g7.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:27.75% 66.25% 47.43% 5.65%"><img src="assets/dash-plat-g8.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:45.61% 94.17% 3.85% -8.87%"><img src="assets/dash-plat-g9.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:97% 76.69% -32.29% -4.27%"><img src="assets/dash-plat-g10.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:46.92% 61.54% 28.26% 20.72%"><img src="assets/dash-plat-g11.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:46.53% 79.04% 27.03% 4.13%"><img src="assets/dash-plat-g12.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:71.58% 87.09% -3.5% 1.58%"><img src="assets/dash-plat-g13.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:99.77% 70.24% -14.78% 11.2%"><img src="assets/dash-plat-g14.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:72.04% 59.35% -5.19% 29.9%"><img src="assets/dash-plat-g15.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:79.86% 66.71% 12.89% 29.16%"><img src="assets/dash-plat-v0.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:71.9% 66.39% 19.79% 29.46%"><img src="assets/dash-plat-v1.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:66.61% 68.56% 25.53% 26.98%"><img src="assets/dash-plat-v2.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:60.53% 71.93% 32.21% 23.94%"><img src="assets/dash-plat-v3.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:58.3% 75.3% 34.52% 19.91%"><img src="assets/dash-plat-v4.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:59.06% 79.49% 33.21% 15.94%"><img src="assets/dash-plat-v5.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:63.38% 84.16% 29.37% 11.7%"><img src="assets/dash-plat-v6.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:67.86% 86.58% 24.46% 9.17%"><img src="assets/dash-plat-v7.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:75.98% 87.39% 15.59% 8.58%"><img src="assets/dash-plat-v8.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:84.75% 86.29% 8% 9.59%"><img src="assets/dash-plat-v9.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:90.96% 84.24% 1.17% 11.26%"><img src="assets/dash-plat-v10.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:94.15% 79.59% -1.56% 15.86%"><img src="assets/dash-plat-v11.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:95.12% 75.51% -2.37% 20.36%"><img src="assets/dash-plat-v12.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:93.39% 70.81% -0.98% 24.78%"><img src="assets/dash-plat-v13.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:86.52% 68.63% 5.68% 26.95%"><img src="assets/dash-plat-v14.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:74.5% 74% 13.44% 16.35%"><img src="assets/dash-plat-v15.svg" alt=""></i>
+                  <i class="abs pl-o3" style="inset:74.77% 74.15% 13.7% 16.5%"><img src="assets/dash-plat-v16.svg" alt=""></i>
+                </div>
+                <div class="bk-main">
+                  <div class="bk-top">
+                    <div class="bk-sum is-plat"><span class="title-small-semibold">0</span><span class="title-xx-small-semibold">UZS</span></div>
+                    <p class="body-small-l-regular">AVO platinum digital</p>
+                  </div>
+                  <div class="bk-bottom">
+                    <div class="bk-pan"><span class="body-small-l-regular">•• 1234</span><img class="ic16" src="assets/dash-cloud.svg" alt=""></div>
+                    <div class="bk-ps"><i class="abs is-mc"><img src="assets/dash-ps-mastercard.svg" alt=""></i></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Bank_card · Agrobank -->
+              <div class="bk bk-agro">
+                <div class="bk-top">
+                  <div class="bk-sum"><span class="title-small-semibold">1 000 000</span><span class="title-xx-small-semibold">UZS</span></div>
+                  <p class="body-small-l-regular">Agrobank</p>
+                </div>
+                <div class="bk-bottom">
+                  <span class="body-small-l-regular">•• 1234</span>
+                  <div class="bk-ps"><i class="abs is-uz"><img src="assets/dash-ps-uzcard.svg" alt=""></i></div>
+                </div>
+              </div>
+              <!-- Bank_card · Добавить новую карту -->
+              <div class="bk bk-add">
+                <div class="bk-add-in">
+                  <img class="ic24" src="assets/dash-card-plus.svg" alt="">
+                  <p class="title-x-small-medium">Добавить новую <br>карту</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main dashboard-content -->
+        <div class="d-main">
+          <!-- Steps_card_reseption: слот баннера -->
+          <div class="d-banner" id="dash-banner" data-v="ready">
+            <!-- 14052:38656 · Готовим кредитные предложения -->
+            <div class="bn is-hidden" data-v="preparing" data-act="dash-banner">
+              <div class="bn-content">
+                <p class="title-small-semibold c-950">Готовим кредитные предложения</p>
+                <div class="bn-btn"><span class="button-small">Подробнее</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic is-card29"><img src="assets/dash-card29.png" alt=""></div></div>
+              <img class="bn-dots" src="assets/dash-pagination.svg" alt="">
+            </div>
+            <!-- 14052:38668 · Для вас есть кредитные предложения -->
+            <div class="bn" data-v="ready" data-act="dash-banner">
+              <div class="bn-content">
+                <p class="title-small-semibold c-950">Для вас есть кредитные предложения</p>
+                <div class="bn-btn"><span class="button-small">Подробнее</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic is-card09"><div class="bn-rot"><img src="assets/dash-card09.png" alt=""></div></div></div>
+              <img class="bn-dots" src="assets/dash-pagination.svg" alt="">
+            </div>
+            <!-- 14331:44178 · Получить кредитную карту -->
+            <div class="bn2 is-hidden" data-v="cc" data-act="dash-banner">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Получить кредитную карту</p>
+                  <p class="body-small-l-regular c-600">6 000 000 UZS кредитного лимита ждут вас!</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить сейчас</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-fill" src="assets/dash-card05.png" alt=""></div></div>
+              <img class="bn-dots" src="assets/dash-pagination2.svg" alt="">
+            </div>
+            <!-- 14331:44179 · Микрозайм одобрен! -->
+            <div class="bn2 is-hidden" data-v="mz" data-act="dash-banner">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Микрозайм одобрен!</p>
+                  <p class="body-small-l-regular c-600">6 000 000 UZS ждут вас</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить сейчас</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-cover" src="assets/dash-num08.png" alt=""></div></div>
+              <img class="bn-dots" src="assets/dash-pagination2.svg" alt="">
+            </div>
+          </div>
+
+          <!-- dashboardBalances -->
+          <div class="d-tiles">
+            <div class="dt is-deposit">
+              <div class="dt-content">
+                <img class="dt-ic" src="assets/dash-deposit.svg" alt="">
+                <div class="dt-text">
+                  <p class="body-small-l-regular dt-label">Вклад на 6 месяцев</p>
+                  <p class="title-x-small-semibold c-950 nowrap">Доходность до 25%</p>
+                </div>
+                <div class="dt-btn"><span class="button-small c-950">Открыть</span><img class="ic16" src="assets/dash-chevron-16-dark.svg" alt=""></div>
+              </div>
+            </div>
+            <div class="dt is-bonus">
+              <div class="dt-content">
+                <img class="dt-ic" src="assets/dash-bonuses.svg" alt="">
+                <div class="dt-text">
+                  <p class="body-small-l-regular dt-label">Бонусы</p>
+                  <p class="dt-bonus c-950"><span class="title-medium-semibold">0 </span><span class="title-x-small-semibold">UZS</span></p>
+                </div>
+                <div class="dt-btn"><span class="button-small c-950">Подробнее</span><img class="ic16" src="assets/dash-chevron-16-dark.svg" alt=""></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TransitionWidget -->
+          <div class="d-transfer">
+            <div class="title-action">
+              <p class="ta-title c-950">Перевести сейчас</p>
+              <div class="ta-btn"><span class="button-medium c-primary">Ещё</span><img class="ic20" src="assets/dash-chevron-20b.svg" alt=""></div>
+            </div>
+            <div class="dtr-input">
+              <span class="body-large-l-regular">Номер карты или телефона</span>
+              <span class="dtr-ic"><img src="assets/dash-scaner.svg" alt=""></span>
+            </div>
+          </div>
+
+          <!-- List_With_Title_Inside -->
+          <div class="d-history">
+            <div class="title-action"><p class="ta-title c-950">Последние операции</p></div>
+            <div class="dh-empty">
+              <div class="dh-content">
+                <img class="dh-ic" src="assets/dash-file.svg" alt="">
+                <p class="body-medium-l c-600">Скоро здесь появится список ваших операций</p>
+              </div>
+              <div class="dh-btn"><img class="ic20" src="assets/dash-add.svg" alt=""><span class="button-medium c-primary">Привязать карту</span></div>
+            </div>
+          </div>
+
+          <!-- Button_group/vertical -->
+          <button class="d-new">Открыть новый продукт</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TabBar «Home - new» (13267:10125) -->
+    <nav class="tabbar">
+      <div class="tb-bar">
+        <div class="tb-edge"><div class="tb-edge-blur"></div></div>
+        <div class="tb-content">
+          <div class="tb-main">
+            <div class="tb-bg"><div class="tb-shadow"></div><div class="tb-fill"></div></div>
+            <div class="tb-tabs">
+              <button class="tb-item is-active"><img src="assets/dash-tb-home.svg" alt=""><span>Главная</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-transfer.svg" alt=""><span>Переводы</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-products.svg" alt=""><span>Продукты</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-bonuses.svg" alt=""><span>Бонусы</span></button>
+            </div>
+          </div>
+          <div class="tb-support">
+            <div class="tb-bg"><div class="tb-shadow"></div><div class="tb-fill"></div></div>
+            <button class="tb-item tb-profile"><img src="assets/dash-tb-profile.svg" alt=""></button>
+          </div>
+        </div>
+        <div class="home-indicator tb-hi"></div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ============ 14331:43748 · Кредитная AVO Platinum L3 ============ -->
+  <section class="screen" id="s-cc-l3" data-title="Кредитная карта AVO platinum" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="l3">
+        <img class="l3-hero" src="assets/prod-cc-card.png" width="191" height="301" alt="">
+        <div class="l3-info">
+          <p class="title-large-h4 l3-title">Кредитная карта AVO platinum</p>
+        <div class="offer-grid">
+          <div class="offer-row">
+            <div class="offer-card is-accent"><p class="oc-title title-medium-semibold">До 45 дней</p><p class="oc-text body-small-l-regular">Без процентов на покупки в&nbsp;льготный период</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100 млн</p><p class="oc-text body-small-l-regular">Кредитный лимит на&nbsp;любые&nbsp;цели</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Гибкий лимит</p><p class="oc-text body-small-l-regular">Управление лимитом в&nbsp;любой момент</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100% кешбек&nbsp;</p><p class="oc-text body-small-l-regular">За первую покупку и 1% с&nbsp;каждой последующей</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без залога</p><p class="oc-text body-small-l-regular">Залог и поручители не&nbsp;нужны</p></div>
+            <div class="offer-card"><div class="apple-pay"><img class="ap-bg" src="assets/prod-applepay-group.svg" alt="Apple Pay"><i class="abs ap-x"><img src="assets/prod-applepay-xmlid3.svg" alt=""></i><i class="abs ap-g1"><img src="assets/prod-applepay-group1.svg" alt=""></i><i class="abs ap-g2"><img src="assets/prod-applepay-group2.svg" alt=""></i></div><p class="oc-text body-small-l-regular">Платите с телефона (только для iOS)</p></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-navy button-large">Выпустить карту</button></div>
+        <p class="checkbox-confirm">Нажимая на кнопку {ButtonName} я даю согласие на <span class="c-primary">получение кредитного отчета из кредитного бюро</span></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14331:43728 · Микрозайм L3 ============ -->
+  <section class="screen" id="s-mz-l3" data-title="Микрозайм до 100 млн" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="l3">
+        <img class="l3-hero" src="assets/prod-mz-hero.png" width="242" height="207" alt="">
+        <div class="l3-info">
+          <p class="title-large-h4 l3-title">Микрозайм до 100 млн</p>
+        <div class="offer-grid">
+          <div class="offer-row">
+            <div class="offer-card is-accent"><p class="oc-title title-medium-semibold">0%&nbsp;</p><p class="oc-text body-small-l-regular">Первые 30 дней без&nbsp;процентов</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100 млн</p><p class="oc-text body-small-l-regular">Максимальная сумма на&nbsp;любые цели</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">До 36 месяцев</p><p class="oc-text body-small-l-regular">Выбирайте удобный срок&nbsp;микрозайма</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">До 60 дней</p><p class="oc-text body-small-l-regular">Без штрафов при просрочке платежа</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без залога</p><p class="oc-text body-small-l-regular">Залог и поручители не&nbsp;нужны</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Мгновенно</p><p class="oc-text body-small-l-regular">Оформление полностью онлайн</p></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-navy button-large">Получить</button></div>
+        <p class="checkbox-confirm">Нажимая на кнопку {ButtonName} я даю согласие на <span class="c-primary">получение кредитного отчета из кредитного бюро</span></p>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14067:39334 · 1. Онбординг КУС – Дашборд (клиент слетел с флоу диплинка, метка хранится 30 дней) ============ -->
+  <section class="screen" id="s-dash-guest" data-title="Главная" data-theme-color="#f1f2f5">
+    <div class="scroll">
+      <div class="g-page">
+        <div class="g-bg"></div>
+        <header class="appbar g-appbar">
+          <div class="g-appbar-bg"><div class="g-bg"></div></div>
+          <div class="statusbar"></div>
+          <div class="dp-row">
+            <div class="dp">
+              <div class="dp-avatar"><div class="dp-photo"><img src="assets/dash-avatar.png" alt=""></div></div>
+              <div class="dp-stories">
+                <div class="dp-story"><div class="dp-sc is-dark"><i class="abs dp-s1"><img src="assets/dash-story1.svg" alt=""></i></div></div>
+                <div class="dp-story"><div class="dp-sc is-blue"><div class="dp-s2"><img src="assets/dash-story2.png" alt=""></div></div></div>
+                <div class="dp-story"><div class="dp-sc is-dark"><div class="dp-s3"><img src="assets/dash-story3.png" alt=""></div></div></div>
+              </div>
+              <div class="dp-bell"><img src="assets/dash-bell.svg" alt=""><span class="dp-badge">3</span></div>
+            </div>
+          </div>
+        </header>
+
+        <div class="g-body">
+          <div class="g-list">
+            <!-- onboardingWidget -->
+            <div class="g-onb">
+              <div class="title-action"><p class="ta-title c-950">Подтвердите личность</p></div>
+              <div class="g-progress">
+                <p class="title-medium-medium g-nums">3 из 4</p>
+                <div class="g-bar"><i class="is-on is-first"></i><i class="is-on"></i><i class="is-last"></i></div>
+              </div>
+              <div class="status-colored g-status">
+                <img class="ic24" src="assets/dash-info.svg" alt="">
+                <div class="sc-content"><p class="sc-title c-950">Заполните данные и пользуйтесь услугами банка — легко и удобно</p></div>
+              </div>
+              <button class="g-become" data-go="identity">Стать клиентом</button>
+            </div>
+
+            <!-- Banners: продукты -->
+            <div class="g-bnr" data-go="mz-l2">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Микрозайм</p>
+                  <p class="body-small-l-regular c-600">Без поручителей — отправьте заявку и получите деньги сразу</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-num02" src="assets/dash-num02.png" alt=""></div></div>
+            </div>
+            <div class="g-bnr" data-go="cc-l2">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Кредитная карта</p>
+                  <p class="body-small-l-regular c-600">Откройте бесплатно и получите лимит на любые расходы</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-fill" src="assets/dash-card01.png" alt=""></div></div>
+            </div>
+            <div class="g-bnr">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Дебетовая карта</p>
+                  <p class="body-small-l-regular c-600">Пластиковая или виртуальная — выберите то, что удобно</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-card04" src="assets/dash-story3.png" alt=""></div></div>
+            </div>
+            <div class="g-bnr">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Вклад</p>
+                  <p class="body-small-l-regular c-600">Зарабатывайте до 25% годовых. Снятие и пополнение — в любой момент</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><img class="is-num03" src="assets/dash-num03.png" alt=""></div></div>
+            </div>
+            <div class="g-bnr">
+              <div class="bn2-content">
+                <div class="bn2-text">
+                  <p class="title-small-semibold c-950">Виртуальная карта UZCARD</p>
+                  <p class="body-small-l-regular c-600">Выберете одну из наших прекрасных карт и совершайте покупки</p>
+                </div>
+                <div class="bn-btn"><span class="button-small">Получить</span><img class="ic16" src="assets/dash-chevron-16.svg" alt=""></div>
+              </div>
+              <div class="bn-img"><div class="bn-pic"><i class="abs is-uzcard"><img src="assets/dash-uzcard.png" alt=""></i></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TabBar «Home - new» (13267:10125) -->
+    <nav class="tabbar">
+      <div class="tb-bar">
+        <div class="tb-edge"><div class="tb-edge-blur"></div></div>
+        <div class="tb-content">
+          <div class="tb-main">
+            <div class="tb-bg"><div class="tb-shadow"></div><div class="tb-fill"></div></div>
+            <div class="tb-tabs">
+              <button class="tb-item is-active"><img src="assets/dash-tb-home.svg" alt=""><span>Главная</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-transfer.svg" alt=""><span>Переводы</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-products.svg" alt=""><span>Продукты</span></button>
+              <button class="tb-item"><img src="assets/dash-tb-bonuses.svg" alt=""><span>Бонусы</span></button>
+            </div>
+          </div>
+          <div class="tb-support">
+            <div class="tb-bg"><div class="tb-shadow"></div><div class="tb-fill"></div></div>
+            <button class="tb-item tb-profile"><img src="assets/dash-tb-profile.svg" alt=""></button>
+          </div>
+        </div>
+        <div class="home-indicator tb-hi"></div>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ============ 14067:39299 · Кредитная AVO Platinum L2 (неявная заявка) ============ -->
+  <section class="screen" id="s-cc-l2" data-title="Кредитная карта AVO platinum" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="l3">
+        <img class="l3-hero" src="assets/prod-cc-card.png" width="191" height="301" alt="">
+        <div class="l3-info">
+          <p class="title-large-h4 l3-title">Кредитная карта AVO platinum</p>
+        <div class="offer-grid">
+          <div class="offer-row">
+            <div class="offer-card is-accent"><p class="oc-title title-medium-semibold">До 45 дней</p><p class="oc-text body-small-l-regular">Без процентов на покупки в&nbsp;льготный период</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100 млн</p><p class="oc-text body-small-l-regular">Кредитный лимит на&nbsp;любые&nbsp;цели</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Гибкий лимит</p><p class="oc-text body-small-l-regular">Управление лимитом в&nbsp;любой момент</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100% кешбек&nbsp;</p><p class="oc-text body-small-l-regular">За первую покупку и 1% с&nbsp;каждой последующей</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без залога</p><p class="oc-text body-small-l-regular">Залог и поручители не&nbsp;нужны</p></div>
+            <div class="offer-card"><div class="apple-pay"><img class="ap-bg" src="assets/prod-applepay-group.svg" alt="Apple Pay"><i class="abs ap-x"><img src="assets/prod-applepay-xmlid3.svg" alt=""></i><i class="abs ap-g1"><img src="assets/prod-applepay-group1.svg" alt=""></i><i class="abs ap-g2"><img src="assets/prod-applepay-group2.svg" alt=""></i></div><p class="oc-text body-small-l-regular">Платите с телефона (только для iOS)</p></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-navy button-large" data-go="identity">Подтвердить личность</button></div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ 14067:39279 · Микрозайм L2 (неявная заявка) ============ -->
+  <section class="screen" id="s-mz-l2" data-title="Микрозайм до 100 млн" data-theme-color="#ffffff">
+    <header class="appbar">
+      <div class="statusbar"></div>
+      <div class="appbar-actions">
+        <button class="appbar-left" data-back aria-label="Назад"><img class="ic24" src="kit/icons/chevron-left.svg" alt=""></button>
+      </div>
+    </header>
+    <div class="scroll">
+      <div class="l3">
+        <img class="l3-hero" src="assets/prod-mz-hero.png" width="242" height="207" alt="">
+        <div class="l3-info">
+          <p class="title-large-h4 l3-title">Микрозайм до 100 млн</p>
+        <div class="offer-grid">
+          <div class="offer-row">
+            <div class="offer-card is-accent"><p class="oc-title title-medium-semibold">0%&nbsp;</p><p class="oc-text body-small-l-regular">Первые 30 дней без&nbsp;процентов</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">100 млн</p><p class="oc-text body-small-l-regular">Максимальная сумма на&nbsp;любые цели</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">До 36 месяцев</p><p class="oc-text body-small-l-regular">Выбирайте удобный срок&nbsp;микрозайма</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">До 60 дней</p><p class="oc-text body-small-l-regular">Без штрафов при просрочке платежа</p></div>
+          </div>
+          <div class="offer-row">
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Без залога</p><p class="oc-text body-small-l-regular">Залог и поручители не&nbsp;нужны</p></div>
+            <div class="offer-card"><p class="oc-title title-medium-semibold">Мгновенно</p><p class="oc-text body-small-l-regular">Оформление полностью онлайн</p></div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer btn-combo is-white">
+      <div class="btn-combo-buttons">
+        <div class="btn-group-v"><button class="btn btn-navy button-large" data-go="identity">Подтвердить личность</button></div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </section>
+
+  <!-- ============ modalNotification (14052:38706) · Для вас есть кредитные предложения ============ -->
+  <div class="sheet-layer" id="sheet-offers">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="mn-main">
+          <div class="mn-banner"><img src="assets/dash-sheet-banner.png" alt=""></div>
+          <div class="mn-content">
+            <div class="mn-tb">
+              <p class="title-large-h4 c-950">Для вас есть кредитные предложения</p>
+              <p class="body-large-l-regular c-600">Посмотрите, какие продукты и условия доступны уже сейчас</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo is-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v"><button class="btn btn-l btn-primary" data-act="offers-go">Перейти</button></div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ modalNotification (14331:44170) · Одобрен микрозайм ============ -->
+  <div class="sheet-layer" id="sheet-mz-approved">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="mn-main">
+          <div class="mn-banner"><img src="assets/dash-sheet-banner.png" alt=""></div>
+          <div class="mn-content">
+            <div class="mn-tb">
+              <p class="title-large-h4 c-950">Одобрен микрозайм</p>
+              <p class="body-large-l-regular c-600">Посмотрите, какие продукты и условия доступны уже сейчас</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo is-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v"><button class="btn btn-l btn-primary" data-go="mz-l3">Перейти</button></div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ modalNotification (14331:44171) · Одобрен кредитный лимит ============ -->
+  <div class="sheet-layer" id="sheet-cc-approved">
+    <div class="sheet-scrim"></div>
+    <div class="sheet">
+      <div class="modal-notification">
+        <div class="grabber"></div>
+        <div class="mn-main">
+          <div class="mn-banner"><img src="assets/dash-sheet-banner.png" alt=""></div>
+          <div class="mn-content">
+            <div class="mn-tb">
+              <p class="title-large-h4 c-950">Одобрен кредитный лимит</p>
+              <p class="body-large-l-regular c-600">Посмотрите, какие продукты и условия доступны уже сейчас</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-combo is-white">
+          <div class="btn-combo-buttons">
+            <div class="btn-group-v"><button class="btn btn-l btn-primary" data-go="cc-l3">Перейти</button></div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 14052:34553 · Notification - Collapsed: SMS с кодом (+ затемнение Rectangle 118) ============ -->
+  <div class="push" id="push-otp">
+    <div class="ios-notification" data-act="otp-fill">
+      <div class="app-icon"><img src="assets/auth1-push-messages.png" alt=""></div>
+      <div class="body">
+        <div class="text">AVO bank: chtobi podtverdit', chto eto vashe ustroystvo, vvedite kod: A8G6Y3. Nikomu ego ne peredavayte</div>
+        <div class="time">9:41 AM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 14052:34613 · Notification - Collapsed «Вы зарегистрировались в AVO bank!» (поверх 14052:34597) ============ -->
+  <div class="push" id="push-registered">
+    <div class="ios-notification">
+      <div class="app-icon"><img src="assets/auth2-push-icon.png" alt=""></div>
+      <div class="body">
+        <div class="text">Вы зарегистрировались в AVO bank! Теперь можно получить до 100 млн сумов прямо в приложении. Без залога и поручителей: <a>https://<wbr>click.avo.uz/DnKF/t</a></div>
+        <div class="time">9:41 AM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Notification - Collapsed (14052:38690) · Мы подобрали Вам кредитные предложения ============ -->
+  <div class="push" id="push-offers">
+    <div class="ios-notification">
+      <div class="app-icon"><img src="assets/dash-push-icon.png" alt=""></div>
+      <div class="body">
+        <div class="text">Мы подобрали Вам кредитные предложения</div>
+        <div class="time">9:41 AM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="kit/proto.js?v=1795003788"></script>
+<script>
+const P = Proto; const $ = s => document.querySelector(s); const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ================= Координатор: метка диплинка и переходы между частями флоу =================
+   Схема — Figma «Кредитные диплинки: целевой флоу» (14052:34543), вайтборд «Multi-product user flow».
+   Метка диплинка: мультипродуктовый (multi), кредитная карта (cc), микрозайм (mz).
+   Задаётся ссылкой ?dl=cc|mz|multi или состоянием «Вход по диплинку» в карте; по умолчанию — мультипродуктовый.
+   Клиент слетел с флоу (⊗) — дашборд гостя, метка хранится 30 дней. Выбор продукта на витрине (L2) — явная заявка:
+   метка меняется на этот продукт, после KYC клиент попадает на его L3. */
+const DL_LABELS = { multi: 'мультипродуктовый', cc: 'кредитная карта', mz: 'микрозайм' };
+const qDl = new URLSearchParams(location.search).get('dl');
+const D = { label: DL_LABELS[qDl] ? qDl : 'multi' };
+const RESULT = { multi: 'multi-intro', cc: 'cc-l3', mz: 'mz-l3' };
+let coreT = [];
+const later = (fn, ms) => coreT.push(setTimeout(fn, ms));
+const clearLater = () => { coreT.forEach(clearTimeout); coreT = []; };
+
+document.addEventListener('proto:enter', e => {
+  const id = e.target.id.replace(/^s-/, '');
+  if (P.mode === 'figma') return;                        // сверка с Figma — без автопереходов
+  if (id === 'splash') later(() => { if (P.current === 'splash') P.replace('phone', 'fade'); }, 1500);
+  if (id === 'mz-l2') D.label = 'mz';                    // явная заявка: выбранный на витрине продукт
+  if (id === 'cc-l2') D.label = 'cc';
+});
+// KYC пройден → продукт по метке; назад в онбординг не вернуться
+document.addEventListener('flow:processed', () => { if (P.current === 'processing') P.reset(RESULT[D.label], 'fade'); });
+// Расчёт кредитных возможностей готов → дашборд со шторкой предложений
+document.addEventListener('flow:calculated', () => {
+  if (P.current !== 'calc-wait') return;
+  P.reset('dash', 'fade'); window.dashBanner && window.dashBanner('ready');
+  later(() => { if (P.current === 'dash') P.openSheet('offers'); }, 450);
+});
+// ⊗ посреди онбординга: клиент слетел с флоу диплинка → дашборд гостя, метка сохраняется
+P.on('close-flow', () => { clearLater(); P.hideNotifications(); P.reset('dash-guest', 'fade'); });
+
+/* ================= Группа auth1: splash → phone → otp (+ push-otp) → terms =================
+   Демо-данные из макета: номер (90) 000 00 00 — кадр 14052:34547, код A8G6Y3 — пуш 14052:34553. */
+const AUTH = { phone: '' };                    // 9 цифр без +998
+const DEMO_PHONE = '900000000', DEMO_CODE = 'A8G6Y3';
+// Фокус (и клавиатуру) ставим сами только там, где это не обман: на компьютере всегда,
+// на телефоне — только внутри тапа (иначе iOS не покажет клавиатуру, а кит решит, что она открыта).
+const canFocus = () => P.mode === 'desk' || (P.mode === 'phone' && !!(navigator.userActivation && navigator.userActivation.isActive));
+
+/* ---------- 4. Ввод номера: маска (00) 000 00 00, «Войти» активна при 9 цифрах ---------- */
+const phoneInput = $('#phone-input');
+const fmtPhone = d => !d ? '' : '(' + d.slice(0, 2) + (d.length > 2 ? ') ' + d.slice(2, 5) : '') + (d.length > 5 ? ' ' + d.slice(5, 7) : '') + (d.length > 7 ? ' ' + d.slice(7, 9) : '');
+function renderPhone() {
+  const v = fmtPhone(AUTH.phone); if (phoneInput.value !== v) phoneInput.value = v;
+  $('#phone-submit').disabled = AUTH.phone.length < 9;
+}
+phoneInput.addEventListener('input', () => {
+  let d = phoneInput.value.replace(/\D/g, '');
+  if (d.length > 9 && d.startsWith('998')) d = d.slice(3);   // вставили номер с кодом страны
+  AUTH.phone = d.slice(0, 9); renderPhone();
+});
+
+/* ---------- OTP: пуш с кодом через 1 с, тап по пушу / подсказке или ввод 6 символов → лоадер → terms ---------- */
+const OTP = { code: '', loading: false, suggest: false, sec: 58 };
+const otpInput = $('#otp-input');
+if (P.mode !== 'phone') otpInput.setAttribute('inputmode', 'none');   // на компьютере — нарисованная клавиатура
+let otpLive = false, otpPushT, otpTickT, otpDoneT;
+function renderOtp() {
+  const s = $('#s-otp');
+  $$('#s-otp .otp-cell').forEach((c, i) => { c.textContent = OTP.code[i] || ''; c.classList.toggle('is-active', !OTP.loading && i === OTP.code.length); });
+  s.classList.toggle('is-loading', OTP.loading);
+  s.classList.toggle('has-suggest', OTP.suggest && !OTP.loading);
+  s.classList.toggle('can-resend', OTP.loading || OTP.sec <= 0);
+  $('#otp-timer').textContent = '00:' + String(Math.max(0, OTP.sec)).padStart(2, '0');
+  $('#otp-phone').textContent = '+998 ' + fmtPhone(AUTH.phone.length === 9 ? AUTH.phone : DEMO_PHONE);
+  if (otpInput.value !== OTP.code) otpInput.value = OTP.code;
+}
+const hidePushOtp = () => { const el = $('#push-otp'); if (el) el.classList.remove('is-shown'); };
+function otpStop() { clearTimeout(otpPushT); clearInterval(otpTickT); clearTimeout(otpDoneT); }
+function otpStart() {   // вход на экран и «Отправить код повторно»
+  otpStop(); hidePushOtp();
+  Object.assign(OTP, { code: '', loading: false, suggest: false, sec: 58 }); renderOtp();
+  if (P.mode === 'figma') return;                                // сверка — без таймеров
+  otpTickT = setInterval(() => { if (OTP.sec > 0) { OTP.sec--; renderOtp(); } else clearInterval(otpTickT); }, 1000);
+  otpPushT = setTimeout(() => {
+    if (P.current !== 'otp' || OTP.loading) return;
+    OTP.suggest = true; renderOtp(); P.notify('otp', { delay: 0 });
+  }, 1000);
+}
+function otpAccept() {
+  OTP.loading = true; clearInterval(otpTickT); hidePushOtp(); renderOtp();
+  if (P.mode === 'figma') return;
+  clearTimeout(otpDoneT); otpDoneT = setTimeout(() => { if (P.current === 'otp') P.go('terms'); }, 1200);
+}
+function otpSet(code) {
+  if (OTP.loading) return renderOtp();
+  OTP.code = code.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); renderOtp();
+  if (OTP.code.length === 6) otpAccept();
+}
+otpInput.addEventListener('input', () => otpSet(otpInput.value));
+$('#otp-kb').addEventListener('click', e => {
+  const k = e.target.closest('[data-k]'); if (!k) return;
+  otpSet(k.dataset.k === 'del' ? OTP.code.slice(0, -1) : OTP.code + k.dataset.k);
+});
+P.on('otp-fill', () => otpSet(DEMO_CODE));                          // тап по пушу или по подсказке «From Messages»
+P.on('otp-resend', () => { if (!OTP.loading) otpStart(); });        // ссылка видна, когда таймер дошёл до 00:00
+
+document.addEventListener('proto:enter', e => {
+  const id = e.target.id.replace(/^s-/, '');
+  if (id !== 'otp' && otpLive) { otpLive = false; otpStop(); hidePushOtp(); }
+  if (id === 'phone') { renderPhone(); if (canFocus()) phoneInput.focus({ preventScroll: true }); }
+  if (id === 'otp') { otpLive = true; otpStart(); if (canFocus()) otpInput.focus({ preventScroll: true }); }
+});
+
+
+/* ---------- состояния ---------- */
+// P.reset на тот же экран не шлёт proto:enter, поэтому экран приводим в исходное явно
+function toPhone(p, digits) {
+  AUTH.phone = digits; p.reset('phone', null); renderPhone();
+  if (p.mode === 'figma') p.keyboard.show(phoneInput);                 // в кадрах Figma клавиатура открыта
+  else if (canFocus()) phoneInput.focus({ preventScroll: true });
+}
+function toOtp(p) { AUTH.phone = DEMO_PHONE; p.reset('otp', null); otpLive = true; otpStart(); if (canFocus()) otpInput.focus({ preventScroll: true }); }
+
+/* ================= auth2: пароль, биометрия, паспорт, лицо (Figma 14052:34557…34698) ================= */
+
+/* ---------- Пароль: 4 точки, цифровая клавиатура — часть экрана ----------
+   pass: точки заполняются по тапу, ⌫ стирает; все 4 → пауза → pass2.
+   pass2: верхний ряд — придуманный пароль (заполнен), нижний — повтор (в кадре 14052:34615 оба заполнены).
+   Все 4 → пауза → затемнение + пуш «Вы зарегистрировались…» → bio-ios (на Android — bio-android).
+   Подсказки «Пароль подходит, если:» в Figma без состояний (зелёные галочки и в пустом кадре) — статичны. */
+const PW_LEN = 4;
+const PW = { first: '', second: '', busy: false, pushed: false };
+const BIO = /Android/i.test(navigator.userAgent) ? 'bio-android' : 'bio-ios';
+let pwT = [];
+const pwLater = (fn, ms) => pwT.push(setTimeout(fn, ms));
+const pwClear = () => { pwT.forEach(clearTimeout); pwT = []; };
+
+function setDot(d, on) {
+  if (d.classList.contains('on') === on) return;
+  d.classList.toggle('on', on);
+  if (on && P.animOn()) { d.classList.remove('p-pop'); void d.offsetWidth; d.classList.add('p-pop'); }
+}
+function renderPass() {
+  $('#s-pass').classList.toggle('is-empty', !PW.first.length);
+  $$('#s-pass .pw-row i').forEach((d, i) => setDot(d, i < PW.first.length));
+}
+function renderPass2() {
+  $$('#s-pass2 .pw-row.is-first i').forEach(d => setDot(d, true));
+  $$('#s-pass2 .pw-row.is-repeat i').forEach((d, i) => setDot(d, i < PW.second.length));
+  $('#s-pass2').classList.toggle('is-pushed', PW.pushed);
+}
+function passDone() {
+  PW.busy = true;
+  pwLater(() => { PW.busy = false; if (P.current === 'pass') P.go('pass2'); }, 350);
+}
+function pass2Done() {
+  PW.busy = true;
+  pwLater(() => {
+    if (P.current !== 'pass2') return;
+    PW.pushed = true; renderPass2();
+    P.notify('registered', { delay: 150, hide: 4500 });
+    pwLater(() => { PW.busy = false; if (P.current === 'pass2') P.go(BIO); }, 2600);
+  }, 350);
+}
+function pressKey(k) {
+  if (PW.busy || (P.current !== 'pass' && P.current !== 'pass2')) return;
+  const f = P.current === 'pass' ? 'first' : 'second';
+  if (k !== 'del' && PW[f].length >= PW_LEN) return f === 'first' ? passDone() : pass2Done();
+  PW[f] = k === 'del' ? PW[f].slice(0, -1) : PW[f] + k;
+  if (f === 'first') renderPass(); else renderPass2();
+  if (PW[f].length === PW_LEN) f === 'first' ? passDone() : pass2Done();
+}
+P.on('pass-key', el => pressKey(el.dataset.key));
+// на компьютере — и с физической клавиатуры
+document.addEventListener('keydown', e => {
+  if (P.current !== 'pass' && P.current !== 'pass2') return;
+  if (/^\d$/.test(e.key)) pressKey(e.key); else if (e.key === 'Backspace') pressKey('del');
+});
+function pwReset(o) { pwClear(); Object.assign(PW, { second: '', busy: false, pushed: false }, o); renderPass(); renderPass2(); }
+document.addEventListener('proto:enter', e => {
+  const id = e.target.id.replace(/^s-/, '');
+  if (id === 'pass') pwReset({ first: '' });
+  if (id === 'pass2') pwReset();
+});
+
+/* ---------- Подтвердите личность: серия и номер / ПИНФЛ, дата рождения ----------
+   Документ: 2 буквы серии + номер (в макете «АА120120» — 6 цифр, в плейсхолдере 7) или ПИНФЛ 14 цифр.
+   Дата: маска ДД.ММ.ГГГГ, точки ставятся сами. «Продолжить» активна, когда оба поля заполнены. */
+const idDoc = $('#id-doc'), idBirth = $('#id-birth');
+const maskDoc = v => {
+  v = v.toUpperCase().replace(/[^0-9A-ZА-ЯЁ]/g, '');
+  const m = v.match(/^([A-ZА-ЯЁ]{0,2})(.*)$/), digits = m[2].replace(/\D/g, '');
+  return m[1] ? m[1] + digits.slice(0, 7) : digits.slice(0, 14);
+};
+const maskDate = v => {
+  const d = v.replace(/\D/g, '').slice(0, 8);
+  return d.slice(0, 2) + (d.length > 2 ? '.' + d.slice(2, 4) : '') + (d.length > 4 ? '.' + d.slice(4) : '');
+};
+const docOk = v => /^[A-ZА-ЯЁ]{2}\d{6,7}$/.test(v) || /^\d{14}$/.test(v);
+const dateOk = v => { const m = v.match(/^(\d{2})\.(\d{2})\.(\d{4})$/); return !!m && +m[1] >= 1 && +m[1] <= 31 && +m[2] >= 1 && +m[2] <= 12; };
+function renderIdentity() {
+  const ok = docOk(idDoc.value) && dateOk(idBirth.value);
+  $('#identity-next').disabled = !ok;
+  $('#s-identity').classList.toggle('is-ready', ok);
+}
+idDoc.addEventListener('input', () => { const v = maskDoc(idDoc.value); if (v !== idDoc.value) idDoc.value = v; renderIdentity(); });
+idBirth.addEventListener('input', () => { const v = maskDate(idBirth.value); if (v !== idBirth.value) idBirth.value = v; renderIdentity(); });
+// поле документа — текстовое (буквы серии), без нарисованной клавиатуры кита; фокус подсвечиваем так же
+idDoc.addEventListener('focus', () => idDoc.closest('.input-text').classList.add('is-focused'));
+idDoc.addEventListener('blur', () => idDoc.closest('.input-text').classList.remove('is-focused'));
+const setIdentity = (doc, birth) => { idDoc.value = doc; idBirth.value = birth; renderIdentity(); };
+
+/* ---------- состояния группы: карта экранов и сверка ---------- */
+const DEMO_PW = '1357';
+
+/* ---------- Группа prod: автопереходы лоадеров ----------
+   myid → processing (в Figma AFTER_TIMEOUT); processing → событие flow:processed (куда дальше — по метке диплинка);
+   calc-wait → событие flow:calculated. Сверка с Figma (?mode=figma) — без автопереходов. */
+const PROD_AUTO = {
+  myid: [2500, () => P.go('processing', 'fade')],
+  processing: [2500, () => document.dispatchEvent(new CustomEvent('flow:processed'))],
+  'calc-wait': [3000, () => document.dispatchEvent(new CustomEvent('flow:calculated'))],
+};
+let prodT;
+document.addEventListener('proto:enter', e => {
+  clearTimeout(prodT);
+  const id = e.target.id.replace(/^s-/, '');
+  if (P.mode === 'figma' || !PROD_AUTO[id]) return;
+  const [ms, fn] = PROD_AUTO[id];
+  prodT = setTimeout(() => { if (P.current === id) fn(); }, ms);
+});
+
+/* ---------- состояния: карта экранов и сверка ---------- */
+const prodAt = id => p => p.reset(id, null);
+
+/* ---------- Группа dash: дашборд, дашборд гостя, шторки результата, пуш ---------- */
+
+/* Слот баннера на дашборде (Steps_card_reseption):
+   preparing — «Готовим кредитные предложения» (14052:38656), ready — «Для вас есть кредитные предложения» (14052:38668),
+   cc — «Получить кредитную карту», mz — «Микрозайм одобрен!» (14331:44172). Смена — с анимацией появления. */
+window.dashBanner = (v, anim = true) => {
+  const box = $('#dash-banner'); if (!box) return;
+  const same = box.dataset.v === v;
+  box.dataset.v = v;
+  $$('#dash-banner > [data-v]').forEach(el => {
+    const on = el.dataset.v === v;
+    el.classList.toggle('is-hidden', !on);
+    if (on && anim && !same && P.animOn()) { el.classList.remove('p-swap-in'); void el.offsetWidth; el.classList.add('p-swap-in'); }
+  });
+};
+
+/* ---------- состояния: карта экранов и сверка ---------- */
+const dash = (banner, after) => p => { P.reset('dash', null); dashBanner(banner, false); if (after) after(p); };
+
+/* ================= Состояния: карта экранов и сверка с Figma ================= */
+P.states([
+  { id: 'dl-multi', group: 'Вход по диплинку', title: 'Мультипродуктовый диплинк → «Узнайте свои кредитные возможности»', apply: p => { D.label = 'multi'; p.reset('splash', null); } },
+  { id: 'dl-cc', group: 'Вход по диплинку', title: 'Диплинк кредитной карты → карта L3', apply: p => { D.label = 'cc'; p.reset('splash', null); } },
+  { id: 'dl-mz', group: 'Вход по диплинку', title: 'Диплинк микрозайма → микрозайм L3', apply: p => { D.label = 'mz'; p.reset('splash', null); } },
+  { id: 'splash', group: 'Регистрация', title: 'Splash', figma: '14052:34544', node: '14052:34544', height: 844, apply: p => { AUTH.phone = ''; renderPhone(); p.reset('splash', null); } },
+  { id: 'phone', group: 'Регистрация', title: 'Ввод номера телефона', figma: '14052:34545', node: '14052:34545', height: 844, apply: p => toPhone(p, '') },
+  { id: 'phone-filled', group: 'Регистрация', title: 'Номер введён, «Войти» активна', figma: '14052:34547', node: '14052:34547', height: 844, apply: p => toPhone(p, DEMO_PHONE) },
+  { id: 'otp', group: 'Регистрация', title: 'Введите код из SMS', figma: '14052:34549', node: '14052:34549', height: 844, apply: p => toOtp(p) },
+  { id: 'otp-push', group: 'Регистрация', title: 'Пуш с кодом и подсказка клавиатуры', figma: '14052:34550', node: '14052:34550', height: 844, apply: p => { toOtp(p); OTP.sec = 48; OTP.suggest = true; renderOtp(); p.notify('otp', { delay: 0, hide: 0 }); } },
+  { id: 'otp-loading', group: 'Регистрация', title: 'Код принят, проверяем', figma: '14052:34555', node: '14052:34555', height: 844, apply: p => { toOtp(p); otpSet(DEMO_CODE); } },
+  { id: 'terms', group: 'Регистрация', title: 'Условия Генерального договора', figma: '14052:34588', node: '14052:34588', height: 844, apply: p => p.reset('terms', null) },
+  { id: 'pass', group: 'Регистрация', title: 'Придумайте пароль (1 из 4)', figma: '14052:34573', node: '14052:34573', height: 844,
+    apply: () => { P.reset('pass', null); pwReset({ first: '' }); } },
+  { id: 'pass-filled', group: 'Регистрация', title: 'Пароль введён', figma: '14052:34557', node: '14052:34557', height: 844,
+    apply: () => { P.reset('pass', null); pwReset({ first: DEMO_PW }); } },
+  { id: 'pass2', group: 'Регистрация', title: 'Введите повторно', figma: '14052:34615', node: '14052:34615', height: 844,
+    apply: () => { P.reset('pass', null); pwReset({ first: DEMO_PW }); P.go('pass2', null); pwReset({ second: DEMO_PW }); } },
+  { id: 'pass2-push', group: 'Регистрация', title: 'Пуш «Вы зарегистрировались в AVO bank!»', figma: '14052:34597', node: '14052:34597', height: 844,
+    apply: () => { P.reset('pass', null); pwReset({ first: DEMO_PW }); P.go('pass2', null); pwReset({ second: DEMO_PW, pushed: true }); P.notify('registered', { delay: 0, hide: 0 }); } },
+  { id: 'bio-ios', group: 'Регистрация', title: 'Face ID вместо пароля (2 из 4, iOS)', figma: '14052:34636', node: '14052:34636', height: 844,
+    apply: () => P.reset('bio-ios', null) },
+  { id: 'bio-android', group: 'Регистрация', title: 'Отпечаток пальца (2 из 4, Android)', figma: '14052:34633', node: '14052:34633', height: 844,
+    apply: () => P.reset('bio-android', null) },
+  { id: 'identity', group: 'Регистрация', title: 'Подтвердите личность (3 из 4)', figma: '14052:34639', node: '14052:34639', height: 844,
+    apply: () => { setIdentity('', ''); P.reset('identity', null); } },
+  { id: 'identity-filled', group: 'Регистрация', title: 'Подтвердите личность — заполнено', figma: '14052:34658', node: '14052:34658', height: 844,
+    apply: () => { setIdentity('АА120120', '06.06.1990'); P.reset('identity', null); } },
+  { id: 'face', group: 'Регистрация', title: 'Идентификация лица (4 из 4)', figma: '14052:34676', node: '14052:34676', height: 844,
+    apply: () => { setIdentity('АА120120', '06.06.1990'); P.reset('identity', null); P.go('face', null); } },
+  { id: 'myid', group: 'Обработка данных', title: 'MyID: пожалуйста, улыбнитесь', figma: 'MyID', node: '14052:34700', height: 844, apply: prodAt('myid') },
+  { id: 'processing', group: 'Обработка данных', title: 'Обрабатываем ваши данные', figma: '14052:34712', node: '14052:34712', height: 844, apply: prodAt('processing') },
+  { id: 'multi-intro', group: 'Мультипродуктовый диплинк', title: 'Узнайте свои кредитные возможности', figma: '435417', node: '14052:38587', height: 844, apply: prodAt('multi-intro') },
+  { id: 'calc-wait', group: 'Мультипродуктовый диплинк', title: 'Рассчитываем ваши кредитные возможности', figma: '701 - 67', node: '14052:38680', height: 844, apply: prodAt('calc-wait') },
+  { id: 'cc-l3', group: 'Продукт по метке (L3)', title: 'Кредитная AVO Platinum L3', figma: '14331:43748', node: '14331:43748', height: 930, apply: prodAt('cc-l3') },
+  { id: 'mz-l3', group: 'Продукт по метке (L3)', title: 'Микрозайм L3', figma: '14331:43728', node: '14331:43728', height: 844, apply: prodAt('mz-l3') },
+  { id: 'cc-l2', group: 'Гость: неявная заявка (L2)', title: 'Кредитная AVO Platinum L2', figma: '14067:39299', node: '14067:39299', height: 930, apply: prodAt('cc-l2') },
+  { id: 'mz-l2', group: 'Гость: неявная заявка (L2)', title: 'Микрозайм L2', figma: '14067:39279', node: '14067:39279', height: 844, apply: prodAt('mz-l2') },
+  { id: 'dash-preparing', group: 'Дашборд', title: 'Дашборд: готовим кредитные предложения', figma: '14052:38656', node: '14052:38656', height: 844,
+    selector: '#dash-banner > [data-v="preparing"]', apply: dash('preparing') },
+  { id: 'push-offers', group: 'Дашборд', title: 'Пуш: мы подобрали кредитные предложения', figma: '14052:38690', node: '14052:38690', height: 844,
+    selector: '#push-offers .ios-notification', apply: dash('preparing', p => p.notify('offers', { delay: 0, hide: 0 })) },
+  { id: 'dash-offers', group: 'Дашборд', title: 'Для вас есть кредитные предложения (шторка)', figma: '14052:38691', node: '14052:38691', height: 844,
+    apply: dash('ready', p => p.openSheet('offers')) },
+  { id: 'dash-mz-approved', group: 'Дашборд', title: 'Одобрен микрозайм (шторка)', figma: '14331:44170', node: '14331:44170', height: 844,
+    selector: '#sheet-mz-approved .sheet > :first-child', apply: dash('mz', p => p.openSheet('mz-approved')) },
+  { id: 'dash-cc-approved', group: 'Дашборд', title: 'Одобрен кредитный лимит (шторка)', figma: '14331:44171', node: '14331:44171', height: 844,
+    selector: '#sheet-cc-approved .sheet > :first-child', apply: dash('cc', p => p.openSheet('cc-approved')) },
+  { id: 'dash-guest', group: 'Дашборд гостя', title: 'Дашборд: не стал клиентом, «Подтвердите личность 3 из 4»', figma: '14067:39334', node: '14067:39334', height: 1174,
+    apply: () => P.reset('dash-guest', null) },
+]);
+
+renderPhone(); renderOtp();
+
+renderPass(); renderIdentity();
+
+P.start('splash');
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+/* ================= Группа auth2: пароль, биометрия, паспорт, лицо (Figma 14052:34557…34698) ================= */
+/* Все экраны группы — белые (bg/neutral/calm000); StatusBar внутри AppBar этих макетов — opacity 0 */
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face){background:var(--bg-neutral-calm000)}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .statusbar{opacity:0}
+
+/* _progress bar-concept: «N из 4» Title/Medium/Medium + 4 сегмента по 6 px встык, крайние скруглены 6 */
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-progress{display:flex;gap:12px;align-items:center;width:100%;flex:none}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-progress p{white-space:nowrap;color:var(--text-primary-bold950)}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-bar{flex:1;min-width:1px;display:flex;align-items:center}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-bar i{flex:1;min-width:1px;height:6px;background:var(--bg-neutral-static-calm200)}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-bar i:first-child{border-radius:6px 0 0 6px}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-bar i:last-child{border-radius:0 6px 6px 0}
+:is(#s-pass,#s-pass2,#s-bio-ios,#s-bio-android,#s-identity,#s-face) .a2-bar i.on{background:var(--bg-primary-bold600)}
+
+/* Заголовок: Title/Large/H2 цвета Title-Active #030303 (в Figma без токена) + Body/Large/L Regular #5a5b73, зазор 12 */
+:is(#s-pass,#s-pass2,#s-identity,#s-face) .a2-text{display:flex;flex-direction:column;gap:12px;width:100%}
+:is(#s-pass,#s-pass2,#s-identity,#s-face) .a2-h{color:#030303}
+:is(#s-pass,#s-pass2,#s-identity,#s-face) .a2-sub{color:var(--colortext-body)}
+
+/* Button primary / secondary этих макетов: высота 48, отступы 12/24, радиус 12, primary — bg/primary/bold950 */
+:is(#s-bio-ios,#s-bio-android,#s-identity,#s-face) .btn-l{height:48px;padding:12px 24px;border-radius:12px}
+:is(#s-bio-ios,#s-bio-android,#s-identity,#s-face) .btn-primary{background:var(--bg-primary-bold950);color:var(--text-neutral-calm000)}
+:is(#s-bio-ios,#s-bio-android) .btn-secondary{background:var(--bg-neutral-calm100);color:var(--text-primary-bold950)}
+
+/* ===== 14052:34573 / 14052:34557 · Придумайте пароль; 14052:34615 / 14052:34597 · Введите повторно ===== */
+/* прогресс top 106 (appbar 94 + 12); тексты top 178; правила — низ на 514, над клавиатурой (554) */
+:is(#s-pass,#s-pass2) .scroll{padding:12px 16px 0}
+:is(#s-pass,#s-pass2) .pw-body{display:flex;flex-direction:column;justify-content:space-between;height:336px;margin-top:50px;flex:none}
+:is(#s-pass,#s-pass2) .pw-top{display:flex;flex-direction:column;align-items:center;width:100%}
+/* codeField: точки 10 через 16, py 3; пустая — opacity .3. Введён: зазор от текста 72 (14052:34557);
+   пустой кадр 14052:34573 центрирует точки между текстом и правилами — зазор 90, на 18 px ниже */
+:is(#s-pass,#s-pass2) .pw-code{display:flex;flex-direction:column;gap:20px;margin-top:72px;transition:margin-top var(--t2) var(--ease)}
+#s-pass.is-empty .pw-code{margin-top:90px}
+:is(#s-pass,#s-pass2) .pw-row{display:flex;gap:16px;align-items:center;padding:3px 0}
+:is(#s-pass,#s-pass2) .pw-row i{width:10px;height:10px;border-radius:12px;background:var(--bg-primary-bold600);opacity:.3;transition:opacity var(--t1) ease}
+:is(#s-pass,#s-pass2) .pw-row i.on{opacity:1}
+/* Rules: info 20 + «Пароль подходит, если:» Body/Medium/L #5a5b73; Bullet-list: tick 20 зелёная, зазор 6, текст bold600 */
+:is(#s-pass,#s-pass2) .pw-rules{display:flex;flex-direction:column;gap:8px;width:100%}
+:is(#s-pass,#s-pass2) .pw-rules-h{display:flex;gap:8px;align-items:center;white-space:nowrap;color:var(--colortext-body)}
+:is(#s-pass,#s-pass2) .pw-list{display:flex;flex-direction:column;gap:8px;width:100%}
+:is(#s-pass,#s-pass2) .pw-item{display:flex;gap:6px;align-items:center;width:100%;color:var(--text-neutral-bold600)}
+:is(#s-pass,#s-pass2) .pw-item span{flex:1;min-width:1px}
+/* NumericKeyboard — часть экрана (кит .ios-numpad), без задержки двойного тапа */
+:is(#s-pass,#s-pass2) .ios-numpad .key{touch-action:manipulation}
+/* Rectangle 117: затемнение rgba(0,0,0,.2) поверх всего кадра под пушем (14052:34597) */
+#s-pass2 .pw-dim{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity var(--t2) ease}
+#s-pass2.is-pushed .pw-dim{opacity:1}
+
+/* ===== 14052:34636 iOS / 14052:34633 Android · биометрия, 2 из 4 ===== */
+/* AppBar — только статус-бар 54; прогресс top 106 поверх; Frame 620 (54…674) центрирует баннер и тексты */
+:is(#s-bio-ios,#s-bio-android) .scroll{position:relative;display:flex;flex-direction:column}
+:is(#s-bio-ios,#s-bio-android) .a2-progress{position:absolute;left:16px;top:52px;width:auto;right:16px}
+:is(#s-bio-ios,#s-bio-android) .bio-main{flex:1 0 auto;display:flex;flex-direction:column;gap:24px;align-items:center;justify-content:center;padding:74px 16px}
+:is(#s-bio-ios,#s-bio-android) .bio-banner{position:relative;width:242px;height:144px;flex:none}
+:is(#s-bio-ios,#s-bio-android) .bio-ill{position:absolute;left:15px;top:.99px;width:212px;overflow:hidden}
+:is(#s-bio-ios,#s-bio-android) .bio-ill img{position:absolute;max-width:none}
+/* Img_banner/242*144/Card_14: illustration 212:144, картинка 103.65 % × 99.31 %, сдвиг −2.51 % / 0.69 % */
+#s-bio-ios .bio-ill{height:144px}
+#s-bio-ios .bio-ill img{left:-2.51%;top:.69%;width:103.65%;height:99.31%}
+/* Img_banner/242*144/Card_13: illustration 212:143, картинка 103.16 % × 100 %, сдвиг −2.5 % */
+#s-bio-android .bio-ill{height:143.01px}
+#s-bio-android .bio-ill img{left:-2.5%;top:0;width:103.16%;height:100%}
+:is(#s-bio-ios,#s-bio-android) .bio-text{display:flex;flex-direction:column;gap:16px;width:100%;text-align:center}
+:is(#s-bio-ios,#s-bio-android) .bio-text .title-large-h4{color:var(--text-neutral-bold950)}
+:is(#s-bio-ios,#s-bio-android) .bio-text .body-large-l-regular{color:var(--text-neutral-bold600)}
+
+/* ===== 14052:34639 / 14052:34658 · Подтвердите личность, 3 из 4 ===== */
+/* тексты top 174 (Content top 62 + pt 112), поля через 48, между полями 24 */
+#s-identity .scroll{padding:12px 16px 0}
+#s-identity .id-text{margin-top:46px}
+#s-identity .id-inputs{display:flex;flex-direction:column;gap:24px;width:100%;margin-top:48px}
+/* Input_Text этих макетов: фон bg/neutral/calm050, значение Body/Large/L Regular, плейсхолдер Placeholder #9d9d9d */
+#s-identity .input-text{background:var(--bg-neutral-calm050)}
+#s-identity .input-text.is-focused{background:var(--bg-neutral-calm200)}
+#s-identity .input-text input{font-size:16px;line-height:22px;font-weight:400}
+#s-identity .input-text input::placeholder{color:#9d9d9d;opacity:1}
+/* «Продолжить» неактивна до заполнения; заполнено — Semibold и другой текст дисклеймера, как в 14052:34658 */
+#s-identity .btn-primary:disabled{background:var(--bg-neutral-calm200);color:var(--text-neutral-bold600)}
+#s-identity.is-ready .btn-primary{font-weight:600}
+#s-identity .id-cc-filled,#s-identity.is-ready .id-cc-empty{display:none}
+#s-identity.is-ready .id-cc-filled{display:inline}
+
+/* ===== 14052:34676 · Идентификация лица, 4 из 4 ===== */
+/* фото top 163 (+16 под бейджи), две колонки 173 через 12, высота 240, радиус 8; заголовок через 32 */
+#s-face .scroll{padding:12px 16px 0}
+#s-face .face-photos{display:flex;gap:12px;width:100%;padding-top:16px;margin-top:35px}
+#s-face .face-col{position:relative;flex:1;min-width:1px}
+#s-face .face-ph{position:relative;height:240px;border-radius:8px;overflow:hidden}
+#s-face .face-ph img{position:absolute;top:0;max-width:none;object-fit:cover}
+#s-face .face-ph .ph-bad{left:-233px;width:431px;height:240px}
+#s-face .face-ph .ph-good{left:-24px;width:433px;height:241px}
+/* бейджи 32: красный Info/Lightmode #ff005c (без токена) с remove 24, зелёный Success #0dbf54 с tick 24 */
+#s-face .face-badge{position:absolute;left:50%;top:-16px;width:32px;height:32px;margin-left:-16px;border-radius:50px;display:flex;align-items:center;justify-content:center}
+#s-face .face-badge.is-bad{background:#ff005c}
+#s-face .face-badge.is-good{background:var(--colorinfo-success)}
+#s-face .face-title{display:flex;flex-direction:column;gap:24px;width:100%;margin-top:32px}
+#s-face .face-tips-h{padding-bottom:24px;color:var(--colortext-body)}
+#s-face .bullet-list{padding-bottom:0}
+#s-face .btn-primary{font-weight:600}
+
+/* ===== 14052:34613 · пуш «Вы зарегистрировались в AVO bank!» ===== */
+/* кадр 16/16, ширина 358; фон #b9b9b9 + #333 color-dodge = непрозрачный #e7e7e7; иконка — Сообщения (PNG из макета) */
+#push-registered{left:16px;right:16px}
+html:not(.m-phone) #push-registered{top:16px}
+#push-registered .ios-notification{background:#e7e7e7;-webkit-backdrop-filter:none;backdrop-filter:none}
+#push-registered .app-icon{background:none}
+#push-registered .app-icon img{width:100%;height:100%;object-fit:cover}
+#push-registered .text a{color:var(--text-primary-bold600);text-decoration:none}

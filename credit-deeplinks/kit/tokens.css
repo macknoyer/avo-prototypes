@@ -1,0 +1,230 @@
+/* Сгенерировано из «AVO Design System» (project/tokens.json, версия 2). Не править руками: перегенерировать. */
+:root{
+  --surface-neutral-calm000: #ffffff;
+  --surface-neutral-calm100: #f1f2f5;
+  --surface-primary-bold950: #0b1d47;
+  --surface-secondary-calm300: #faff00;
+  --bg-neutral-bold950: #19191f;
+  --bg-neutral-bold800: #39393f;
+  --bg-neutral-bold700: #4b4b51;
+  --bg-neutral-calm400: #99999e;
+  --bg-neutral-calm200: #e1e1e5;
+  --bg-neutral-calm100: #f1f2f5;
+  --bg-neutral-calm050: #f8f9fb;
+  --bg-neutral-calm000: #ffffff;
+  --bg-neutral-static-bold950: #19191f;
+  --bg-neutral-static-bold700: #4b4b51;
+  --bg-neutral-static-calm200: #e1e1e5;
+  --bg-neutral-static-calm100: #f1f2f5;
+  --bg-neutral-static-calm050: #f8f9fb;
+  --bg-neutral-static-calm000: #ffffff;
+  --bg-primary-bold1000: #07122c;
+  --bg-primary-bold950: #0b1d47;
+  --bg-primary-bold600: #2055cf;
+  --bg-primary-calm100: #dce5f9;
+  --bg-secondary-calm300: #faff00;
+  --bg-secondary-calm400: #faf600;
+  --bg-positive-calm500: #2aa754;
+  --bg-positive-calm050: #e2f8ea;
+  --bg-alert-calm500: #ec0456;
+  --bg-alert-calm050: #ffebf2;
+  --bg-warning-calm500: #fd9722;
+  --bg-warning-calm050: #fff6eb;
+  --text-neutral-bold950: #19191f;
+  --text-primary-bold950: #0b1d47;
+  --text-primary-bold600: #2055cf;
+  --text-primary-static-bold950: #0b1d47;
+  --text-neutral-bold700: #4b4b51;
+  --text-neutral-bold600: #5d5d63;
+  --text-neutral-calm400: #99999e;
+  --text-neutral-calm300: #bdbdc2;
+  --text-neutral-calm000: #ffffff;
+  --text-neutral-static-bold950: #19191f;
+  --text-neutral-static-bold700: #4b4b51;
+  --text-neutral-static-bold600: #5d5d63;
+  --text-neutral-static-calm400: #99999e;
+  --text-neutral-static-calm100: #f1f2f5;
+  --text-neutral-static-calm050: #f8f9fb;
+  --text-neutral-static-calm000: #ffffff;
+  --text-secondary-calm300: #faff00;
+  --text-positive-calm500: #2aa754;
+  --text-alert-calm500: #ec0456;
+  --icon-neutral-bold950: #19191f;
+  --icon-primary-bold950: #0b1d47;
+  --icon-neutral-bold800: #39393f;
+  --icon-primary-bold600: #2055cf;
+  --icon-neutral-bold700: #4b4b51;
+  --icon-neutral-calm400: #99999e;
+  --icon-neutral-calm300: #bdbdc2;
+  --icon-neutral-calm000: #ffffff;
+  --icon-neutral-static-bold950: #19191f;
+  --icon-neutral-static-calm050: #f8f9fb;
+  --icon-neutral-static-calm000: #ffffff;
+  --icon-positive-calm500: #2aa754;
+  --icon-alert-calm500: #ec0456;
+  --border-neutral-bold600: #5d5d6412;
+  --overlay-neutral-boldest: #29292f8c;
+  --overlay-neutral-bold: #29292f26;
+  --overlay-neutral-calm: #ffffff8c;
+  --overlay-neutral-calmest: #ffffff26;
+  --border-neutral-calm400: #99999e;
+  --border-neutral-calm200: #e1e1e5;
+  --border-neutral-calm100: #f1f2f5;
+  --border-neutral-calm000: #ffffff;
+  --border-primary-bold950: #0b1d47;
+  --border-primary-bold600: #2055cf;
+  --border-alert-calm500: #ec0456;
+  --icon-warning-calm500: #fd9722;
+  --labels-primary: #000000;
+  --colortext-body: #5a5b73;
+  --colorbase-off-white: #ffffff;
+  --colorinfo-success: #0dbf54;
+  --color-icon-primary-on-dark: #ffffff;
+}
+/* Тёмная тема — по запросу: <html data-theme="dark"> */
+:root[data-theme="dark"]{
+  --surface-neutral-calm000: #29292f;
+  --surface-neutral-calm100: #19191f;
+  --surface-primary-bold950: #edf2fc;
+  --surface-secondary-calm300: #faff00;
+  --bg-neutral-bold950: #f8f9fb;
+  --bg-neutral-bold800: #99999e;
+  --bg-neutral-bold700: #99999e;
+  --bg-neutral-calm400: #5d5d63;
+  --bg-neutral-calm200: #4b4b51;
+  --bg-neutral-calm100: #19191f;
+  --bg-neutral-calm050: #19191f;
+  --bg-neutral-calm000: #29292f;
+  --bg-neutral-static-bold950: #19191f;
+  --bg-neutral-static-bold700: #4b4b51;
+  --bg-neutral-static-calm200: #e1e1e5;
+  --bg-neutral-static-calm100: #f1f2f5;
+  --bg-neutral-static-calm050: #f8f9fb;
+  --bg-neutral-static-calm000: #ffffff;
+  --bg-primary-bold1000: #7296e9;
+  --bg-primary-bold950: #95b0ee;
+  --bg-primary-bold600: #7296e9;
+  --bg-primary-calm100: #0b1d47;
+  --bg-secondary-calm300: #faff00;
+  --bg-secondary-calm400: #faf600;
+  --bg-positive-calm500: #2aa754;
+  --bg-positive-calm050: #0f3d1f;
+  --bg-alert-calm500: #ec0456;
+  --bg-alert-calm050: #590120;
+  --bg-warning-calm500: #fd9722;
+  --bg-warning-calm050: #793b01;
+  --text-neutral-bold950: #ffffff;
+  --text-primary-bold950: #95b0ee;
+  --text-primary-bold600: #7296e9;
+  --text-primary-static-bold950: #0b1d47;
+  --text-neutral-bold700: #bdbdc2;
+  --text-neutral-bold600: #bdbdc2;
+  --text-neutral-calm400: #99999e;
+  --text-neutral-calm300: #5d5d63;
+  --text-neutral-calm000: #19191f;
+  --text-neutral-static-bold950: #19191f;
+  --text-neutral-static-bold700: #4b4b51;
+  --text-neutral-static-bold600: #5d5d63;
+  --text-neutral-static-calm400: #727278;
+  --text-neutral-static-calm100: #f1f2f5;
+  --text-neutral-static-calm050: #f8f9fb;
+  --text-neutral-static-calm000: #ffffff;
+  --text-secondary-calm300: #faff00;
+  --text-positive-calm500: #33cc66;
+  --text-alert-calm500: #fd5e97;
+  --icon-neutral-bold950: #ffffff;
+  --icon-primary-bold950: #95b0ee;
+  --icon-neutral-bold800: #e1e1e5;
+  --icon-primary-bold600: #7296e9;
+  --icon-neutral-bold700: #bdbdc2;
+  --icon-neutral-calm400: #99999e;
+  --icon-neutral-calm300: #5d5d63;
+  --icon-neutral-calm000: #19191f;
+  --icon-neutral-static-bold950: #19191f;
+  --icon-neutral-static-calm050: #f8f9fb;
+  --icon-neutral-static-calm000: #ffffff;
+  --icon-positive-calm500: #33cc66;
+  --icon-alert-calm500: #fd5e97;
+  --border-neutral-bold600: #e1e1e512;
+  --overlay-neutral-boldest: #ffffff8c;
+  --overlay-neutral-bold: #ffffff26;
+  --overlay-neutral-calm: #29292f8c;
+  --overlay-neutral-calmest: #29292f26;
+  --border-neutral-calm400: #5d5d63;
+  --border-neutral-calm200: #4b4b51;
+  --border-neutral-calm100: #39393f;
+  --border-neutral-calm000: #19191f;
+  --border-primary-bold950: #95b0ee;
+  --border-primary-bold600: #7296e9;
+  --border-alert-calm500: #ca034a;
+  --icon-warning-calm500: #fdae53;
+  --labels-primary: #ffffff;
+  --colortext-body: #5a5b73;
+  --colorbase-off-white: #ffffff;
+  --colorinfo-success: #0dbf54;
+  --color-icon-primary-on-dark: #ffffff;
+}
+/* Текстовые стили Figma. Шрифт — системный SF (на iPhone так же рисует нативное приложение). */
+.title-large-h1{font-size:32px;line-height:36px;font-weight:600;letter-spacing:0px}
+.title-large-h2{font-size:26px;line-height:30px;font-weight:600;letter-spacing:0px}
+.title-large-h3{font-size:24px;line-height:28px;font-weight:600;letter-spacing:-0.408px}
+.title-large-h4{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-0.22px}
+.title-large-h5{font-size:22px;line-height:28px;font-weight:400;letter-spacing:-0.22px}
+.title-medium-semibold{font-size:18px;line-height:22px;font-weight:600;letter-spacing:0px}
+.title-medium-medium{font-size:18px;line-height:22px;font-weight:500;letter-spacing:0px}
+.title-small-semibold{font-size:16px;line-height:20px;font-weight:600;letter-spacing:0px}
+.title-small-medium{font-size:16px;line-height:20px;font-weight:500;letter-spacing:0px}
+.title-x-small-semibold{font-size:14px;line-height:18px;font-weight:600;letter-spacing:0px}
+.title-x-small-medium{font-size:14px;line-height:18px;font-weight:500;letter-spacing:0px}
+.title-x-small-regular{font-size:14px;line-height:18px;font-weight:400;letter-spacing:0px}
+.title-xx-small-semibold{font-size:12px;line-height:16px;font-weight:600;letter-spacing:0px}
+.body-large-l-regular{font-size:16px;line-height:22px;font-weight:400;letter-spacing:0px}
+.body-large-l-underlined{font-size:16px;line-height:22px;font-weight:400;letter-spacing:0px}
+.body-large-m-regular{font-size:14px;line-height:18px;font-weight:400;letter-spacing:0px}
+.body-medium-l{font-size:14px;line-height:17px;font-weight:400;letter-spacing:0px}
+.body-medium-l-underlined{font-size:14px;line-height:17px;font-weight:400;letter-spacing:0px}
+.body-medium-l-currency{font-size:14px;line-height:22px;font-weight:600;letter-spacing:0px}
+.body-medium-m{font-size:12px;line-height:16px;font-weight:400;letter-spacing:0px}
+.body-medium-s{font-size:12px;line-height:14px;font-weight:400;letter-spacing:0px}
+.body-medium-xs{font-size:10px;line-height:12px;font-weight:400;letter-spacing:0px}
+.body-small-l-regular{font-size:12px;line-height:16px;font-weight:400;letter-spacing:0px}
+.body-small-m-semibold{font-size:12px;line-height:12px;font-weight:600;letter-spacing:0px}
+.body-small-m-regular{font-size:12px;line-height:12px;font-weight:400;letter-spacing:0px}
+.body-small-s-regular{font-size:10px;line-height:14px;font-weight:400;letter-spacing:0px}
+.body-small-xs-regular{font-size:8px;line-height:12px;font-weight:400;letter-spacing:0px}
+.button-large{font-size:16px;line-height:24px;font-weight:500;letter-spacing:0px}
+.button-medium{font-size:14px;line-height:20px;font-weight:500;letter-spacing:0px}
+.button-small{font-size:12px;line-height:16px;font-weight:500;letter-spacing:0px}
+.topbar-medium{font-size:10px;line-height:11.934px;font-weight:500;letter-spacing:0.24px}
+:root{
+  --space-0m: 0px;
+  --space-0-5m: 2px;
+  --space-1m: 4px;
+  --space-1-5m: 6px;
+  --space-2m: 8px;
+  --space-3m: 12px;
+  --space-4m: 16px;
+  --space-6m: 24px;
+  --space-8m: 32px;
+  --space-10m: 40px;
+  --space-11m: 44px;
+  --space-12m: 48px;
+}
+:root{
+  --radius-2-5: 2.5px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-32: 32px;
+  --radius-full: 500px;
+}
+:root{
+  --tab-bar: 0px -0.5px 0px 0px #0000001a;
+  --shadow-lvl-1: 0px 2px 8px 0px #19191f1f;
+  --shadow-lvl-2: 0px 4px 15px 0px #19191f1a;
+  --shadow-lvl-3: 0px 6px 51px -14px #19191f1a;
+  --shadow-button: 0px 3px 6px 0px #281e324d;
+  --shadow-card-drop: 0px -5px 20px 0px #0000000d;
+}

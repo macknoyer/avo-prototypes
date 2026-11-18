@@ -1,0 +1,216 @@
+/* ===== Группа dash: дашборд 14052:38691, дашборд гостя 14067:39334, шторки результата, пуш 14052:38690 =====
+   Значения — из get_design_context. Селекторы только внутри #s-dash / #s-dash-guest / #sheet-… / #push-offers. */
+
+/* ---------- общее для двух дашбордов: профиль, баннеры, таббар ---------- */
+html.m-figma .device:has(#s-dash-guest.is-active){--frame-r:32px}
+:is(#s-dash,#s-dash-guest) .scroll{position:relative}
+
+/* DashboardElProfile: аватар 36, три сторис 36 (−2 внахлёст), колокол 28 с бейджем */
+:is(#s-dash,#s-dash-guest) .dp-row{position:relative;display:flex;flex-direction:column;width:100%;padding:0 16px}
+:is(#s-dash,#s-dash-guest) .dp{display:flex;align-items:center;justify-content:space-between;width:100%}
+:is(#s-dash,#s-dash-guest) .dp-avatar{position:relative;width:36px;height:36px;flex:none;border-radius:500px;border:1px solid var(--border-neutral-bold600);overflow:hidden}
+:is(#s-dash,#s-dash-guest) .dp-photo{position:absolute;left:50%;top:50%;width:36px;height:36px;transform:translate(-50%,-50%);overflow:hidden}
+:is(#s-dash,#s-dash-guest) .dp-photo img{position:absolute;left:-20.83%;top:0;width:150%;height:150%}
+:is(#s-dash,#s-dash-guest) .dp-stories{display:flex;align-items:center}
+/* обводка сторис в Figma — снаружи (на сверке: синий 1 px, под ним белый 1 px фона, потом контент 34) */
+:is(#s-dash,#s-dash-guest) .dp-story{position:relative;width:36px;height:36px;flex:none;margin-right:-2px;border-radius:18px;box-shadow:0 0 0 1px var(--border-primary-bold600);background:var(--bg-neutral-calm000)}
+:is(#s-dash,#s-dash-guest) .dp-story:last-child{margin-right:0}
+:is(#s-dash,#s-dash-guest) .dp-sc{position:absolute;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);border-radius:17px;overflow:hidden}
+:is(#s-dash,#s-dash-guest) .dp-sc.is-dark{background:var(--bg-neutral-bold800)}
+:is(#s-dash,#s-dash-guest) .dp-sc.is-blue{background:var(--bg-primary-bold600)}
+:is(#s-dash,#s-dash-guest) .dp-s1{inset:7.61% -10.87% 10.87% 19.57%}
+:is(#s-dash,#s-dash-guest) .dp-s2{position:absolute;top:-9.78%;right:-8.7%;bottom:25%;left:26.09%}
+:is(#s-dash,#s-dash-guest) .dp-s3{position:absolute;inset:-17.39% -17.39% -27.17% 23.91%}
+:is(#s-dash,#s-dash-guest) :is(.dp-s2,.dp-s3) img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+:is(#s-dash,#s-dash-guest) .dp-bell{position:relative;width:28px;height:28px;flex:none}
+:is(#s-dash,#s-dash-guest) .dp-bell>img{position:absolute;left:0;top:0;width:28px;height:28px}
+:is(#s-dash,#s-dash-guest) .dp-badge{position:absolute;right:-2px;top:-2px;display:flex;align-items:center;justify-content:center;min-width:16px;min-height:16px;padding:0 2px;border-radius:999px;background:var(--bg-alert-calm500);color:var(--text-neutral-static-calm000);font-size:12px;line-height:16px;text-align:center}
+
+/* Banners: кнопка-ссылка 12/16, картинка 80×80 справа снизу, пагинация 56×12 */
+:is(#s-dash,#s-dash-guest) .bn-btn{display:flex;gap:6px;align-items:center;justify-content:center;min-width:40px;padding:4px 0;border-radius:6px;color:var(--text-primary-bold950);white-space:nowrap}
+:is(#s-dash,#s-dash-guest) .bn-img{display:flex;align-items:flex-end;justify-content:flex-end;align-self:stretch;flex:none}
+:is(#s-dash,#s-dash-guest) .bn-pic{position:relative;width:80px;height:80px;flex:none;overflow:hidden}
+:is(#s-dash,#s-dash-guest) .bn-pic img.is-fill{position:absolute;inset:0;width:100%;height:100%;object-position:bottom}
+:is(#s-dash,#s-dash-guest) .bn-pic img.is-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+:is(#s-dash,#s-dash-guest) .bn-dots{position:absolute;left:50%;bottom:4px;width:56px;height:12px;transform:translateX(-50%)}
+/* Banners нового вида (14331:44172, гость): градиент, обводка 1 внутрь, тень */
+:is(#s-dash,#s-dash-guest) :is(.bn2,.g-bnr){position:relative;display:flex;align-items:flex-start;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px 0 rgba(36,49,74,.04)}
+:is(#s-dash,#s-dash-guest) :is(.bn2,.g-bnr)::after{content:"";position:absolute;inset:0;border:1px solid var(--border-neutral-calm000);border-radius:16px;pointer-events:none}
+:is(#s-dash,#s-dash-guest) .bn2-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;padding:16px 8px 16px 16px}
+:is(#s-dash,#s-dash-guest) .bn2-text{display:flex;flex-direction:column;gap:4px;width:100%}
+
+/* TabBar «Home - new»: стекло 108, таб-бар 103 (pt 8, px 16.5), пилюля 291×62 + кнопка профиля 62 */
+:is(#s-dash,#s-dash-guest) .tabbar{position:absolute;left:0;right:0;bottom:0;height:108px;z-index:5;-webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px)}
+:is(#s-dash,#s-dash-guest) .tb-bar{position:absolute;left:0;right:0;bottom:0;height:103px;display:flex;flex-direction:column;align-items:center;padding:8px 16.5px 0;overflow:hidden}
+:is(#s-dash,#s-dash-guest) .tb-edge{position:absolute;left:-10px;top:0;width:calc(100% + 22px);height:103px}
+/* Blur: чёрная заливка в режиме screen ничего не меняет — остаётся backdrop-blur 30 под маской */
+:is(#s-dash,#s-dash-guest) .tb-edge-blur{position:absolute;inset:0;-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);
+  -webkit-mask:url(../assets/dash-tb-edge.svg) 0 0/100% 100% no-repeat;mask:url(../assets/dash-tb-edge.svg) 0 0/100% 100% no-repeat}
+:is(#s-dash,#s-dash-guest) .tb-content{position:relative;display:flex;gap:8px;align-items:center;justify-content:flex-end;width:360px;flex:none}
+:is(#s-dash,#s-dash-guest) .tb-main{position:relative;display:flex;flex-direction:column;align-items:flex-start;height:62px;padding:4px;flex:none}
+:is(#s-dash,#s-dash-guest) .tb-main>.tb-bg{position:absolute;left:.29px;top:0;width:291px;height:62px}
+:is(#s-dash,#s-dash-guest) .tb-support{position:relative;display:flex;align-items:center;width:62px;height:62px;padding:4px;flex:none}
+:is(#s-dash,#s-dash-guest) .tb-support>.tb-bg{position:absolute;inset:0 -.5px 0 .5px}
+/* BG: размытая тень 4 % (blur 10, сдвиг 2 вниз, opacity .67) под маской яркости + заливка: верхний слой #f7f7f7 непрозрачный.
+   Glass Effect из Figma в CSS не выгружается (в кадре — едва заметный вертикальный перелив пилюли). */
+:is(#s-dash,#s-dash-guest) .tb-shadow{position:absolute;inset:2px 0 -2px;border-radius:1000px;background:rgba(0,0,0,.04);filter:blur(10px);opacity:.67;
+  -webkit-mask:url(../assets/dash-tb-mask1.svg) -76px -78px/calc(100% + 152px) calc(100% + 152px) no-repeat;mask:url(../assets/dash-tb-mask1.svg) -76px -78px/calc(100% + 152px) calc(100% + 152px) no-repeat;mask-mode:luminance}
+:is(#s-dash,#s-dash-guest) .tb-support .tb-shadow{-webkit-mask-image:url(../assets/dash-tb-mask2.svg);mask-image:url(../assets/dash-tb-mask2.svg)}
+:is(#s-dash,#s-dash-guest) .tb-fill{position:absolute;inset:0;border-radius:296px;background:#f7f7f7}
+:is(#s-dash,#s-dash-guest) .tb-tabs{position:relative;display:flex;align-items:center}
+:is(#s-dash,#s-dash-guest) .tb-item{position:relative;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;width:75.2px;margin-right:-6px;padding:6px 8px 7px;flex:none;text-align:center}
+:is(#s-dash,#s-dash-guest) .tb-item:last-child{margin-right:0}
+:is(#s-dash,#s-dash-guest) .tb-item img{width:25px;height:25px}
+:is(#s-dash,#s-dash-guest) .tb-item span{font-size:10px;line-height:normal;font-weight:500;letter-spacing:.24px;white-space:nowrap;color:var(--text-neutral-bold700)}
+:is(#s-dash,#s-dash-guest) .tb-item.is-active span{color:var(--text-primary-bold600)}
+:is(#s-dash,#s-dash-guest) .tb-item.tb-profile{width:54px;height:54px;margin:0;border-radius:320px}
+:is(#s-dash,#s-dash-guest) .tb-hi{flex:1 1 0;height:auto;min-height:1px;width:390px}
+
+/* ---------- 14052:38691 · дашборд ---------- */
+#s-dash{background:#f3f3f6}   /* Background/Primary/Lightmode — в токенах кита нет */
+#s-dash .d-page{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;padding-bottom:143px}
+#s-dash .d-head{display:flex;flex-direction:column;width:100%}
+#s-dash .d-appbar{background:var(--bg-neutral-calm000);padding-bottom:4px}
+#s-dash .d-appbar .statusbar{opacity:0;background:var(--bg-neutral-calm000)}   /* в кадре StatusBar opacity 0 */
+
+/* Widget_balance: pt 32, pb 16, gap 16 */
+#s-dash .d-balance{display:flex;flex-direction:column;gap:16px;align-items:flex-start;width:100%;padding:32px 0 16px;background:var(--bg-neutral-calm000);overflow:hidden}
+#s-dash .db-row{position:relative;display:flex;gap:12px;align-items:flex-start;width:100%;padding:0 16px}
+#s-dash .db-total{flex:1;min-width:1px;height:52px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+#s-dash .db-label{padding-top:4px;white-space:nowrap}
+#s-dash .db-title{display:flex;gap:8px;align-items:center;width:100%}
+#s-dash .db-filter{align-self:stretch;display:flex;align-items:center;padding:3px 0}
+#s-dash .db-filter-ic{position:relative;display:block;width:22px;height:22px;overflow:hidden}
+#s-dash .db-filter-ic .abs{inset:24.65% 11.29% 21.8% 11.8%}
+#s-dash .db-sum{display:flex;gap:4px;align-items:flex-end;font-weight:600;color:var(--text-neutral-bold950);white-space:nowrap}
+#s-dash .db-num{font-size:24px;line-height:28px;letter-spacing:-.408px}
+#s-dash .db-cur{display:flex;flex-direction:column;justify-content:center;width:36px;height:24px;font-size:18px;line-height:22px}
+#s-dash .db-eye{align-self:stretch;display:flex;align-items:center;padding:4px 0}
+#s-dash .db-cards{position:absolute;right:16px;top:-4px;display:flex;gap:6px;align-items:center;justify-content:center;min-width:50px;padding:6px 0;border-radius:8px;white-space:nowrap}
+/* карты 210×120, gap 12; ряд листается вбок (в кадре обрезан) */
+#s-dash .db-cardlist{display:flex;gap:12px;align-items:flex-start;width:100%;padding:0 16px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#s-dash .db-cardlist::-webkit-scrollbar{display:none}
+#s-dash .bk{position:relative;width:210px;height:120px;flex:none;border-radius:8px;overflow:hidden}
+#s-dash .bk-top{display:flex;flex-direction:column;gap:2px;align-items:flex-start;justify-content:flex-end;width:100%}
+#s-dash .bk-sum{display:flex;gap:4px;align-items:flex-end;white-space:nowrap}
+#s-dash .bk-sum.is-plat{gap:2px}
+#s-dash .bk p,#s-dash .bk span{white-space:nowrap}
+#s-dash .bk-bottom{display:flex;align-items:center;justify-content:space-between;width:100%}
+#s-dash .bk-pan{display:flex;gap:6px;align-items:center}
+#s-dash .bk-ps{position:relative;width:40px;height:40px;flex:none;border-radius:4px;overflow:hidden}
+#s-dash .bk-ps .is-mc{inset:25% 12.5% 28.61% 12.5%}
+#s-dash .bk-ps .is-uz{inset:16.67% 25% 15.52% 25%}
+/* AVO platinum: фон-узор «avo platinum» (слои бленда — как в Figma, без изоляции) */
+#s-dash .bk-plat{display:flex;flex-direction:column;gap:10px;background:#fff;color:var(--text-neutral-static-bold950)}
+#s-dash .pl{position:absolute;left:0;top:0;width:210px;height:120px;overflow:hidden}
+#s-dash .pl-metal{position:absolute;left:-62.03px;top:-21.89px;width:668.547px;height:246.307px;mix-blend-mode:overlay}
+#s-dash .pl-metal img{width:100%;height:100%;object-fit:cover;transform:scaleY(-1)}
+#s-dash .pl-rect1{position:absolute;inset:-13.2% -6.47% -29.96% -18.2%;
+  -webkit-mask:url(../assets/dash-plat-mask1.svg) 0 0/261.857px 172.097px no-repeat;mask:url(../assets/dash-plat-mask1.svg) 0 0/261.857px 172.097px no-repeat}
+#s-dash .pl-rect2{position:absolute;left:-21.23%;right:16.08%;top:-2px;height:132.096px;opacity:.7;mix-blend-mode:overlay;
+  -webkit-mask:url(../assets/dash-plat-mask2.svg) -5.413px 1px/255px 136.451px no-repeat;mask:url(../assets/dash-plat-mask2.svg) -5.413px 1px/255px 136.451px no-repeat}
+#s-dash :is(.pl-rect1,.pl-rect2) img{position:absolute;left:0;top:0;width:100%;height:100%}
+#s-dash .pl-bg4{position:absolute;inset:-4.85% -6.98% -31.09% -19.42%;background:#fff;opacity:.5}
+#s-dash .pl-bg3{position:absolute;inset:-4.85% -6.98% -31.09% -19.42%;opacity:.3;background-size:100% 100%;
+  background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 265.46 163.13' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-11.24 2.7176 2.3036 9.5984 121.59 45.002)'><stop stop-color='rgba(255,255,255,1)' offset='0'/><stop stop-color='rgba(220,220,220,1)' offset='0.9'/></radialGradient></defs></svg>")}
+#s-dash .pl-yellow{inset:-12.82% -19.88% -41.31% 53.42%}
+#s-dash .pl-pattern{position:absolute;inset:1.14% 33.99% -59.53% -23.77%;mix-blend-mode:multiply;opacity:.3}
+#s-dash .pl-pattern .abs{inset:-1.05% -1.06%}
+#s-dash .pl-o3{opacity:.3}
+#s-dash .bk-main{position:relative;flex:1;min-height:1px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;width:100%;padding:12px 12px 4px}
+/* Agrobank: #00c769 — Other/Logo bank/Agro-1, в токенах кита нет */
+#s-dash .bk-agro{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:12px 12px 4px;background:#00c769;color:var(--text-neutral-static-calm000)}
+#s-dash .bk-add{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;background:var(--bg-neutral-calm100)}
+#s-dash .bk-add-in{flex:1;min-height:1px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;text-align:center;color:var(--text-neutral-bold700)}
+
+/* Main dashboard-content: 358, gap 16 */
+#s-dash .d-main{display:flex;flex-direction:column;gap:16px;align-items:flex-start;width:calc(100% - 32px)}
+#s-dash .d-banner{display:flex;flex-direction:column;width:100%}
+/* Banners 14052:38656 / 38668: pl 16, gap 10; фон — белый (заливки saturation + plus-lighter белым) */
+#s-dash .bn{position:relative;display:flex;gap:10px;align-items:flex-start;width:100%;padding-left:16px;border-radius:16px;background:var(--bg-neutral-calm000);overflow:hidden}
+#s-dash .bn-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:16px 0}
+#s-dash .bn-content>p{width:100%}
+#s-dash .bn-pic.is-card29 img{position:absolute;left:50%;top:0;width:80px;height:80px;transform:translateX(-50%);object-fit:cover}
+/* Card_09: картинка повёрнута на −14,15° в рамке 78.382×85.631 (hypot из get_design_context) */
+#s-dash .bn-rot{position:absolute;left:1.397px;top:-4.488px;width:78.382px;height:85.631px;transform:rotate(-14.15deg);overflow:hidden}
+#s-dash .bn-rot img{position:absolute;left:4.11%;top:1.77%;width:90.99%;height:92.55%}
+#s-dash .bn2{background:linear-gradient(106.444deg,#f0f4fc 0%,#f9fafd 50%,#fff 100%)}
+#s-dash .bn2 .bn-dots{bottom:3px}
+
+/* dashboardBalances: две плитки, gap 16 */
+#s-dash .d-tiles{display:flex;gap:16px;align-items:flex-start;width:100%}
+#s-dash .dt{position:relative;flex:1;min-width:1px;display:flex;align-items:flex-start;border-radius:16px;overflow:hidden}
+#s-dash .dt.is-deposit{align-self:stretch;background:var(--bg-neutral-calm000)}
+#s-dash .dt-content{position:relative;flex:1;min-width:1px;display:flex;flex-direction:column;align-items:flex-start;padding:16px 8px 16px 16px}
+#s-dash .is-deposit .dt-content{height:100%;justify-content:space-between}
+#s-dash .is-bonus .dt-content{gap:8px;background:var(--bg-primary-calm100)}
+#s-dash .dt-ic{position:absolute;left:118px;bottom:0;width:64px;height:64px}
+#s-dash .dt-text{position:relative;display:flex;flex-direction:column;gap:4px;align-items:flex-start;width:100%}
+#s-dash .dt-label{white-space:nowrap;color:var(--text-neutral-bold700)}
+#s-dash .dt-bonus{width:100%;font-size:0;line-height:0}
+#s-dash .dt-btn{position:relative;display:flex;gap:6px;align-items:center;justify-content:center;min-width:40px;padding:4px 0;border-radius:6px;white-space:nowrap}
+
+/* TransitionWidget: p 16, gap 12; Input_Text — обводка 1 внутрь (поле 48) */
+#s-dash .d-transfer{display:flex;flex-direction:column;gap:12px;align-items:flex-start;width:100%;padding:16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+#s-dash .title-action{height:32px}
+#s-dash .ta-btn{white-space:nowrap}
+#s-dash .dtr-input{display:flex;gap:8px;align-items:center;width:100%;padding:12px 15px;border:1px solid var(--border-neutral-calm400);border-radius:8px;background:var(--bg-neutral-calm050);overflow:hidden}
+#s-dash .dtr-input>span:first-child{flex:1;min-width:1px;color:var(--text-neutral-calm400)}
+#s-dash .dtr-ic{display:flex;align-items:flex-start;padding:0 3px;flex:none}
+#s-dash .dtr-ic img{width:22px;height:22px}
+
+/* List_With_Title_Inside: pt 16, pb 32, px 16, gap 16 */
+#s-dash .d-history{display:flex;flex-direction:column;gap:16px;align-items:flex-start;width:100%;padding:16px 16px 32px;border-radius:16px;background:var(--bg-neutral-calm000);overflow:hidden}
+#s-dash .dh-empty,#s-dash .dh-content{display:flex;flex-direction:column;gap:12px;align-items:center;width:100%}
+#s-dash .dh-content p{width:100%;text-align:center}
+#s-dash .dh-ic{width:28px;height:28px}
+#s-dash .dh-btn{display:flex;gap:6px;align-items:center;justify-content:center;min-width:50px;width:100%;padding:6px 0;border-radius:8px;white-space:nowrap}
+
+/* Button_group/vertical: жёлтая кнопка 48 */
+#s-dash .d-new{display:flex;align-items:center;justify-content:center;width:100%;min-width:100px;height:48px;padding:12px 24px;border-radius:12px;background:var(--bg-secondary-calm300);color:var(--text-neutral-static-bold950);font-size:16px;line-height:24px;font-weight:500;text-align:center;white-space:nowrap}
+
+/* ---------- 14067:39334 · дашборд гостя ---------- */
+#s-dash-guest .g-page{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;margin-top:-1px;padding-bottom:143px}
+/* фон 390×460: градиент под маской */
+#s-dash-guest .g-bg{position:absolute;left:0;top:0;width:100%;height:460px;
+  background-image:linear-gradient(139.708deg,#fff 17.788%,#c9ccd6 39.825%,#c9ccd6 63.942%,#fff 100%);
+  -webkit-mask:url(../assets/dash-guest-bg.svg) 0 0/100% 460px no-repeat;mask:url(../assets/dash-guest-bg.svg) 0 0/100% 460px no-repeat}
+#s-dash-guest .g-appbar{position:relative;padding-bottom:4px;overflow:hidden}
+#s-dash-guest .g-appbar-bg{position:absolute;left:0;top:0;width:100%;height:94px;background:var(--surface-neutral-calm100);overflow:hidden}
+#s-dash-guest .g-body{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding-top:32px;border-radius:16px 16px 0 0}
+#s-dash-guest .g-list{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;padding:0 16px}
+/* onboardingWidget: p 16, gap 16 */
+#s-dash-guest .g-onb{display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;width:100%;padding:16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+#s-dash-guest .title-action{height:32px}
+#s-dash-guest .g-progress{display:flex;gap:12px;align-items:center;width:100%}
+#s-dash-guest .g-nums{white-space:nowrap;color:var(--text-primary-bold950)}
+#s-dash-guest .g-bar{flex:1;min-width:1px;display:flex;align-items:center}
+#s-dash-guest .g-bar i{flex:1;min-width:1px;height:6px;background:var(--bg-neutral-static-calm200)}
+#s-dash-guest .g-bar i.is-on{background:var(--bg-primary-bold600)}
+#s-dash-guest .g-bar i.is-first{border-radius:6px 0 0 6px}
+#s-dash-guest .g-bar i.is-last{border-radius:0 6px 6px 0}
+#s-dash-guest .g-status{background:var(--bg-neutral-calm100)}
+#s-dash-guest .g-become{display:flex;gap:8px;align-items:center;justify-content:center;width:100%;min-width:80px;height:40px;padding:10px 16px;border-radius:8px;background:var(--bg-primary-bold950);color:var(--text-neutral-calm000);font-size:14px;line-height:20px;font-weight:500;white-space:nowrap}
+#s-dash-guest .g-bnr{background:linear-gradient(104.348deg,#f0f4fc 0%,#f9fafd 50%,#fff 100%)}
+#s-dash-guest .bn-pic img.is-num02{position:absolute;left:8.64%;top:14.29%;width:107.73%;height:99.11%}
+#s-dash-guest .bn-pic img.is-card04{position:absolute;left:4.46%;top:-.28%;width:103.57%;height:159.5%}
+#s-dash-guest .bn-pic img.is-num03{position:absolute;left:10.48%;top:0;width:118.32%;height:134.82%}
+#s-dash-guest .bn-pic .is-uzcard{inset:-27.68% -43.75% -41.07% -25%}
+#s-dash-guest .bn-pic .is-uzcard img{object-fit:cover}
+
+/* ---------- шторки результата: modalNotification 14052:38706 / 14331:44170 / 14331:44171 ---------- */
+/* затемнение кадра 14052:38691 (Rectangle 85): rgba(25,25,31,.6) */
+:is(#sheet-offers,#sheet-mz-approved,#sheet-cc-approved) .sheet-scrim{background:rgba(25,25,31,.6)}
+:is(#sheet-offers,#sheet-mz-approved,#sheet-cc-approved) .mn-banner{position:relative;width:242px;height:144px;flex:none;border-radius:12px;overflow:hidden}
+:is(#sheet-offers,#sheet-mz-approved,#sheet-cc-approved) .mn-banner img{position:absolute;left:50%;top:50%;width:242px;height:144px;transform:translate(-50%,-50%);object-fit:cover}
+:is(#sheet-offers,#sheet-mz-approved,#sheet-cc-approved) .mn-tb{display:flex;flex-direction:column;gap:16px;width:100%;padding-bottom:16px;text-align:center}
+:is(#sheet-offers,#sheet-mz-approved,#sheet-cc-approved) .btn-l{font-weight:600}   /* «Перейти» — SF UI Display Semibold */
+
+/* ---------- пуш 14052:38690: Notification - Collapsed во всю ширину кадра (390, масштаб ×1.029) ---------- */
+#push-offers{left:0;right:0}
+#push-offers .ios-notification{gap:10.29px;padding:14.406px;border-radius:24.697px}
+#push-offers .app-icon{width:39.103px;height:39.103px;border-radius:8.747px;background:none}
+#push-offers .app-icon img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#push-offers .body{gap:5.145px}
+#push-offers .text{font-size:15.435px;line-height:20.58px;letter-spacing:-.2367px}
+#push-offers .time{width:53.509px;padding-right:1.509px;font-size:13.377px;line-height:20.58px}

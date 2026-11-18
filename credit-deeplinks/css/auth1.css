@@ -1,0 +1,127 @@
+/* Группа auth1: splash → phone → otp (+ push-otp) → terms. Значения — из get_design_context секции 14052:34543. */
+
+/* ---------- 1. Splash (14052:34544): жёлтый фон, логотип 220×184 по центру, статус-бар скрыт (opacity 0) ---------- */
+#s-splash{background:var(--bg-secondary-calm300)}
+#s-splash .statusbar{opacity:0}
+#s-splash .splash-logo{position:absolute;left:50%;top:50%;width:220px;height:184px;transform:translate(-50%,-50%)}
+#s-splash .splash-logo img{width:100%;height:100%;object-fit:cover}
+#s-splash>.home-indicator{position:absolute;left:0;bottom:0}
+#s-splash>.home-indicator::after{background:#030303}
+
+/* ---------- общее для экранов авторизации: белый фон, кнопка 48 (Button primary navy / secondary) ---------- */
+#s-phone,#s-otp,#s-terms{background:var(--surface-neutral-calm000)}
+#s-phone .btn-48,#s-terms .btn-48{height:48px;padding:12px 24px;border-radius:12px;font-size:16px;line-height:24px;font-weight:500}
+#s-phone .btn-navy:not([disabled]),#s-terms .btn-navy{background:var(--bg-primary-bold950);color:var(--text-neutral-calm000)}
+
+/* ---------- 4. Ввод номера (14052:34545, 14052:34547) ---------- */
+/* Combobox языка: 145×36 справа в строке AppBar */
+#s-phone .lang-combobox{position:absolute;right:16px;top:2px;width:145px;height:36px;display:flex;gap:8px;align-items:center;padding:0 12px;border-radius:8px;background:var(--bg-neutral-calm050);overflow:hidden}
+#s-phone .lc-content{display:flex;gap:12px;align-items:center;height:100%;opacity:.9;white-space:nowrap;color:var(--text-neutral-bold950)}
+#s-phone .lc-chevron{width:22px;height:22px;flex:none}
+#s-phone .auth-content{display:flex;flex-direction:column;gap:48px;padding:16px 16px 0}
+#s-phone .auth-text{display:flex;flex-direction:column;gap:24px}
+#s-phone .auth-logo{width:90px;height:30px}
+#s-phone .auth-titles{display:flex;flex-direction:column;gap:12px}
+/* Input_Phone: codeField «+998» + mainField, между ними 2 px */
+#s-phone .input-phone{display:flex;gap:2px;width:100%;height:48px;cursor:text}
+#s-phone .ip-code{display:flex;align-items:center;padding:0 8px;border-radius:8px 0 0 8px;background:var(--bg-neutral-calm050);font-size:16px;line-height:22px;color:var(--text-neutral-bold950);white-space:nowrap}
+#s-phone .ip-main{flex:1;min-width:1px;display:flex;border-radius:0 8px 8px 0;background:var(--bg-neutral-calm050);overflow:hidden}
+#s-phone .ip-main input{width:100%;height:48px;padding:13px 16px;font-size:16px;line-height:22px;color:var(--text-neutral-bold950);caret-color:var(--text-primary-bold600)}
+#s-phone .ip-main input::placeholder{color:var(--text-neutral-bold600);opacity:1}
+
+/* ---------- OTP (14052:34549, 14052:34550, 14052:34555) ---------- */
+#s-otp .statusbar{opacity:0}
+#s-otp .otp-body{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;gap:32px;padding:18px 16px 0}
+#s-otp .otp-text{display:flex;flex-direction:column;gap:12px}
+#s-otp .otp-title{color:#030303}                      /* Title-Active/Lightmode, токена нет */
+#s-otp .otp-sub{color:var(--colortext-body)}          /* Body/Lightmode #5a5b73 */
+/* Numeric Field: 6 ячеек 48×48, gap 8; активная — рамка primary, принятый код — positive */
+#s-otp .otp-cells{position:relative;display:flex;gap:8px;width:100%}
+#s-otp .otp-cell{flex:1 0 0;min-width:1px;max-width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:8px;background:var(--bg-neutral-calm100);font-size:16px;line-height:24px;font-weight:500;color:var(--text-neutral-bold950);transition:border-color var(--t1) ease,color var(--t1) ease}
+#s-otp .otp-cell.is-active{border-color:var(--icon-primary-bold600)}
+#s-otp.is-loading .otp-cell{border-color:var(--icon-positive-calm500);color:var(--text-positive-calm500)}
+/* настоящее поле поверх ячеек: системная клавиатура на телефоне и ввод с клавиатуры компьютера */
+#s-otp #otp-input{position:absolute;inset:0;width:100%;height:100%;font-size:16px;color:transparent;-webkit-text-fill-color:transparent;caret-color:transparent;background:none;cursor:pointer}
+/* Loader anim: 56×56 по центру (x 167, y 360), дуга 24 px; в Figma — AFTER_TIMEOUT между вариантами, здесь вращение */
+#s-otp .otp-loader{position:absolute;left:50%;top:266px;width:56px;height:56px;margin-left:-28px;display:none;align-items:center;justify-content:center;border-radius:8px}
+#s-otp.is-loading .otp-loader{display:flex}
+#s-otp .otp-loader img{width:24px;height:24px;animation:auth1Spin .9s linear infinite}
+@keyframes auth1Spin{to{transform:rotate(360deg)}}
+/* низ: «Отправка кода» + подсказка клавиатуры + AlphabeticKeyboard */
+#s-otp .otp-bottom{flex:none;display:flex;flex-direction:column}
+#s-otp .otp-resend{display:flex;justify-content:center;padding:0 16px 20px;font-size:14px;line-height:18px;font-weight:500;text-align:center;white-space:nowrap}
+#s-otp .rs-timer{display:flex;gap:8px;align-items:center}
+#s-otp .rs-link{display:none;font-weight:500}
+#s-otp.can-resend .rs-timer{display:none}
+#s-otp.can-resend .rs-link{display:block}
+/* _Keyboard-suggestion «From Messages» (14052:34550): появляется вместе с пушем */
+#s-otp .kb-suggest{position:relative;flex:none;height:46px;display:none;background:#d1d3d9;color:#030303;text-align:center;white-space:nowrap;font-optical-sizing:auto;font-feature-settings:"case" 1}
+#s-otp.has-suggest .kb-suggest{display:block}
+#s-otp .kb-suggest>span{position:absolute;left:1px;right:0}
+#s-otp .ks-from{top:5px;font-size:11px;line-height:13px;letter-spacing:.066px}
+#s-otp .ks-code{top:19px;font-size:17px;line-height:22px;letter-spacing:-.408px}
+#s-otp .kb-suggest::before,#s-otp .kb-suggest::after{content:"";position:absolute;top:13px;width:1px;height:25px;border-radius:1px;background:#aeaeb2;opacity:.5}
+#s-otp .kb-suggest::before{left:30px}
+#s-otp .kb-suggest::after{right:30px}
+/* AlphabeticKeyboard, страница символов (13263:30168) — на компьютере и в ?mode=figma; на телефоне системная */
+#s-otp .ios-alpha-kb{position:relative;flex:none;height:290px;background:#d1d3d9;overflow:hidden;color:#030303;font-optical-sizing:auto}
+#s-otp .akb-keys{position:absolute;left:2px;right:3px;top:8px;height:150px}
+#s-otp .akb-row{position:absolute;left:0;right:0;top:0;height:42px}
+#s-otp .akb-row.r2{top:54px}
+#s-otp .akb-row.r3{top:108px}
+#s-otp .akb-key{position:absolute;top:0;height:42px;border-radius:4.6px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.3);text-align:center;font-size:22px;line-height:28px;letter-spacing:.35px;color:#030303}
+#s-otp .akb-key:active{background:#bcbec4}
+#s-otp .akb-key>span{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%)}
+#s-otp .akb-key.s26>span{top:calc(50% - 14px);transform:none;line-height:26px}
+#s-otp .akb-ten>:nth-child(1){left:0;right:calc(90% + 4.5px)}
+#s-otp .akb-ten>:nth-child(2){left:calc(10% + 1.5px);right:calc(80% + 5px)}
+#s-otp .akb-ten>:nth-child(3){left:calc(20% + 1px);right:calc(70% + 3.5px)}
+#s-otp .akb-ten>:nth-child(4){left:calc(30% + 2.5px);right:calc(60% + 4px)}
+#s-otp .akb-ten>:nth-child(5){left:calc(40% + 2px);right:calc(50% + 2.5px)}
+#s-otp .akb-ten>:nth-child(6){left:calc(50% + 3.5px);right:calc(40% + 2px)}
+#s-otp .akb-ten>:nth-child(7){left:calc(60% + 4px);right:calc(30% + 1.5px)}
+#s-otp .akb-ten>:nth-child(8){left:calc(70% + 4.5px);right:calc(20% + 1px)}
+#s-otp .akb-ten>:nth-child(9){left:calc(80% + 5px);right:calc(10% + .5px)}
+#s-otp .akb-ten>:nth-child(10){left:calc(90% + 5.5px);right:0}
+#s-otp .akb-shift{left:0;width:44px;background:#adb3bc;font-size:13px}
+#s-otp .akb-shift>span{top:calc(50% - 13px);transform:none;line-height:26px}
+#s-otp .akb-mid{position:absolute;left:60px;right:60px;top:0;height:42px}
+#s-otp .akb-mid>:nth-child(1){left:0;right:calc(75% + 18.25px)}
+#s-otp .akb-mid>:nth-child(2){left:54px;right:calc(50% + 29.5px)}
+#s-otp .akb-mid>:nth-child(3){left:calc(25% + 41.75px);right:calc(25% + 41.75px)}
+#s-otp .akb-mid>:nth-child(4){left:calc(50% + 30.5px);right:54px}
+#s-otp .akb-mid>:nth-child(5){left:calc(75% + 18.25px);right:0}
+#s-otp .akb-del{position:absolute;right:0;top:0;width:44px;height:42px}
+#s-otp .akb-del img{position:absolute;left:0;top:0;width:100%;height:102.5%}
+#s-otp .akb-del:active{opacity:.7}
+#s-otp .akb-bottom{position:absolute;left:2px;right:3px;top:170px;display:flex;gap:6px}
+#s-otp .akb-bottom .akb-key{position:relative;font-size:16px;line-height:21px;letter-spacing:-.32px}
+#s-otp .akb-bottom .akb-key>span{top:calc(50% + .5px)}
+#s-otp .akb-wide{width:91px;flex:none}
+#s-otp .akb-space{flex:1;min-width:1px}
+#s-otp .akb-extra{position:absolute;left:30px;right:31px;top:235px;display:flex;justify-content:space-between;align-items:flex-start}
+#s-otp .akb-emoji{width:27px;height:27px}
+#s-otp .akb-dictation{width:19px;height:28px}
+#s-otp .akb-hi{position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:100px;background:#030303}
+/* телефон: системная клавиатура вместо нарисованной; home indicator — пока клавиатуры нет */
+#s-otp .otp-bottom>.home-indicator{display:none}
+html.m-phone #s-otp .ios-alpha-kb,html.m-phone #s-otp .kb-suggest{display:none}
+html.m-phone #s-otp .otp-bottom>.home-indicator{display:block}
+html.m-phone #s-otp:focus-within .otp-bottom>.home-indicator{display:none}
+
+/* ---------- push-otp (14052:34553) + затемнение Rectangle 118 (rgba(0,0,0,.3) на весь кадр) ---------- */
+#push-otp{left:16px;right:16px;top:16px}
+html.m-phone #push-otp{top:calc(env(safe-area-inset-top,0px) + 8px)}
+/* Figma: #b9b9b9 + #333 color-dodge, оба непрозрачные = #e7e7e7 (сверено по эталону) */
+#push-otp .ios-notification{background:#e7e7e7;-webkit-backdrop-filter:none;backdrop-filter:none;transition:box-shadow var(--t3) var(--ease)}
+#push-otp.is-shown .ios-notification{box-shadow:0 0 0 200vmax rgba(0,0,0,.3)}
+#push-otp .app-icon{background:none}
+#push-otp .app-icon img{width:100%;height:100%}
+
+/* ---------- Условия договора (14052:34588): AppBar + Pop-up со скриншотом договора ---------- */
+#s-terms .appbar-title p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;width:100%;text-align:center}
+#s-terms .terms-pop{position:relative;flex:1;min-height:0;overflow:hidden}
+#s-terms .terms-doc{position:absolute;left:50%;top:17px;width:346px;height:715px;margin-left:-173px;border-radius:18px;overflow:hidden}
+#s-terms .terms-doc img{position:absolute;left:0;top:-230px;width:346px;height:796.4px;object-fit:cover}
+#s-terms .terms-accept{font-weight:600}
+#s-terms .terms-share{background:var(--bg-neutral-calm100);color:var(--text-primary-bold950)}

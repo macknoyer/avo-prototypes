@@ -1,0 +1,102 @@
+/* Группа prod: MyID (14052:34700), Обрабатываем (14052:34712), Узнайте возможности (14052:38587),
+   Рассчитываем (14052:38680), Кредитная карта L3/L2 (14331:43748, 14067:39299), Микрозайм L3/L2 (14331:43728, 14067:39279).
+   Значения — из get_design_context. Файл лежит в css/, поэтому пути к ассетам — ../assets/. */
+
+/* ---------- Белый фон у всех экранов группы ---------- */
+#s-myid,#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2{background:var(--surface-neutral-calm000)}
+#s-processing,#s-calc-wait{background:var(--bg-neutral-calm000)}
+/* статус-бар в кадрах MyID, «Обрабатываем» и «Рассчитываем» с opacity 0 */
+#s-myid .statusbar,#s-processing .statusbar,#s-calc-wait .statusbar{opacity:0}
+/* скругление кадров Figma для ?mode=figma: 435417 — 30, L3/L2 — 32 (остальные 24, как по умолчанию) */
+html.m-figma .device:has(#s-multi-intro.is-active){--frame-r:30px}
+html.m-figma .device:has(:is(#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2).is-active){--frame-r:32px}
+
+/* ---------- MyID: логотип top 101, подпись top 187, фото top 257 ---------- */
+#s-myid .myid-body{display:flex;flex-direction:column;align-items:center;padding-top:7px}
+#s-myid .myid-logo{width:100px;height:33px;flex:none}
+#s-myid .myid-hint{margin-top:53px;text-align:center;white-space:nowrap;color:var(--colortext-body)}
+#s-myid .myid-photo{margin-top:48px;width:356px;height:456px;flex:none}
+/* HomeIndicator: чёрный, сдвинут на 1 px вправо (left:1px в Figma) */
+#s-myid .home-indicator::after{margin-left:-66px;background:var(--labels-primary)}
+
+/* ---------- Лоадеры «Обрабатываем» и «Рассчитываем»: баннер, заголовок, Bullet-list-bg ---------- */
+:is(#s-processing,#s-calc-wait) .wait{display:flex;flex-direction:column;gap:24px;padding:0 16px}
+/* у «Обрабатываем» AppBar — только статус-бар 54, контент с y=94 */
+#s-processing .wait{padding-top:40px}
+:is(#s-processing,#s-calc-wait) .wait-title{display:flex;flex-direction:column;gap:24px;align-items:center;width:100%}
+:is(#s-processing,#s-calc-wait) .wait-content{display:flex;flex-direction:column;gap:24px;width:100%;text-align:center}
+#s-calc-wait .wait-content{width:326px}
+/* Title-Active/Lightmode #030303 — токена нет; Body/Lightmode #5a5b73 = --colortext-body */
+:is(#s-processing,#s-calc-wait) .wait-h{color:#030303}
+:is(#s-processing,#s-calc-wait) .wait-p{color:var(--colortext-body)}
+/* Img_banner/242*144: радиус 12, обрезка */
+:is(#s-processing,#s-calc-wait) .wait-banner{position:relative;width:242px;height:144px;flex:none;border-radius:12px;overflow:hidden}
+/* Card_11: картинка 440/296 по высоте 144 по центру, маска-градиент 242×144 (затухание справа) */
+#s-processing .wait-banner .abs{left:13.975px;top:0;width:214.05px;height:144px;
+  -webkit-mask:url(../assets/prod-processing-mask.svg) -14px 0/242px 144px no-repeat;mask:url(../assets/prod-processing-mask.svg) -14px 0/242px 144px no-repeat}
+#s-processing .wait-banner .abs>img{object-fit:cover}
+/* Card_23: картинка 242×144 */
+#s-calc-wait .wait-banner>img{width:242px;height:144px;object-fit:cover}
+/* Bullet-list-bg: активный шаг, фон calm100, Content py 1 */
+:is(#s-processing,#s-calc-wait) .bl{display:flex;flex-direction:column;gap:8px;width:100%}
+:is(#s-processing,#s-calc-wait) .bl-item{display:flex;gap:8px;align-items:flex-start;width:100%;padding:17px 16px;border-radius:18px;background:var(--bg-neutral-calm100)}
+:is(#s-processing,#s-calc-wait) .bl-icon{align-self:stretch;display:flex;align-items:flex-start;padding-top:1px;flex:none}
+:is(#s-processing,#s-calc-wait) .bl-text{flex:1;min-width:1px;align-self:stretch;display:flex;align-items:center}
+/* Loader anim: рамка 20×20, внутри дуга 24×24; в Figma статична — вращаем вокруг центра её окружности */
+:is(#s-processing,#s-calc-wait) .loader{width:20px;height:20px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+:is(#s-processing,#s-calc-wait) .loader img{width:24px;height:24px;flex:none}
+@keyframes prod-spin{to{transform:rotate(360deg)}}
+:is(#s-processing,#s-calc-wait) .spin{animation:prod-spin 1s linear infinite;transform-origin:44.196% 55.804%}
+
+/* ---------- «Рассчитываем»: buttonCombination-info ---------- */
+#s-calc-wait .cw-info{width:100%;padding:0 16px}
+/* contentBlock: обводка 1 px в Figma внутри и не влияет на размер блока (187) — padding 16/12 минус 1 px обводки */
+#s-calc-wait .content-block{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;padding:15px 11px;border-radius:8px;overflow:hidden;
+  background:var(--bg-neutral-calm050);border:1px solid var(--border-neutral-calm200)}
+#s-calc-wait .cb-text{width:100%;text-align:center;color:var(--text-neutral-bold600)}
+
+/* ---------- Button primary 48: bg/primary/bold950, радиус 12 (в ките только btn-l 56 на static-bold950) ---------- */
+:is(#s-multi-intro,#s-calc-wait,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .btn-navy{height:48px;padding:12px 24px;border-radius:12px;
+  background:var(--bg-primary-bold950);color:var(--text-neutral-calm000)}
+/* «Хочу узнать» в Figma — Semibold */
+#s-multi-intro .btn-navy{font-weight:600}
+/* checkbox-confirm на L3 — Body/Lightmode #5a5b73 (на 435417 — bold600, как в ките) */
+:is(#s-cc-l3,#s-mz-l3) .checkbox-confirm{color:var(--colortext-body)}
+
+/* ---------- 435417: баннер, заголовок, сетка ---------- */
+/* контент: top 106 = AppBar 94 + 12; баннер, заголовок и сетка через gap 24 */
+#s-multi-intro .mi{display:flex;flex-direction:column;gap:24px;align-items:center;padding:12px 16px 0}
+/* Img_banner/242*144/Card_05: картинка 447×447 со сдвигом, маска-градиент 245×144 (затухание снизу) */
+#s-multi-intro .mi-banner{position:relative;width:242px;height:144px;flex:none;overflow:hidden}
+#s-multi-intro .mi-banner .abs{inset:-93.75% -40.08% -116.67% -44.63%;
+  -webkit-mask:url(../assets/prod-multi-intro-mask.svg) 108px 135px/245px 144px no-repeat;mask:url(../assets/prod-multi-intro-mask.svg) 108px 135px/245px 144px no-repeat}
+#s-multi-intro .mi-banner .abs>img{object-fit:cover}
+#s-multi-intro .mi-title{width:100%;text-align:center;color:var(--text-neutral-bold950)}
+
+/* ---------- L3 / L2: картинка продукта, заголовок, сетка ---------- */
+:is(#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .l3{display:flex;flex-direction:column;align-items:center}
+/* карта: top 94, до текста gap 16; микрозайм: top 99, без gap */
+:is(#s-cc-l3,#s-cc-l2) .l3{gap:16px}
+:is(#s-mz-l3,#s-mz-l2) .l3{padding-top:5px}
+:is(#s-cc-l3,#s-cc-l2) .l3-hero{width:191px;height:301px;flex:none;object-fit:cover}
+:is(#s-mz-l3,#s-mz-l2) .l3-hero{width:242px;height:207px;flex:none;object-fit:cover}
+:is(#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .l3-info{display:flex;flex-direction:column;gap:16px;width:100%;padding:0 16px}
+:is(#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .l3-title{width:100%;text-align:center;color:var(--text-neutral-bold950)}
+
+/* ---------- offerCard: сетка преимуществ 2 колонки, первая карточка подсвечена (одна на 5 экранах) ---------- */
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .offer-grid{display:flex;flex-direction:column;gap:12px;width:100%}
+/* карточки ряда одной высоты (self-stretch / фиксированная высота в Figma) */
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .offer-row{display:flex;gap:12px;width:100%}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .offer-card{flex:1 0 0;min-width:1px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;
+  padding:20px 10px;border-radius:16px;background:var(--bg-neutral-calm100)}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .offer-card.is-accent{background:var(--bg-primary-calm100)}
+/* карточка с фиксированной высотой без justify-center: контент сверху */
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .offer-card.is-top{justify-content:flex-start}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .oc-title{white-space:nowrap;color:var(--text-neutral-bold950)}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .oc-text{width:100%;text-align:center;color:var(--text-neutral-bold600)}
+/* Apple_Pay_Mark 40×25: подложка + 3 слоя */
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .apple-pay{position:relative;width:40px;height:25px;flex:none;overflow:hidden}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .apple-pay .ap-bg{position:absolute;inset:0;width:100%;height:100%}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .apple-pay .ap-x{inset:3.33% 2.13%}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .apple-pay .ap-g1{inset:27.42% 66.25% 33.8% 13.55%}
+:is(#s-multi-intro,#s-cc-l3,#s-mz-l3,#s-cc-l2,#s-mz-l2) .apple-pay .ap-g2{inset:30.15% 13.72% 24.39% 37.78%}
