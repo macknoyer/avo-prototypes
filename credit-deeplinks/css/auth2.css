@@ -87,8 +87,8 @@
 #s-face .face-col{position:relative;flex:1;min-width:1px}
 #s-face .face-ph{position:relative;height:240px;border-radius:8px;overflow:hidden}
 #s-face .face-ph img{position:absolute;top:0;max-width:none;object-fit:cover}
-#s-face .face-ph .ph-bad{left:-233px;width:431px;height:240px}
-#s-face .face-ph .ph-good{left:-24px;width:433px;height:241px}
+/* фото — экспорт узлов 14052:34684/34689 с фильтрами экспозиции, уже обрезан по рамке */
+#s-face .face-ph .ph-bad,#s-face .face-ph .ph-good{left:0;width:100%;height:100%}
 /* бейджи 32: красный Info/Lightmode #ff005c (без токена) с remove 24, зелёный Success #0dbf54 с tick 24 */
 #s-face .face-badge{position:absolute;left:50%;top:-16px;width:32px;height:32px;margin-left:-16px;border-radius:50px;display:flex;align-items:center;justify-content:center}
 #s-face .face-badge.is-bad{background:#ff005c}
