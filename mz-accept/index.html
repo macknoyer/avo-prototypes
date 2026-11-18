@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Акцепт микрозайма</title>
 <meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
-<link rel="stylesheet" href="kit/tokens.css?v=1794937050">
-<link rel="stylesheet" href="kit/proto.css?v=1794937050">
-<link rel="stylesheet" href="kit/components.css?v=1794937050">
+<link rel="stylesheet" href="kit/tokens.css?v=1794998415">
+<link rel="stylesheet" href="kit/proto.css?v=1794998415">
+<link rel="stylesheet" href="kit/components.css?v=1794998415">
 <link rel="stylesheet" href="css/calc.css">
 <link rel="stylesheet" href="css/offer.css">
 <link rel="stylesheet" href="css/last-step.css">
@@ -396,7 +396,7 @@
   <div class="toast" id="toast-unavailable" role="status"><div class="toast-pill is-alert"><p class="body-large-l-regular nowrap">Действие недоступно</p></div></div>
 </div>
 
-<script src="kit/proto.js?v=1794937050"></script>
+<script src="kit/proto.js?v=1794998415"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
@@ -416,7 +416,9 @@ const TERMS = [
 const APPROVED = 10000000;
 const termsFor = a => TERMS.filter(t => a <= t.max);
 const payFor = (t, a) => Math.round(a * t.k / 1000) * 1000;
-const S = { amount: 7000000, term: 36, loading: false, editing: false, checks: [false, false, false, false, false] };
+// Срок не предвыбран: его выбирает клиент, «Получить деньги» неактивна до выбора (решение Ника 18.11.2026).
+// Сумма предзаполнена одобренной.
+const S = { amount: 7000000, term: null, loading: false, editing: false, checks: [false, false, false, false, false] };
 let lastValid = S.amount;
 const input = $('#amount');
 
@@ -424,7 +426,7 @@ function renderCalc() {
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
   $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
   const list = termsFor(S.amount);
-  if (!list.some(t => t.m === S.term)) S.term = list[0].m;
+  if (S.term && !list.some(t => t.m === S.term)) S.term = null;   // выбранный срок пропал после смены суммы — клиент выбирает заново
   P.list($('#terms'), list, t => t.m, t => {
     const on = t.m === S.term && !S.editing;
     const val = S.loading ? 'sk' : String(payFor(t, S.amount));
@@ -438,7 +440,7 @@ function renderCalc() {
       </div>
     </div>`;
   });
-  $('#get-money').disabled = S.loading;
+  $('#get-money').disabled = S.loading || !S.term;
 }
 function loadPayments(ms = 900) {
   S.loading = true; renderCalc();
@@ -495,10 +497,11 @@ P.on('close-crediting', () => P.go('account', 'fade'));
 P.on('close-flow', () => { S.checks = S.checks.map(() => false); renderChecks(); P.reset('calc'); });
 
 /* ---------- состояния: карта экранов и сверка ---------- */
-const reset = o => { Object.assign(S, { amount: 7000000, term: 36, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
+const reset = o => { Object.assign(S, { amount: 7000000, term: null, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
 const at = (id, o, before) => () => { reset(o); P.reset('calc', null); if (before) before.forEach(b => P.go(b, null)); if (id !== 'calc') P.go(id, null); };
 P.states([
-  { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc') },
+  { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение: срок не выбран', figma: '14598:32260', height: 844, apply: at('calc') },
+  { id: 'calc-term', group: 'Выбор суммы', title: 'Срок выбран (в кадре Figma — по умолчанию)', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc', { term: 36 }) },
   { id: 'offer', group: 'Оффер', title: 'Принять условия кредита', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer') },
   { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer')(); p.openSheet('service'); } },
   { id: 'service-toast', group: 'Оффер', title: 'Действие недоступно (тост сверху)', figma: '14603:37837', node: '14603:37837', height: 1572, selector: '#toast-unavailable .toast-pill', apply: p => { at('offer')(); p.openSheet('service'); p.toast('unavailable', 2e9); } },
