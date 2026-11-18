@@ -1,4 +1,4 @@
-/* Runtime прототипа. Источник — .claude/skills/figma-prototype/kit/. В папке прототипа лежит копия, её не правим.
+/* Runtime прототипа. Источник — .claude/skills/proto/kit/. В папке прототипа лежит копия, её не правим.
    Разметка:
      <section class="screen" id="s-<id>" data-title="…" data-theme-color="#f1f2f5">…</section>
      data-go="<id>"        — push на экран            data-back           — назад
@@ -108,6 +108,12 @@
     clearTimeout(el._t1); clearTimeout(el._t2);
     el._t1 = setTimeout(() => el.classList.add('is-shown'), delay);
     if (hide) el._t2 = setTimeout(() => el.classList.remove('is-shown'), delay + hide);
+  };
+  // тост сверху экрана: <div class="toast" id="toast-<id>">…</div>, скрывается сам
+  P.toast = (id, ms = 2000) => {
+    const el = document.getElementById('toast-' + id); if (!el) return;
+    clearTimeout(el._t); el.classList.remove('is-shown'); void el.offsetWidth; el.classList.add('is-shown');
+    el._t = setTimeout(() => el.classList.remove('is-shown'), ms);
   };
   P.hideNotifications = () => P.$$('.push').forEach(el => { clearTimeout(el._t1); clearTimeout(el._t2); el.classList.remove('is-shown'); });
 

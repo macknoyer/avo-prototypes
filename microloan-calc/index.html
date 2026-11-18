@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Калькулятор микрозайма 4.0</title>
 <meta name="description" content="Калькулятор микрозайма 4.0: одобренная сумма, ввод суммы, выбор срока. Прототип 1:1 по Figma «Калькулятор 4.0».">
-<link rel="stylesheet" href="kit/tokens.css?v=1794911184">
-<link rel="stylesheet" href="kit/proto.css?v=1794911184">
-<link rel="stylesheet" href="kit/components.css?v=1794911184">
+<link rel="stylesheet" href="kit/tokens.css?v=1794998447">
+<link rel="stylesheet" href="kit/proto.css?v=1794998447">
+<link rel="stylesheet" href="kit/components.css?v=1794998447">
 <style>
   html{--frame-r:30px}
   /* KL_offer */
@@ -65,7 +65,7 @@
   </section>
 </div>
 
-<script src="kit/proto.js?v=1794911184"></script>
+<script src="kit/proto.js?v=1794998447"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
@@ -85,7 +85,9 @@ const TERMS = [
 const termsFor = amount => TERMS.filter(t => amount <= t.max);
 const payFor = (t, amount) => Math.round(amount * t.pay / 10000000 / 1000) * 1000;
 const SCEN = { A: { approved: 10000000 }, B: { approved: 2000000 } };  // B — кадр 4.0 68516:39117
-const S = { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false };
+// Срок не предвыбран: его выбирает клиент, «Получить деньги» неактивна до выбора (решение Ника 18.11.2026).
+// Сумма предзаполнена одобренной.
+const S = { scen: 'A', amount: 10000000, term: null, loading: false, editing: false };
 let lastValid = S.amount;
 
 function render() {
@@ -94,7 +96,7 @@ function render() {
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
   $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
   const list = termsFor(S.amount);
-  if (!list.some(t => t.m === S.term)) S.term = list[0].m;
+  if (S.term && !list.some(t => t.m === S.term)) S.term = null;   // выбранный срок пропал после смены суммы — клиент выбирает заново
   P.list($('#terms'), list, t => t.m, t => {
     const on = t.m === S.term && !S.editing;
     const val = S.loading ? 'sk' : String(payFor(t, S.amount));
@@ -108,8 +110,8 @@ function render() {
       </div>
     </div>`;
   });
-  // «Кнопка становится активной после подгрузки сумм» — Rule dev, Калькулятор 3.0
-  $('#get-money').disabled = S.loading;
+  // «Кнопка становится активной после подгрузки сумм» — Rule dev, Калькулятор 3.0; и после выбора срока
+  $('#get-money').disabled = S.loading || !S.term;
 }
 
 function loadPayments(ms = 900) {
@@ -145,11 +147,12 @@ document.querySelector('.input-text').addEventListener('click', () => input.focu
 
 P.on('term', el => { S.term = Number(el.dataset.m); render(); });
 
-const set = o => () => { clearTimeout(loadPayments.t); Object.assign(S, { scen: 'A', amount: 10000000, term: 36, loading: false, editing: false }, o); lastValid = S.amount; render(); P.reset('offer', null); };
+const set = o => () => { clearTimeout(loadPayments.t); Object.assign(S, { scen: 'A', amount: 10000000, term: null, loading: false, editing: false }, o); lastValid = S.amount; render(); P.reset('offer', null); };
 P.states([
-  { id: 'default',  group: 'Основной флоу', title: 'Предложение по умолчанию', figma: '68516:39019', node: '68516:39019', height: 844, apply: set({}) },
-  { id: 'keyboard', group: 'Основной флоу', title: 'Ввод суммы', figma: '68516:41004', node: '68516:41004', height: 844, apply: () => { set({ editing: true })(); P.keyboard.show(input); } },
-  { id: 'loading',  group: 'Сценарии', title: 'Одобрено 2 000 000: пять сроков, загрузка', figma: '68516:39117', node: '68516:39117', height: 1001, apply: () => { set({ scen: 'B', amount: 1000000 })(); loadPayments(1500); } },
+  { id: 'default',  group: 'Основной флоу', title: 'Предложение: срок не выбран', figma: '68516:39019', height: 844, apply: set({}) },
+  { id: 'term-chosen', group: 'Основной флоу', title: 'Срок выбран (в кадре Figma — по умолчанию)', figma: '68516:39019', node: '68516:39019', height: 844, apply: set({ term: 36 }) },
+  { id: 'keyboard', group: 'Основной флоу', title: 'Ввод суммы после выбора срока', figma: '68516:41004', node: '68516:41004', height: 844, apply: () => { set({ editing: true, term: 36 })(); P.keyboard.show(input); } },
+  { id: 'loading',  group: 'Сценарии', title: 'Одобрено 2 000 000: пять сроков, загрузка', figma: '68516:39117', node: '68516:39117', height: 1001, apply: () => { set({ scen: 'B', amount: 1000000, term: 36 })(); loadPayments(1500); } },
   { id: 'amount-3m', group: 'Сроки по сумме', title: '3 000 000 → 4 срока', apply: set({ amount: 3000000 }) },
   { id: 'amount-4m', group: 'Сроки по сумме', title: '4 000 000 → 3 срока', apply: set({ amount: 4000000 }) },
   { id: 'amount-7m', group: 'Сроки по сумме', title: '7 000 000 → 2 срока', apply: set({ amount: 7000000 }) },
