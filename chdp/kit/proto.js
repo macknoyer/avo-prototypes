@@ -1,4 +1,4 @@
-/* Runtime прототипа. Источник — .claude/skills/figma-prototype/kit/. В папке прототипа лежит копия, её не правим.
+/* Runtime прототипа. Источник — .claude/skills/proto/kit/. В папке прототипа лежит копия, её не правим.
    Разметка:
      <section class="screen" id="s-<id>" data-title="…" data-theme-color="#f1f2f5">…</section>
      data-go="<id>"        — push на экран            data-back           — назад
@@ -16,6 +16,7 @@
   const mode = qs.get('mode') || (phone ? 'phone' : 'desk');
   html.classList.add('m-' + mode);
   if (qs.get('map') === '1') html.classList.add('with-map');
+  if (qs.get('still') === '1') html.classList.add('m-still');  // без анимаций: скриншоты конечного состояния
 
   const P = window.Proto = {
     mode, stack: [], handlers: {}, _states: [], sheet: null,
@@ -108,6 +109,12 @@
     el._t1 = setTimeout(() => el.classList.add('is-shown'), delay);
     if (hide) el._t2 = setTimeout(() => el.classList.remove('is-shown'), delay + hide);
   };
+  // тост сверху экрана: <div class="toast" id="toast-<id>">…</div>, скрывается сам
+  P.toast = (id, ms = 2000) => {
+    const el = document.getElementById('toast-' + id); if (!el) return;
+    clearTimeout(el._t); el.classList.remove('is-shown'); void el.offsetWidth; el.classList.add('is-shown');
+    el._t = setTimeout(() => el.classList.remove('is-shown'), ms);
+  };
   P.hideNotifications = () => P.$$('.push').forEach(el => { clearTimeout(el._t1); clearTimeout(el._t2); el.classList.remove('is-shown'); });
 
   /* ---------- клики и хотспоты ---------- */
@@ -129,11 +136,140 @@
     if (t.dataset.act) { const fn = P.handlers[t.dataset.act]; if (fn) fn(t, e); else flashHotspots(); }
   });
 
+  /* ---------- клавиатура ---------- */
+  const KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ']];
+  // Поле ввода — к верху видимой области: снизу клавиатура и кнопка, поле не должно за ними прятаться.
+  // Запас снизу (.kb-spacer внутри контента) нужен, чтобы короткий экран тоже можно было прокрутить до поля.
+  function scrollToField(input, smooth) {
+    const sc = input.closest('.scroll'); if (!sc) return;
+    let sp = sc.querySelector(':scope > .kb-spacer');
+    if (!sp) { sp = document.createElement('div'); sp.className = 'kb-spacer'; sc.appendChild(sp); }
+    sp.style.height = P.$('.device').clientHeight + 'px';
+    const anchor = input.closest('[data-scroll-anchor], .input') || input;
+    const top = sc.scrollTop + anchor.getBoundingClientRect().top - sc.getBoundingClientRect().top - 16;
+    sc.scrollTo({ top: Math.max(0, top), behavior: smooth && animOn() ? 'smooth' : 'auto' });
+  }
+  function releaseScroll(sc) {
+    const sp = sc && sc.querySelector(':scope > .kb-spacer'); if (!sp) return;
+    const max = sc.scrollHeight - sp.offsetHeight - sc.clientHeight;
+    if (sc.scrollTop > max) sc.scrollTo({ top: Math.max(0, max), behavior: animOn() ? 'smooth' : 'auto' });
+    setTimeout(() => sp.remove(), animOn() ? 360 : 0);
+  }
+  P.keyboard = {
+    show(input) {
+      const d = P.$('.device'); clearTimeout(d._kbT); d.classList.remove('kb-closing'); d.classList.add('kb-open'); if (mode !== 'phone') d.classList.add('kb-fake');
+      P.kbInput = input; const box = input.closest('.input-text, .input-uzs'); if (box) box.classList.add('is-focused');
+      requestAnimationFrame(() => scrollToField(input, true));
+      setTimeout(() => { if (P.kbInput === input) scrollToField(input, true); }, 380);  // после выезда клавиатуры
+    },
+    hide() {
+      const d = P.$('.device'); d.classList.remove('kb-open');
+      if (P.kbInput) releaseScroll(P.kbInput.closest('.scroll'));
+      P.$$('.is-focused').forEach(b => b.classList.remove('is-focused')); P.kbInput = null;
+      if (d.classList.contains('kb-fake') && P.animOn()) {
+        d.classList.add('kb-closing');
+        clearTimeout(d._kbT); d._kbT = setTimeout(() => d.classList.remove('kb-fake', 'kb-closing'), 300);
+      } else d.classList.remove('kb-fake', 'kb-closing');
+    },
+  };
+  function typeInto(input, key) {
+    input.value = key === 'del' ? input.value.slice(0, -1) : input.value + key;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  function wireKeyboard() {
+    const inputs = P.$$('input[data-kb]'); if (!inputs.length) return;
+    if (mode !== 'phone') {
+      const kb = document.createElement('div'); kb.className = 'fake-kb';
+      const row = (keys, top) => `<div class="row" style="top:${top}px">${keys}</div>`;
+      const key = ([d, l]) => `<button class="key" data-key="${d}"><span class="d">${d}</span>${l ? `<span class="l">${l}</span>` : ''}</button>`;
+      kb.innerHTML = `<div class="ios-numpad">` + row(KEYS.slice(0, 3).map(key).join(''), 6) + row(KEYS.slice(3, 6).map(key).join(''), 59) +
+        row(KEYS.slice(6, 9).map(key).join(''), 112) +
+        row(`<span class="key empty"></span><button class="key zero" data-key="0"><span class="d">0</span></button><button class="key del" data-key="del" aria-label="Стереть"><img src="${KIT}icons/kb-delete.svg" alt=""></button>`, 165) +
+        `<div class="home-indicator"></div></div>`;
+      P.$('.device').appendChild(kb);
+      kb.addEventListener('pointerdown', e => e.preventDefault());
+      kb.addEventListener('click', e => { const k = e.target.closest('[data-key]'); if (k && P.kbInput) typeInto(P.kbInput, k.dataset.key); });
+    }
+    inputs.forEach(inp => {
+      if (mode !== 'phone') inp.setAttribute('inputmode', 'none');
+      inp.addEventListener('focus', () => P.keyboard.show(inp));
+      inp.addEventListener('blur', () => setTimeout(() => {
+        if (document.activeElement === inp) return;
+        P.keyboard.hide(); inp.dispatchEvent(new CustomEvent('proto:done', { bubbles: true }));
+      }, 200));
+    });
+  }
+  // Телефон: экран = видимая область (visualViewport), чтобы низ с кнопкой вставал над системной клавиатурой
+  function fitViewport() {
+    if (mode !== 'phone' || !window.visualViewport) return;
+    const vv = visualViewport;
+    let t;
+    const fit = () => {
+      html.style.setProperty('--vvh', vv.height + 'px'); html.style.setProperty('--vvt', vv.offsetTop + 'px');
+      clearTimeout(t); t = setTimeout(() => { if (P.kbInput) scrollToField(P.kbInput, true); }, 120);  // системная клавиатура доехала
+    };
+    vv.addEventListener('resize', fit); vv.addEventListener('scroll', fit); fit();
+  }
+
+  /* ---------- анимации: списки и значения ---------- */
+  const animOn = () => mode !== 'figma' && !html.classList.contains('m-still') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  P.animOn = animOn;
+  function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  // Список с ключами. Новые элементы раскрываются, лишние схлопываются, соседи сдвигаются плавно.
+  // Внутри элемента data-swap="<значение>" — при смене значения элемент проигрывает p-swap-in (или data-swap-anim="pop").
+  P.list = (box, items, keyFn, htmlFn) => {
+    const anim = animOn() && box.dataset.ready === '1';
+    const gap = parseFloat(getComputedStyle(box).rowGap) || 0;
+    const old = new Map(P.$$(':scope > .p-item[data-key]', box).map(el => [el.dataset.key, el]));
+    const keep = new Set(items.map(it => String(keyFn(it))));
+    old.forEach((el, k) => {
+      if (keep.has(k)) return;
+      el.removeAttribute('data-key');
+      if (!anim) return el.remove();
+      el.style.height = el.offsetHeight + 'px'; void el.offsetHeight;
+      el.classList.add('p-leave'); el.style.height = '0px'; el.style.marginBottom = -gap + 'px';
+      setTimeout(() => el.remove(), 380);
+    });
+    let prev = null;
+    items.forEach(it => {
+      const k = String(keyFn(it)), html = htmlFn(it);
+      let el = old.get(k);
+      if (el) {
+        const before = P.$$('[data-swap]', el).map(n => n.dataset.swap);
+        if (el.innerHTML !== html) {
+          el.innerHTML = html;
+          if (anim) P.$$('[data-swap]', el).forEach((n, i) => { if (before[i] !== n.dataset.swap) restart(n, n.dataset.swapAnim === 'pop' ? 'p-pop' : 'p-swap-in'); });
+        }
+      } else {
+        el = document.createElement('div'); el.className = 'p-item'; el.dataset.key = k; el.innerHTML = html;
+        if (anim) {
+          el.classList.add('p-enter'); el.style.height = '0px'; el.style.marginBottom = -gap + 'px';
+          requestAnimationFrame(() => {
+            el.style.transition = 'height var(--t3) var(--ease), margin var(--t3) var(--ease)';
+            el.style.height = el.scrollHeight + 'px'; el.style.marginBottom = '0px';
+            setTimeout(() => { el.classList.remove('p-enter'); el.style.height = el.style.marginBottom = el.style.transition = ''; }, 380);
+          });
+        }
+      }
+      box.insertBefore(el, prev ? prev.nextSibling : box.firstChild); prev = el;
+    });
+    box.dataset.ready = '1';
+  };
+  // Смена текста/разметки элемента с анимацией появления
+  P.swap = (el, html, cls = 'p-swap-in') => { if (el.innerHTML === html) return; el.innerHTML = html; if (animOn()) restart(el, cls); };
+
+  // Тап мимо поля убирает фокус и клавиатуру. Слушаем pointerdown: на iOS click по пустому месту не приходит,
+  // а у цифровой клавиатуры iOS нет кнопки «Готово».
+  document.addEventListener('pointerdown', e => {
+    const ae = document.activeElement;
+    if (ae && ae.matches && ae.matches('input[data-kb]') && !e.target.closest('.input-text, .input-uzs, .fake-kb')) ae.blur();
+  }, true);
+
   /* ---------- состояния: карта экранов и сверка с Figma ---------- */
   P.states = list => { P._states = list; return P; };
   P.applyState = id => {
     const s = P._states.find(x => x.id === id); if (!s) return false;
-    P.closeSheet(true); P.hideNotifications();
+    P.closeSheet(true); P.hideNotifications(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); P.keyboard.hide();
     s.apply(P);
     if (s.height) html.style.setProperty('--frame-h', s.height + 'px'); else html.style.removeProperty('--frame-h');
     history.replaceState({ d: P.stack.length }, '', '#@' + id);
@@ -167,7 +303,7 @@
     P.$$('.statusbar').forEach(fillStatusBar);
     P.$$('.sheet-layer').forEach(wireSheetDrag);
     P.$$('.sheet-layer .sheet-scrim').forEach(s => s.addEventListener('click', () => P.closeSheet()));
-    buildMap();
+    buildMap(); wireKeyboard(); fitViewport();
     const h = decodeURIComponent(location.hash.slice(1));
     if (h.startsWith('@') && P.applyState(h.slice(1))) return;
     const id = h && screenEl(h) ? h : first;

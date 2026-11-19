@@ -24,8 +24,8 @@
 .appbar-title{width:204px;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
 
 /* Button */
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-width:100px;text-align:center;white-space:nowrap;transition:opacity .12s ease}
-.btn:active{opacity:.82}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-width:100px;text-align:center;white-space:nowrap;transition:opacity .12s ease,background-color var(--t2) var(--ease),color var(--t2) var(--ease),transform var(--t1) var(--ease)}
+.btn:active{opacity:.82;transform:scale(.985)}
 .btn-l{padding:16px 24px;border-radius:16px;font-size:16px;line-height:24px;font-weight:500}
 .btn-m{padding:12px 16px;border-radius:12px;min-width:80px;font-size:14px;line-height:20px;font-weight:500}
 .btn-primary{background:var(--bg-neutral-static-bold950);color:var(--text-neutral-calm000)}
@@ -184,3 +184,55 @@
 .cm-footer{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:flex-end;width:100%;padding:0 16px;background:var(--bg-neutral-calm000)}
 .action-block{display:flex;align-items:center;width:100%;padding:14px 16px;border-radius:16px;background:var(--bg-neutral-calm100)}
 .action-block .ab-btn{flex:1;min-width:60px;display:flex;gap:8px;align-items:center;padding:12px 0;border-radius:12px;font-size:14px;line-height:20px;font-weight:500;color:var(--text-primary-bold600)}
+
+/* buttonCombination-checkbox на белом с текстом-слотом над кнопкой */
+.btn-combo.is-white{background:var(--bg-neutral-calm000)}
+.btn-combo .slot{width:100%;text-align:center;font-size:12px;line-height:16px;color:var(--text-neutral-bold600)}
+
+/* Input_Text: значение 18 Medium и иконка справа; в фокусе фон calm200 */
+.input-text{position:relative;display:flex;gap:8px;align-items:center;width:100%;padding:13px 16px;border-radius:8px;background:var(--bg-neutral-calm000);overflow:hidden;cursor:text}
+.input-text input{flex:1;min-width:1px;height:22px;font-size:18px;line-height:22px;font-weight:500;color:var(--text-neutral-bold950);caret-color:var(--text-primary-bold600)}
+.input-text .it-icon{display:flex;padding:0 3px;flex:none}
+.input-text .it-icon img{width:22px;height:22px}
+.input-text.is-focused{background:var(--bg-neutral-calm200)}
+
+/* _ControlWithLabel-concept: радио слева, подпись и строка значения */
+.cwl-concept{display:flex;gap:16px;align-items:flex-start;width:100%;padding:16px;border-radius:16px;background:var(--bg-neutral-calm000)}
+.cwl-concept .radio{width:24px;height:24px;flex:none}
+.cwl-concept .cc-content{flex:1;min-width:1px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.cwl-concept .cc-label{font-size:14px;line-height:18px;font-weight:500}
+.cwl-concept .cc-row{position:relative;display:flex;align-items:center;justify-content:space-between}
+.cwl-concept .cc-row-label{font-size:14px;line-height:17px;color:var(--text-neutral-bold600);white-space:nowrap}
+.cwl-concept .cc-sum{display:flex;gap:2px;align-items:flex-end;white-space:nowrap}
+.cwl-concept .cc-sum .num{font-size:16px;line-height:20px;font-weight:600}
+.cwl-concept .cc-sum .cur{align-self:stretch;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:1px;font-size:12px;line-height:16px;font-weight:600}
+
+/* Скелетон загрузки значения: прямоугольник 106×20 поверх значения (Figma «Rectangle») */
+.skeleton{position:absolute;right:0;top:0;width:106px;height:20px;border-radius:16px;background:var(--bg-neutral-calm100);overflow:hidden}
+
+/* iOS NumericKeyboard (на компьютере и в ?mode=figma; на телефоне — системная) */
+.ios-numpad{position:relative;height:290px;background:#d1d3d9;-webkit-backdrop-filter:blur(54px);backdrop-filter:blur(54px);font-optical-sizing:auto}
+.ios-numpad .row{position:absolute;left:6px;right:6px;height:46px;display:flex;gap:5px}
+.ios-numpad .key{position:relative;flex:1;min-width:1px;height:100%;border-radius:4.6px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.3);color:#030303;text-align:center}
+.ios-numpad .key:active{background:#bcbec4}
+.ios-numpad .key .d{position:absolute;left:0;right:0;top:calc(50% - 8px);transform:translateY(-50%);font-size:25px;line-height:normal;letter-spacing:.2912px}
+.ios-numpad .key .l{position:absolute;left:0;right:0;top:62.5%;bottom:8.93%;font-size:10px;line-height:normal;font-weight:700;letter-spacing:2px}
+.ios-numpad .key.zero .d{top:50%}
+.ios-numpad .key.empty,.ios-numpad .key.del{background:none;box-shadow:none}
+.ios-numpad .key.del img{position:absolute;inset:0;width:100%;height:100%}
+.ios-numpad .home-indicator{position:absolute;left:0;right:0;bottom:0;height:34px}
+.ios-numpad .home-indicator::after{background:#030303}
+
+/* анимации компонентов: фокус поля, нажатие карточек */
+.input-text,.input-uzs{transition:background-color var(--t2) var(--ease)}
+.cwl-concept,.cwl,.list-widget,.bankcard-item,.list-arrow,.payment-card{transition:transform var(--t1) var(--ease)}
+.cwl-concept:active,.cwl:active,.list-widget:active,.bankcard-item.pressable:active,.cm-list .bankcard-item:active{transform:scale(.98)}
+/* скелетон: перелив во время загрузки */
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);animation:shimmer 1.2s ease-in-out infinite}
+@keyframes shimmer{to{transform:translateX(100%)}}
+
+/* tooltip / тост (Figma «tooltip»): отступы 4/12/6, радиус 50, Shadow-lvl-3, текст Body/Large/L Regular.
+   Базовый — тёмный (bold800, текст белый); .is-alert — «Действие недоступно» (14603:37837):
+   фон bg/alert/calm050, текст #a3043d — в Figma без токена. */
+.toast-pill{display:flex;gap:10px;align-items:center;justify-content:center;padding:4px 12px 6px;border-radius:50px;background:var(--bg-neutral-bold800);box-shadow:var(--shadow-lvl-3);color:var(--text-neutral-calm000);text-align:center;white-space:nowrap}
+.toast-pill.is-alert{background:var(--bg-alert-calm050);color:#a3043d}

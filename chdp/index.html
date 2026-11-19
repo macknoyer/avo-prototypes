@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>ЧДП микрозайма</title>
 <meta name="description" content="Частичное досрочное погашение микрозайма AVO: счёт, выбор суммы, предупреждение, статус. Прототип 1:1 по Figma «ЧДП».">
-<link rel="stylesheet" href="kit/tokens.css">
-<link rel="stylesheet" href="kit/proto.css">
-<link rel="stylesheet" href="kit/components.css">
+<link rel="stylesheet" href="kit/tokens.css?v=1795071905">
+<link rel="stylesheet" href="kit/proto.css?v=1795071905">
+<link rel="stylesheet" href="kit/components.css?v=1795071905">
 <style>
   /* --- 435324: экран микрозайма --- */
   .acc{display:flex;flex-direction:column;gap:16px;padding:16px 16px 24px}
@@ -93,7 +93,7 @@
           <div class="dw-dl">
             <div class="dl">
               <div class="dl-item"><div class="dl-title">Дата платежа<img src="assets/info.svg" alt=""></div><div class="dl-value">25.08.2025</div></div>
-              <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>1 250 000</span><span>UZS</span></div></div>
+              <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span class="paid-amount">1 250 000</span><span>UZS</span></div></div>
             </div>
           </div>
           <div class="dw-status">
@@ -204,7 +204,7 @@
             <div class="dd-body">
               <div class="dl">
                 <div class="dl-item"><div class="dl-title">Общая задолженность<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>14 750 000</span><span>UZS</span></div></div>
-                <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span>1 250 000</span><span>UZS</span></div></div>
+                <div class="dl-item"><div class="dl-title">Уже внесено<img src="assets/info.svg" alt=""></div><div class="dl-value"><span class="paid-amount">1 250 000</span><span>UZS</span></div></div>
               </div>
             </div>
           </div>
@@ -353,7 +353,7 @@
   </div>
 </div>
 
-<script src="kit/proto.js"></script>
+<script src="kit/proto.js?v=1795071905"></script>
 <script>
 const P = Proto;
 // Источники списания. kapital — карта из кадров ЧДП, platinum — скрытый второй bankcardItem в Figma (14491:3555),
@@ -376,13 +376,18 @@ function cardHTML(src, chevron) {
 document.getElementById('source-list').innerHTML = PICKER.map(id =>
   `<button class="bankcard-item" data-act="pick-source" data-source="${id}">${cardHTML(SOURCES[id], false)}</button>`).join('');
 const MAX = 40000000, INTEREST = 500000;
+// ЕП — ежемесячный платёж по графику («Следующий платеж» на счёте). PAID — «Уже внесено» на счёт погашения в макете.
+// Правило (Ник, 19.11.2026): если на счёт погашения фактически внесено больше ЕП, сумма ЧДП предзаполнена
+// этой суммой; иначе поле пустое, как в кадре 435332. Клиент может её изменить.
+const EP = 16000000, PAID = 1250000, PAID_OVER = 16500000;
+const prefill = () => S.paid > EP ? String(S.paid) : '';
 const SUB = {
   regular: 'Досрочное погашение не отменяет ежемесячный платёж',
   dd: 'Сначала спишется платёж по графику, затем сумма досрочного погашения',
   full: 'Кредит закроется сразу после погашения',
 };
 // when: regular — обычный день; dd — до или в дату платежа (435409/435410); full — вся задолженность (435411)
-const S = { amount: '', card: 'kapital', open: true, when: 'regular', option: 'next' };
+const S = { amount: '', card: 'kapital', open: true, when: 'regular', option: 'next', paid: PAID };
 
 const $ = s => document.querySelector(s);
 const input = $('#amount');
@@ -390,6 +395,7 @@ const input = $('#amount');
 function render() {
   const v = P.num(S.amount);
   if (document.activeElement !== input || P.fmt(input.value) !== P.fmt(S.amount)) input.value = S.amount ? P.fmt(S.amount) : '';
+  document.querySelectorAll('.paid-amount').forEach(el => el.textContent = P.fmt(S.paid));
   document.querySelectorAll('.source-row').forEach(el => el.innerHTML = cardHTML(SOURCES[S.card], true));
   const full = S.when === 'full' || v >= MAX;
   const state = !v ? 'empty' : v > SOURCES[S.card].balance ? 'error' : 'ok';
@@ -418,7 +424,7 @@ input.addEventListener('input', () => {
 });
 document.querySelector('.input-uzs').addEventListener('click', () => input.focus());
 
-P.on('open-partial', () => { Object.assign(S, { amount: '', card: 'kapital', open: true }); render(); P.go('partial'); })
+P.on('open-partial', () => { Object.assign(S, { amount: prefill(), card: 'kapital', open: true }); render(); P.go('partial'); })
  .on('pick-source', el => { S.card = el.dataset.source; render(); P.closeSheet(); })
  .on('accordion', () => { if (P.num(S.amount) && !$('#amount-field').classList.contains('is-error')) { S.open = !S.open; render(); } })
  .on('pick', el => { S.option = el.dataset.option; render(); })
@@ -427,10 +433,11 @@ P.on('open-partial', () => { Object.assign(S, { amount: '', card: 'kapital', ope
    if (!(S.when === 'full' || P.num(S.amount) >= MAX)) P.notify('done', { delay: 1200 });
  })
  .on('done', () => { P.hideNotifications(); Object.assign(S, { amount: '', card: 'kapital', open: true }); render(); P.reset('account'); });
+const account = (paid) => () => { Object.assign(S, { amount: '', card: 'kapital', open: true, when: 'regular', paid }); render(); P.reset('account', null); };
 
-const partial = (o) => () => { Object.assign(S, { amount: '16500000', card: 'kapital', open: true, when: 'regular' }, o); render(); P.stack = ['account']; P.go('partial', null); };
+const partial = (o) => () => { Object.assign(S, { amount: '16500000', card: 'kapital', open: true, when: 'regular', paid: PAID }, o); render(); P.stack = ['account']; P.go('partial', null); };
 P.states([
-  { id: 'account',     group: 'Основной флоу', title: 'Микрозайм', figma: '435324', node: '14484:1031', height: 844, apply: () => { render(); P.reset('account', null); } },
+  { id: 'account',     group: 'Основной флоу', title: 'Микрозайм', figma: '435324', node: '14484:1031', height: 844, apply: account(PAID) },
   { id: 'empty',       group: 'Основной флоу', title: 'Погасить частично — пусто', figma: '435332', node: '14484:950', height: 925, apply: partial({ amount: '' }) },
   { id: 'filled',      group: 'Основной флоу', title: 'Сумма введена', figma: '435331', node: '14484:920', height: 925, apply: partial({}) },
   { id: 'collapsed',   group: 'Основной флоу', title: 'Порядок погашения свёрнут', figma: '435408', node: '14576:43525', height: 925, apply: partial({ open: false }) },
@@ -443,7 +450,9 @@ P.states([
   { id: 'dd-on',       group: 'Сценарии даты', title: 'ЧДП в дату платежа', figma: '435410', node: '14576:43951', height: 925, apply: partial({ when: 'dd' }) },
   { id: 'full',        group: 'Сценарии даты', title: 'Вносит всю задолженность', figma: '435411', node: '14576:44159', height: 925, apply: partial({ when: 'full' }) },
   { id: 'success-full',group: 'Сценарии даты', title: 'Выполнено — полное погашение', figma: '1023', node: '14484:1023', height: 844, apply: () => { partial({ when: 'full' })(); P.go('success', null); } },
-  { id: 'pay',         group: 'Концепт', title: 'Внести платеж (концепт)', figma: 'concept', node: '14484:832', height: 1009, apply: () => { render(); P.reset('account', null); P.go('pay', null); } },
+  { id: 'paid-over',   group: 'Внесено больше платежа', title: 'Микрозайм — внесено больше ЕП', height: 844, apply: account(PAID_OVER) },
+  { id: 'paid-over-partial', group: 'Внесено больше платежа', title: 'Сумма ЧДП = внесённая сумма', height: 925, apply: partial({ paid: PAID_OVER, amount: String(PAID_OVER) }) },
+  { id: 'pay',         group: 'Концепт', title: 'Внести платеж (концепт)', figma: 'concept', node: '14484:832', height: 1009, apply: () => { account(PAID)(); P.go('pay', null); } },
 ]);
 render();
 P.start('account');

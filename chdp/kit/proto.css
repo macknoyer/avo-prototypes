@@ -1,5 +1,5 @@
 /* Runtime прототипа: устройство, экраны, шторка, пуш, хотспоты, карта экранов.
-   Источник — .claude/skills/figma-prototype/kit/. В папке прототипа лежит копия, её не правим. */
+   Источник — .claude/skills/proto/kit/. В папке прототипа лежит копия, её не правим. */
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -25,11 +25,11 @@ p{overflow-wrap:break-word}
    desk   — открыто на компьютере: только экран 390 px по центру, без рамки и скруглений
    figma  — ?mode=figma: ровно кадр Figma для попиксельной сверки                          */
 .device{position:relative;overflow:hidden;background:var(--surface-neutral-calm100);isolation:isolate}
-html.m-phone .device{width:100vw;height:100vh;height:100dvh}
+html.m-phone .device{position:fixed;left:0;top:var(--vvt,0px);width:100vw;height:100vh;height:var(--vvh,100dvh)}
 html.m-desk body{display:flex;align-items:center;justify-content:center}
 html.m-desk .device{width:390px;height:min(844px,100vh)}
 html.m-figma body{background:#fff}
-html.m-figma .device{width:390px;height:var(--frame-h,844px);border-radius:24px}
+html.m-figma .device{width:390px;height:var(--frame-h,844px);border-radius:var(--frame-r,24px)}
 
 /* Статус-бар и home indicator рисуем только там, где нет системных */
 :root{--sb-h:54px;--hi-h:34px}
@@ -74,7 +74,7 @@ html.m-phone .statusbar>*,html.m-phone .home-indicator::after{display:none}
 @keyframes popIn{from{transform:translateX(-30%)}to{transform:none}}
 @keyframes popOut{from{transform:none}to{transform:translateX(100%)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-html.m-figma *{animation:none!important;transition:none!important}
+html.m-figma *,html.m-figma *::before,html.m-figma *::after,html.m-still *,html.m-still *::before,html.m-still *::after{animation:none!important;transition:none!important}
 
 /* ---------- Шторка (bottom sheet) ---------- */
 .sheet-layer{position:absolute;inset:0;z-index:50;visibility:hidden}
@@ -112,3 +112,47 @@ html:not(.with-map) .proto-fab{display:none}
 .proto-map .item.is-current{outline:2px solid var(--text-primary-bold600)}
 .proto-map .row{display:flex;gap:8px;margin-top:12px}
 .proto-map .row button{flex:1;padding:10px;border-radius:10px;background:var(--bg-neutral-static-bold950);color:#fff;font-size:14px;text-align:center}
+
+/* ---------- Клавиатура ----------
+   Телефон: системная клавиатура, экран ужимается до visualViewport, низ встаёт над клавиатурой.
+   Компьютер и ?mode=figma: нарисованная iOS NumericKeyboard для полей <input data-kb="numeric">. */
+.device{--kb-h:0px}
+.device.kb-fake{--kb-h:290px}
+.device.kb-open .screen.is-active{bottom:var(--kb-h)}
+.device.kb-open .screen.is-active>.footer .home-indicator{display:none}
+.device.kb-open .screen.is-active>.footer{padding-bottom:16px}
+.fake-kb{position:absolute;left:0;right:0;bottom:0;height:290px;z-index:40;display:none}
+.device.kb-fake .fake-kb{display:block}
+html.m-phone .fake-kb{display:none!important}
+
+/* ---------- Анимации ----------
+   Если в Figma заданы анимации прототипа (get_motion_context не пустой) — берём их значения.
+   Иначе работают эти, в духе iOS. ?mode=figma и «Уменьшить движение» в системе их выключают. */
+:root{--ease:cubic-bezier(.2,.8,.2,1);--ease-io:cubic-bezier(.4,0,.2,1);--t1:.15s;--t2:.25s;--t3:.35s}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* клавиатура выезжает снизу, экран ужимается вместе с ней */
+.device .screen.is-active{transition:bottom var(--t3) var(--ease)}
+.device.kb-fake .fake-kb{animation:kbIn var(--t3) var(--ease) both}
+.device.kb-closing{--kb-h:0px}
+.device.kb-closing .fake-kb{animation:kbOut .3s var(--ease-io) both}
+@keyframes kbIn{from{transform:translateY(100%)}to{transform:none}}
+@keyframes kbOut{from{transform:none}to{transform:translateY(100%)}}
+/* элементы списка (P.list): появление и уход — высота, прозрачность, сдвиг соседей */
+.p-item{position:relative}
+.p-item.p-enter{overflow:hidden;animation:pEnter var(--t3) var(--ease) both}
+.p-item.p-leave{overflow:hidden;pointer-events:none;transition:height var(--t3) var(--ease),margin var(--t3) var(--ease),opacity var(--t2) ease;opacity:0}
+@keyframes pEnter{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
+/* смена значения (data-swap внутри P.list или P.swap) */
+.p-swap-in{animation:pSwap var(--t2) var(--ease) both}
+.p-pop{animation:pPop var(--t2) var(--ease) both}
+@keyframes pSwap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes pPop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:none}}
+
+/* При вводе над клавиатурой — только главная кнопка: тексты-слоты и дисклеймеры прячутся */
+.device.kb-open .screen.is-active>.footer .slot,
+.device.kb-open .screen.is-active>.footer .checkbox-confirm{display:none}
+
+/* ---------- Тост сверху экрана (P.toast) ----------
+   Короткое сообщение «Действие недоступно» и т. п.: выезжает сверху под статус-баром поверх всего, даже шторки. */
+.toast{position:absolute;left:50%;top:calc(var(--sb-h) + 8px);z-index:85;transform:translate(-50%,-160%);opacity:0;pointer-events:none;transition:transform var(--t3) var(--ease),opacity var(--t2) ease}
+.toast.is-shown{transform:translate(-50%,0);opacity:1}
