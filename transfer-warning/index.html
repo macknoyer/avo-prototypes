@@ -9,20 +9,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Перевод">
 <meta name="theme-color" content="#f1f2f5">
-<title>Перевод: предупреждение антифрода</title>
-<meta name="description" content="Перевод как в приложении и предупреждение антифрода перед подтверждением.">
-<link rel="stylesheet" href="kit/tokens.css?v=1795506360">
-<link rel="stylesheet" href="kit/proto.css?v=1795506360">
-<link rel="stylesheet" href="kit/components.css?v=1795506360">
+<title>Перевод: предупреждение антифрода и MyID</title>
+<meta name="description" content="Перевод как в приложении: предупреждение антифрода и подтверждение по лицу через MyID.">
+<link rel="stylesheet" href="kit/tokens.css?v=1795604059">
+<link rel="stylesheet" href="kit/proto.css?v=1795604059">
+<link rel="stylesheet" href="kit/components.css?v=1795604059">
 <style>
-/* Значения — из get_design_context секции 67283:137381 файла 001-AVO-Design.
-   Предупреждение антифрода — modalNotification «000 Дизайн система» (14362:29456). */
+/* Форма и «Выполнено» — get_design_context секции 67283:137381 файла 001-AVO-Design (435310, 435311, 435309, 67283:137394).
+   Предупреждение — modalNotification «000 Дизайн система» (14362:29456). MyID — кадр 14052:34700 («Кредитные диплинки»). */
 .is-hidden{display:none!important}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{animation:spin .9s linear infinite}
-html.m-figma .device:has(#s-pin.is-active){--frame-r:30px}
-/* AppBar экранов кода и пароля: время 17/22 (Time, labels/primary) */
-.statusbar.sb17 .sb-time{font-size:17px;line-height:22px;letter-spacing:0;color:var(--labels-primary);padding-top:1.5px}
 .bc-bank{letter-spacing:0}
 
 /* ---------- 435310 / 435311 / 435309 · Перевод ---------- */
@@ -63,140 +60,20 @@ html.m-figma .device:has(#s-pin.is-active){--frame-r:30px}
 #sheet-source .action-block .ab-btn{padding:10px 0;border-radius:8px}
 #sheet-source .action-block img{width:20px;height:20px}
 
-/* ---------- 435092 / 435093 · Face ID поверх формы ---------- */
-.faceid{position:absolute;inset:0;z-index:45;display:none}
-.faceid.is-on{display:block}
-.faceid .fi-dim{position:absolute;inset:0;background:rgba(32,32,32,.4)}
-.faceid .fi-box{position:absolute;left:50%;top:24px;width:156px;height:158px;margin-left:-78px;border-radius:24px;background:rgba(30,30,30,.75)}
-.faceid.is-done .fi-box{border-radius:8px}
-.faceid .fi-scan{position:absolute;left:46px;top:31px;width:64px;height:64px}
-.faceid .fi-done{position:absolute;left:42.5px;top:28.5px;width:71px;height:71px;display:none}
-.faceid.is-done .fi-scan{display:none}
-.faceid.is-done .fi-done{display:block}
-.faceid .fi-label{position:absolute;left:.5px;right:0;top:118px;text-align:center;font-family:"SF Pro Text",-apple-system,system-ui,sans-serif;font-weight:600;font-size:17px;line-height:22px;letter-spacing:-.408px;color:#fff;font-feature-settings:"case" 1;font-optical-sizing:auto}
+/* ---------- Предупреждение антифрода: modalNotification 14362:29456 ---------- */
+.ic64{width:64px;height:64px;flex:none}
+.mn-body{padding-bottom:16px;text-align:center;font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
+.warn-cta{display:flex;flex-direction:column;gap:8px;width:100%}
+.warn-cta .slot{width:100%;text-align:center;font-size:12px;line-height:16px;color:var(--text-neutral-bold600)}
 
-/* ---------- OTP (Push и SMS): 67283:137497 … 137843 ---------- */
-#s-otp,#s-pin{background:var(--bg-neutral-calm000)}
-#s-otp.sb-hidden .statusbar{opacity:0}
-#s-otp .otp-body{position:absolute;left:16px;right:16px;top:112px;display:flex;flex-direction:column;gap:32px}
-#s-otp .otp-text{display:flex;flex-direction:column;gap:12px}
-#s-otp .otp-title{font-size:26px;line-height:30px;font-weight:600;color:#030303}
-#s-otp .otp-sub{font-size:16px;line-height:22px;color:#5a5b73}
-#s-otp .otp-cells{position:relative;display:flex;gap:8px;width:100%}
-#s-otp .otp-cell{flex:1 0 0;min-width:1px;max-width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:8px;background:var(--bg-neutral-calm100);font-size:16px;line-height:24px;font-weight:500;color:#030303;transition:border-color var(--t1) ease,color var(--t1) ease}
-#s-otp .otp-cell.is-active{border-color:var(--icon-primary-bold600)}
-#s-otp.is-error .otp-cell{border-color:var(--icon-alert-calm500);color:var(--text-alert-calm500)}
-#s-otp.is-loading .otp-cell{border-color:var(--icon-positive-calm500);color:var(--text-positive-calm500)}
-#s-otp #otp-input{position:absolute;inset:0;width:100%;height:100%;font-size:16px;color:transparent;-webkit-text-fill-color:transparent;caret-color:transparent;background:none;cursor:pointer}
-#s-otp.is-frozen #otp-input{pointer-events:none}
-#s-otp .otp-loader{position:absolute;left:167px;top:360px;width:56px;height:56px;display:none;align-items:center;justify-content:center;border-radius:8px}
-#s-otp.is-loading .otp-loader{display:flex}
-#s-otp .otp-loader img{width:24px;height:24px}
-#s-otp .otp-bottom{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column}
-#s-otp .st{display:flex;justify-content:center;gap:0;padding:0 16px 20px;font-size:14px;line-height:18px;font-weight:500;text-align:center}
-#s-otp .st.g8{gap:8px;white-space:nowrap}
-#s-otp .st.g4{gap:4px;white-space:nowrap}
-#s-otp .st.err1{flex-direction:column;color:#ff005c;white-space:pre-wrap}
-#s-otp .st.alert{color:var(--text-alert-calm500)}
-#s-otp .st button{color:var(--text-primary-bold600);font-weight:500}
-/* _Keyboard-suggestion «From Messages»: появляется вместе с пушем */
-#s-otp .kb-suggest{position:relative;flex:none;height:46px;display:none;background:#d1d3d9;color:#030303;text-align:center;white-space:nowrap;font-optical-sizing:auto;font-feature-settings:"case" 1;cursor:pointer}
-#s-otp.has-suggest .kb-suggest{display:block}
-#s-otp .kb-suggest>span{position:absolute;left:1px;right:0}
-#s-otp .ks-from{top:5px;font-size:11px;line-height:13px;letter-spacing:.066px}
-#s-otp .ks-code{top:19px;font-size:17px;line-height:22px;letter-spacing:-.408px}
-#s-otp .kb-suggest::before,#s-otp .kb-suggest::after{content:"";position:absolute;top:13px;width:1px;height:25px;border-radius:1px;background:#aeaeb2;opacity:.5}
-#s-otp .kb-suggest::before{left:30px}
-#s-otp .kb-suggest::after{right:30px}
-/* AlphabeticKeyboard, символы (18686:330401): на компьютере и в ?mode=figma; на телефоне системная */
-#s-otp .ios-alpha-kb{position:relative;flex:none;height:290px;background:#d1d3d9;overflow:hidden;color:#030303;font-optical-sizing:auto}
-#s-otp .akb-keys{position:absolute;left:2px;right:3px;top:8px;height:150px}
-#s-otp .akb-row{position:absolute;left:0;right:0;top:0;height:42px}
-#s-otp .akb-row.r2{top:54px}
-#s-otp .akb-row.r3{top:108px}
-#s-otp .akb-key{position:absolute;top:0;height:42px;border-radius:4.6px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.3);text-align:center;font-size:22px;line-height:28px;letter-spacing:.35px;color:#030303}
-#s-otp .akb-key:active{background:#bcbec4}
-#s-otp .akb-key>span{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%)}
-#s-otp .akb-key.s26>span{top:calc(50% - 14px);transform:none;line-height:26px}
-#s-otp .akb-ten>:nth-child(1){left:0;right:calc(90% + 4.5px)}
-#s-otp .akb-ten>:nth-child(2){left:calc(10% + 1.5px);right:calc(80% + 5px)}
-#s-otp .akb-ten>:nth-child(3){left:calc(20% + 1px);right:calc(70% + 3.5px)}
-#s-otp .akb-ten>:nth-child(4){left:calc(30% + 2.5px);right:calc(60% + 4px)}
-#s-otp .akb-ten>:nth-child(5){left:calc(40% + 2px);right:calc(50% + 2.5px)}
-#s-otp .akb-ten>:nth-child(6){left:calc(50% + 3.5px);right:calc(40% + 2px)}
-#s-otp .akb-ten>:nth-child(7){left:calc(60% + 4px);right:calc(30% + 1.5px)}
-#s-otp .akb-ten>:nth-child(8){left:calc(70% + 4.5px);right:calc(20% + 1px)}
-#s-otp .akb-ten>:nth-child(9){left:calc(80% + 5px);right:calc(10% + .5px)}
-#s-otp .akb-ten>:nth-child(10){left:calc(90% + 5.5px);right:0}
-#s-otp .akb-shift{left:0;width:44px;background:#adb3bc;font-size:13px}
-#s-otp .akb-shift>span{top:calc(50% - 13px);transform:none;line-height:26px}
-#s-otp .akb-mid{position:absolute;left:60px;right:60px;top:0;height:42px}
-#s-otp .akb-mid>:nth-child(1){left:0;right:calc(75% + 18.25px)}
-#s-otp .akb-mid>:nth-child(2){left:54px;right:calc(50% + 29.5px)}
-#s-otp .akb-mid>:nth-child(3){left:calc(25% + 41.75px);right:calc(25% + 41.75px)}
-#s-otp .akb-mid>:nth-child(4){left:calc(50% + 30.5px);right:54px}
-#s-otp .akb-mid>:nth-child(5){left:calc(75% + 18.25px);right:0}
-#s-otp .akb-del{position:absolute;right:0;top:0;width:44px;height:42px}
-#s-otp .akb-del img{position:absolute;left:0;top:0;width:100%;height:102.5%}
-#s-otp .akb-del:active{opacity:.7}
-#s-otp .akb-bottom{position:absolute;left:2px;right:3px;top:170px;display:flex;gap:6px}
-#s-otp .akb-bottom .akb-key{position:relative;font-size:16px;line-height:21px;letter-spacing:-.32px;font-family:"SF Pro Text",-apple-system,system-ui,sans-serif}
-#s-otp .akb-bottom .akb-key>span{top:calc(50% + .5px)}
-#s-otp .akb-wide{width:91px;flex:none;background:#adb3bc}
-#s-otp .akb-space{flex:1;min-width:1px}
-#s-otp .akb-extra{position:absolute;left:30px;right:31px;top:235px;display:flex;justify-content:space-between;align-items:flex-start}
-#s-otp .akb-emoji{width:27px;height:27px}
-#s-otp .akb-dictation{width:19px;height:28px}
-#s-otp .akb-hi{position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:100px;background:#030303}
-#s-otp .otp-bottom>.home-indicator{display:none}
-#s-otp.is-frozen .ios-alpha-kb,#s-otp.is-frozen .kb-suggest{display:none}
-#s-otp.is-frozen .otp-bottom>.home-indicator{display:block}
-html.m-phone #s-otp .ios-alpha-kb,html.m-phone #s-otp .kb-suggest{display:none}
-html.m-phone #s-otp .otp-bottom>.home-indicator{display:block}
-html.m-phone #s-otp:focus-within .otp-bottom>.home-indicator{display:none}
-/* Notification - Collapsed с кодом + затемнение Rectangle 118 */
-#push-code{left:16px;right:16px;top:16px}
-html.m-phone #push-code{top:calc(env(safe-area-inset-top,0px) + 8px)}
-#push-code .ios-notification{background:#e7e7e7;-webkit-backdrop-filter:none;backdrop-filter:none;transition:box-shadow var(--t3) var(--ease)}
-#push-code.is-shown .ios-notification{box-shadow:0 0 0 200vmax rgba(0,0,0,.3)}
-#push-code .app-icon .abs{inset:38.89% 13.89% 37.28% 13.89%}
-#push-code.is-sms .app-icon{background:none}
-#push-code.is-sms .app-icon img.sms{display:block}
-#push-code .app-icon img.sms{position:absolute;inset:0;width:100%;height:100%;display:none}
-#push-code.is-sms .app-icon .abs{display:none}
-
-/* ---------- Пароль: «Код для входа» 67283:137661 … 67704:158114 ---------- */
-#s-pin .pin-text{position:absolute;left:16px;top:110px;width:358px;display:flex;flex-direction:column;gap:12px}
-#s-pin .pin-title{font-size:26px;line-height:30px;font-weight:600;color:var(--text-neutral-bold950)}
-#s-pin .pin-sub{font-size:16px;line-height:22px;color:#5a5b73}
-#s-pin .pin-field{position:absolute;left:0;right:0;top:241px;display:flex;flex-direction:column;align-items:center;gap:16px}
-#s-pin.is-error .pin-field,#s-pin.is-overflow .pin-field{top:220px}
-#s-pin .dots{display:flex;gap:19px;align-items:center;height:16px}
-#s-pin .dot{width:10.269px;height:10.269px;border-radius:11.948px;background:var(--bg-primary-bold600);opacity:.3}
-#s-pin .dot.on{opacity:1}
-#s-pin.is-error .dot,#s-pin.is-overflow .dot{background:var(--bg-alert-calm500);opacity:1}
-#s-pin .pin-msg{display:none;width:390px;padding:0 16px;font-size:14px;line-height:18px;font-weight:500;text-align:center;color:var(--text-alert-calm500)}
-#s-pin.is-error .pin-msg,#s-pin.is-overflow .pin-msg{display:block}
-#s-pin .pin-kb{position:absolute;left:29px;top:302px;width:333px;height:348px;border-radius:15px;overflow:hidden}
-#s-pin.is-overflow .pin-kb{top:320px}
-#s-pin .pk-grid{position:absolute;left:17px;top:20px;display:flex;flex-direction:column;gap:16px;align-items:flex-end}
-#s-pin .pk-row{display:flex;gap:48px;align-items:center}
-#s-pin .pk-key{position:relative;width:64px;height:64px;border-radius:50px;text-align:center;font-size:26px;line-height:30px;font-weight:600;color:var(--text-neutral-bold950);transition:background-color var(--t1) ease}
-#s-pin .pk-key:active{background:var(--bg-neutral-calm100)}
-#s-pin .pk-key img{position:absolute;left:20px;top:20.08px;width:24px;height:24px}
-#s-pin .pk-key .off{display:none}
-#s-pin.is-frozen .pk-key,#s-pin.is-overflow .pk-key{color:var(--text-neutral-calm400);pointer-events:none}
-#s-pin.is-frozen .pk-key .on,#s-pin.is-overflow .pk-key .on{display:none}
-#s-pin.is-frozen .pk-key .off,#s-pin.is-overflow .pk-key .off{display:block}
-#s-pin .pin-bottom{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:8px;align-items:center;background:var(--bg-neutral-calm000)}
-#s-pin .pb-buttons{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;padding:16px 16px 0}
-#s-pin .pb-link{display:flex;align-items:center;justify-content:center;height:48px;min-width:70px;padding:12px 0;border-radius:12px;font-size:16px;line-height:24px;font-weight:500;color:var(--text-primary-bold600);white-space:nowrap}
-#s-pin.is-error .pb-link,#s-pin.is-overflow .pb-link{height:56px;width:100%}
-#s-pin .pb-frozen-text{display:none;width:100%;text-align:center;font-size:16px;line-height:24px;font-weight:500;color:var(--text-neutral-bold600)}
-#s-pin .pb-timer{display:none;align-items:center;justify-content:center;height:56px;width:100%;font-size:16px;line-height:24px;font-weight:500;color:var(--text-neutral-bold600);white-space:nowrap}
-#s-pin.is-frozen .pb-frozen-text{display:block}
-#s-pin.is-frozen .pb-timer{display:flex}
-#s-pin.is-frozen .pb-link{display:none}
+/* ---------- MyID: кадр 14052:34700 ---------- */
+#s-myid{background:var(--surface-neutral-calm000)}
+#s-myid .statusbar{opacity:0}
+#s-myid .myid-body{display:flex;flex-direction:column;align-items:center;padding-top:7px}
+#s-myid .myid-logo{width:100px;height:33px;flex:none}
+#s-myid .myid-hint{margin-top:53px;text-align:center;white-space:nowrap;color:var(--colortext-body)}
+#s-myid .myid-photo{margin-top:48px;width:356px;height:456px;flex:none}
+#s-myid .home-indicator::after{margin-left:-66px;background:var(--labels-primary)}
 
 /* ---------- Payment-status-card · Выполнено (67283:137394) ---------- */
 #s-success .ps-status{text-align:center}
@@ -216,12 +93,6 @@ html.m-phone #push-code{top:calc(env(safe-area-inset-top,0px) + 8px)}
 .oh-item{flex:1;min-width:1px;display:flex;flex-direction:column;gap:8px;align-items:center}
 .oh-icon{display:flex;padding:13px;border-radius:12px;background:var(--bg-neutral-calm100)}
 .oh-label{font-size:12px;line-height:16px;text-align:center;color:var(--text-neutral-bold950)}
-
-/* ---------- Предупреждение антифрода: modalNotification 14362:29456 ---------- */
-.ic64{width:64px;height:64px;flex:none}
-.mn-body{padding-bottom:16px;text-align:center;font-size:16px;line-height:22px;color:var(--text-neutral-bold600)}
-
-
 </style>
 </head>
 <body>
@@ -273,82 +144,22 @@ html.m-phone #push-code{top:calc(env(safe-area-inset-top,0px) + 8px)}
     </div>
   </section>
 
-  <!-- ============ OTP: Push (Отправили код в приложении) и SMS — 67283:137497 … 137843 ============ -->
-  <section class="screen" id="s-otp" data-title="Подтвердите операцию" data-theme-color="#ffffff">
+  <!-- ============ MyID: подтверждение по лицу (кадр 14052:34700) ============ -->
+  <section class="screen" id="s-myid" data-title="MyID" data-theme-color="#ffffff">
     <header class="appbar">
-      <div class="statusbar sb17"></div>
+      <div class="statusbar"></div>
       <div class="appbar-actions">
-        <button class="appbar-left" data-act="otp-back" aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button>
+        <button class="appbar-left" data-act="myid-back" aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button>
       </div>
     </header>
-    <div class="otp-body">
-      <div class="otp-text">
-        <p class="otp-title">Подтвердите операцию</p>
-        <p class="otp-sub" id="otp-sub">Отправили код в приложении</p>
-      </div>
-      <div class="otp-cells" id="otp-cells">
-        <span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span><span class="otp-cell"></span>
-        <input id="otp-input" type="text" inputmode="text" autocomplete="one-time-code" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="6" aria-label="Код подтверждения">
+    <div class="scroll">
+      <div class="myid-body">
+        <img class="myid-logo" src="assets/myid-logo.svg" alt="AVO">
+        <p class="myid-hint body-large-l-regular">Пожалуйста, улыбнитесь</p>
+        <img class="myid-photo" src="assets/myid-photo.png" width="356" height="456" alt="">
       </div>
     </div>
-    <div class="otp-loader"><img class="spin" src="assets/otp-loader.svg" alt=""></div>
-    <div class="otp-bottom">
-      <div id="otp-status"></div>
-      <div class="kb-suggest" data-act="otp-fill"><span class="ks-from">From Messages</span><span class="ks-code" id="ks-code">A8G6Y3</span></div>
-      <div class="ios-alpha-kb no-hint" id="otp-kb">
-        <div class="akb-keys">
-          <div class="akb-row akb-ten">
-            <button class="akb-key" data-k="1"><span>1</span></button><button class="akb-key" data-k="2"><span>2</span></button><button class="akb-key" data-k="3"><span>3</span></button><button class="akb-key" data-k="4"><span>4</span></button><button class="akb-key" data-k="5"><span>5</span></button><button class="akb-key" data-k="6"><span>6</span></button><button class="akb-key" data-k="7"><span>7</span></button><button class="akb-key" data-k="8"><span>8</span></button><button class="akb-key" data-k="9"><span>9</span></button><button class="akb-key" data-k="0"><span>0</span></button>
-          </div>
-          <div class="akb-row akb-ten r2">
-            <button class="akb-key"><span>-</span></button><button class="akb-key"><span>/</span></button><button class="akb-key s26"><span>:</span></button><button class="akb-key s26"><span>;</span></button><button class="akb-key s26"><span>(</span></button><button class="akb-key s26"><span>)</span></button><button class="akb-key"><span>$</span></button><button class="akb-key"><span>&amp;</span></button><button class="akb-key"><span>@</span></button><button class="akb-key"><span>“</span></button>
-          </div>
-          <div class="akb-row r3">
-            <button class="akb-key akb-shift"><span>#+=</span></button>
-            <div class="akb-mid"><button class="akb-key"><span>.</span></button><button class="akb-key"><span>,</span></button><button class="akb-key"><span>?</span></button><button class="akb-key"><span>!</span></button><button class="akb-key"><span>‘</span></button></div>
-            <button class="akb-del" data-k="del" aria-label="Стереть"><img src="assets/kb-delete.svg" alt=""></button>
-          </div>
-        </div>
-        <div class="akb-bottom"><button class="akb-key akb-wide"><span>ABC</span></button><button class="akb-key akb-space"><span>space</span></button><button class="akb-key akb-wide"><span>return</span></button></div>
-        <div class="akb-extra"><img class="akb-emoji" src="assets/kb-emoji.svg" alt=""><img class="akb-dictation" src="assets/kb-dictation.svg" alt=""></div>
-        <i class="akb-hi"></i>
-      </div>
-      <div class="home-indicator"></div>
-    </div>
-  </section>
-
-  <!-- ============ Пароль от приложения: «Код для входа» 67283:137661 / 137672 / 137685 · 67588:117618 · 67704:158114 ============ -->
-  <section class="screen" id="s-pin" data-title="Пароль" data-theme-color="#ffffff">
-    <header class="appbar">
-      <div class="statusbar sb17"></div>
-      <div class="appbar-actions">
-        <button class="appbar-left" data-act="pin-back" aria-label="Назад"><img class="ic24" src="assets/chevron-left.svg" alt=""></button>
-      </div>
-    </header>
-    <div class="pin-text">
-      <p class="pin-title">Пароль</p>
-      <p class="pin-sub">Введите свой пароль для подтверждения действия</p>
-    </div>
-    <div class="pin-field">
-      <div class="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
-      <p class="pin-msg" id="pin-msg">Неверный пароль, попробуйте еще раз </p>
-    </div>
-    <div class="pin-kb no-hint">
-      <div class="pk-grid">
-        <div class="pk-row"><button class="pk-key" data-pin="1">1</button><button class="pk-key" data-pin="2">2</button><button class="pk-key" data-pin="3">3</button></div>
-        <div class="pk-row"><button class="pk-key" data-pin="4">4</button><button class="pk-key" data-pin="5">5</button><button class="pk-key" data-pin="6">6</button></div>
-        <div class="pk-row"><button class="pk-key" data-pin="7">7</button><button class="pk-key" data-pin="8">8</button><button class="pk-key" data-pin="9">9</button></div>
-        <div class="pk-row"><button class="pk-key" data-pin="0">0</button><button class="pk-key" data-pin="del" aria-label="Стереть"><img class="on" src="assets/pin-return.svg" alt=""><img class="off" src="assets/pin-return-off.svg" alt=""></button></div>
-      </div>
-    </div>
-    <div class="pin-bottom">
-      <div class="pb-buttons">
-        <p class="pb-frozen-text">К сожалению, пока нельзя ввести пароль, так как он был введен неправильно несколько раз. </p>
-        <button class="pb-link" data-act="pin-sms">Подтвердить через СМС</button>
-        <p class="pb-timer"><span>Повторите попытку через&nbsp;</span><span class="c-primary" id="pin-timer">14:59</span></p>
-      </div>
-      <div class="home-indicator"></div>
-    </div>
+    <div class="footer"><div class="home-indicator"></div></div>
   </section>
 
   <!-- ============ Payment-status-card · Выполнено (67283:137394) ============ -->
@@ -426,7 +237,10 @@ html.m-phone #push-code{top:calc(env(safe-area-inset-top,0px) + 8px)}
         <div class="btn-combo" style="background:none">
           <div class="btn-combo-buttons">
             <div class="btn-group-v">
-              <button class="btn btn-l btn-primary" data-act="warn-yes">Да, перевожу сам</button>
+              <div class="warn-cta">
+                <button class="btn btn-l btn-primary" data-act="warn-yes">Да, перевожу сам</button>
+                <p class="slot">Дальше подтвердим вас по лицу через MyID</p>
+              </div>
               <button class="btn btn-l btn-secondary" data-act="warn-cancel">Отменить перевод</button>
             </div>
           </div>
@@ -436,35 +250,15 @@ html.m-phone #push-code{top:calc(env(safe-area-inset-top,0px) + 8px)}
     </div>
   </div>
 
-  <!-- ============ 435092 / 435093 · Face ID ============ -->
-  <div class="faceid" id="faceid">
-    <div class="fi-dim"></div>
-    <div class="fi-box"><img class="fi-scan" src="assets/faceid.svg" alt=""><img class="fi-done" src="assets/faceid-done.svg" alt=""><p class="fi-label">Face ID</p></div>
-  </div>
-
-  <!-- ============ Notification - Collapsed с кодом: AVO (Push OTP, 67283:137540) / Сообщения (SMS, 67283:137789) ============ -->
-  <div class="push" id="push-code">
-    <div class="ios-notification" data-act="otp-fill">
-      <div class="app-icon"><i class="abs"><img src="assets/push-avo.svg" alt=""></i><img class="sms" src="assets/push-messages.png" alt=""></div>
-      <div class="body">
-        <div class="text">AVO bank: chtobi podtverdit', perevod, vvedite kod: A8G6Y3. Nikomu ego ne peredavayte</div>
-        <div class="time">9:41 AM</div>
-      </div>
-    </div>
-  </div>
-
   <div class="toast" id="toast-cancelled"><div class="toast-pill body-large-l-regular">Перевод отменён</div></div>
 </div>
 
-
-
-<script src="kit/proto.js?v=1795506360"></script>
+<script src="kit/proto.js?v=1795604059"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
 const fmt = n => P.fmt(n) || '0';
-const html = document.documentElement;
 
 /* ================= Данные из макета ================= */
 // Карты из шторки «Откуда перевести» (435311). В форме AVO platinum нарисована с подложкой __Banks cards Sqr (435309).
@@ -494,16 +288,12 @@ $('#source-list').innerHTML = Object.entries(CARDS).map(([id, c]) => `<button cl
   '<div class="action-block"><button class="ab-btn"><img src="assets/plus.svg" alt="">Добавить новую карту</button></div>';
 // Комиссия в кадре 435309: 910 000 UZS при 10 000 000 → 9,1 % (других сумм в макете нет)
 const FEE_RATE = 0.091;
-const DEMO_CODE = 'A8G6Y3';
 
 /* ================= Состояние ================= */
 const F = { src: null, amount: 0 };
-const SIM = { scn: 'warn', method: 'face', face: 'ok', pin: 'ok', fast: 'no' };
 let timers = [];
 const later = (ms, fn) => { const t = setTimeout(fn, ms); timers.push(t); return t; };
-const clearFlow = () => { timers.forEach(clearTimeout); timers = []; stopOtp(); };
-const sec = (normal) => SIM.fast === 'yes' ? Math.min(normal, normal > 100 ? 10 : 5) : normal;
-const canFocus = () => P.mode === 'desk' || (P.mode === 'phone' && !!(navigator.userActivation && navigator.userActivation.isActive));
+const clearFlow = () => { timers.forEach(clearTimeout); timers = []; };
 
 /* ---------- форма ---------- */
 const amountIn = $('#amount');
@@ -540,153 +330,23 @@ P.closeSheet = instant => {
 P.on('pick', el => { F.src = el.dataset.card; P.closeSheet(); renderForm(true); });
 function setLoading(on) { $('#btn-pay').classList.toggle('is-loading', on); }
 
-/* ---------- «Перевести»: с предупреждением — проверка и шторка; как сейчас — сразу подтверждение ---------- */
-let faceFails = 0;
+/* ---------- «Перевести» → проверка → предупреждение → MyID → Выполнено ---------- */
+function fillWarn() {
+  $('#warn-text').textContent = `Перевод ${fmt(F.amount).replace(/ /g, ' ')} UZS на карту •••• 3596. Если кто-то по телефону или в мессенджере просит перевести деньги — остановитесь. Сотрудники банка никогда об этом не просят.`;
+}
 P.on('pay', () => {
   if (!(F.src && F.amount)) return;
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   setLoading(true);
-  if (SIM.scn === 'warn') { later(1200, () => { fillWarn(); P.openSheet('warn'); }); return; }
-  cascade(SIM.method);
+  later(1200, () => { fillWarn(); P.openSheet('warn'); });
 });
-function cascade(m) {
-  if (m === 'face') return faceId();
-  if (m === 'pin') { setLoading(false); return openPin(); }
-  setLoading(false); openOtp(m);
-}
-function faceId() {
-  const fi = $('#faceid'); fi.classList.remove('is-done'); fi.classList.add('is-on');
-  later(1300, () => {
-    if (SIM.face === 'ok') { fi.classList.add('is-done'); later(700, () => { fi.classList.remove('is-on', 'is-done'); setLoading(false); success(); }); return; }
-    fi.classList.remove('is-on'); setLoading(false); faceFails++;
-    if (faceFails >= 3) { faceFails = 0; openOtp('push'); }
-  });
-}
-
-/* ---------- предупреждение ---------- */
-function fillWarn() {
-  const t = $('#warn-text');
-  t.firstChild.nodeValue = `Перевод ${fmt(F.amount).replace(/ /g, ' ')} UZS на карту •••• 3596. Если кто-то по телефону или в мессенджере просит перевести деньги — остановитесь. Сотрудники банка никогда об этом не просят.`;
-}
-P.on('warn-yes', () => { closeSheet0(); setLoading(false); later(260, () => openOtp('push')); });
 P.on('warn-cancel', () => { closeSheet0(); setLoading(false); setTimeout(() => P.toast('cancelled'), 250); });
-
-/* ---------- OTP: Push и SMS ---------- */
-const otpIn = $('#otp-input');
-if (P.mode !== 'phone') otpIn.setAttribute('inputmode', 'none');
-const OTP = { ch: 'push', code: '', err: '', left: 3, st: 'cool', sec: 59, sends: 1, suggest: false, loading: false, frozen: 0 };
-let otpTick, pushT;
-function stopOtp() { clearInterval(otpTick); clearTimeout(pushT); hidePush(); }
-const hidePush = () => $('#push-code').classList.remove('is-shown');
-const mmss = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-function renderOtp() {
-  const s = $('#s-otp'), sms = OTP.ch === 'sms';
-  $('#otp-sub').textContent = sms ? 'Введите код из SMS, который отправлен на номер {otpPhone}' : 'Отправили код в приложении';
-  const shown = OTP.err || OTP.code;
-  $$('.otp-cell', s).forEach((c, i) => {
-    c.textContent = shown[i] || '';
-    c.classList.toggle('is-active', !OTP.loading && !OTP.err && !OTP.frozen && OTP.st !== 'err2' && i === OTP.code.length);
-  });
-  s.classList.toggle('is-error', !!OTP.err);
-  s.classList.toggle('is-loading', OTP.loading);
-  s.classList.toggle('is-frozen', !!OTP.frozen);
-  s.classList.toggle('has-suggest', OTP.suggest && !OTP.loading && !OTP.frozen);
-  $('#push-code').classList.toggle('is-sms', sms);
-  if (otpIn.value !== OTP.code) otpIn.value = OTP.code;
-  const t = mmss(Math.max(0, OTP.sec));
-  // «Отправка кода»: у пуша — одна строка с пробелом (137549), у SMS — два текста с отступом 8 (137773)
-  const cool = sms ? `<div class="st g8"><span class="c-600">Отправить код повторно через</span><span class="c-primary">${t}</span></div>`
-                   : `<p class="st"><span><span class="c-600">Отправить код повторно через </span><span class="c-primary">${t}</span></span></p>`;
-  const resend = OTP.sec > 0 ? cool : '<div class="st"><button data-act="otp-resend">Отправить код повторно</button></div>';
-  $('#otp-status').innerHTML = OTP.frozen
-    ? `<p class="st c-600">К сожалению, пока нельзя ввести код, так как код был введен неправильно несколько раз. </p><div class="st g4"><span class="c-600">Повторите попытку через</span><span class="c-primary">${mmss(OTP.frozen)}</span></div>`
-    : OTP.st === 'nocode' ? '<div class="st"><button data-act="otp-nocode">Не получил код</button></div>'
-    : OTP.st === 'err1' ? `<div class="st err1"><p>Неверный код, попробуйте еще раз </p><p>(осталось попыток: 2)</p></div>${cool}`
-    : OTP.st === 'err2' ? `<p class="st alert">Неверный код. Осталась 1 попытка. Следующая ошибка приведёт к блокировке подтверждения операций на 15 минут</p>${resend}`
-    : resend;
+P.on('warn-yes', () => { closeSheet0(); setLoading(false); later(260, myid); });
+function myid() {
+  P.go('myid');
+  later(2800, () => { if (P.current === 'myid') success(); });     // снимок сделан — перевод выполнен
 }
-function tick() {
-  if (OTP.frozen) { OTP.frozen--; if (!OTP.frozen) { Object.assign(OTP, { left: 3, err: '', st: 'cool', sec: sec(59), code: '' }); sendCode(); } renderOtp(); return; }
-  if (OTP.sec > 0) OTP.sec--;
-  renderOtp();
-}
-function sendCode() {          // отправка кода: через 1,5 с приходит пуш или SMS, над клавиатурой — подсказка с кодом
-  clearTimeout(pushT); hidePush(); OTP.suggest = false;
-  if (P.mode === 'figma') return;
-  pushT = setTimeout(() => { if (P.current !== 'otp' || OTP.loading || OTP.frozen) return; OTP.suggest = true; renderOtp(); P.notify('code', { delay: 0, hide: 5000 }); }, 1500);
-}
-function openOtp(ch, o = {}) {
-  stopOtp();
-  Object.assign(OTP, { ch, code: '', err: '', left: 3, st: 'cool', sec: sec(59), sends: 1, suggest: false, loading: false, frozen: 0 }, o);
-  if (P.current === 'form') P.go('otp'); else if (P.current !== 'otp') P.replace('otp', 'push');
-  renderOtp();
-  if (o.static) return;
-  otpTick = setInterval(tick, 1000);
-  sendCode();
-  if (canFocus()) otpIn.focus({ preventScroll: true });
-}
-function otpSet(code) {
-  if (OTP.loading || OTP.frozen) return renderOtp();
-  if (OTP.err) { OTP.err = ''; if (OTP.st === 'err1') OTP.st = 'cool'; }
-  OTP.code = code.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); renderOtp();
-  if (OTP.code.length === 6) later(200, checkCode);
-}
-function checkCode() {
-  if (OTP.code.length < 6 || OTP.loading) return;
-  hidePush();
-  if (OTP.code === DEMO_CODE) {
-    OTP.loading = true; clearInterval(otpTick); renderOtp();
-    later(1200, () => { if (P.current === 'otp') success(); });
-    return;
-  }
-  OTP.left--;
-  if (OTP.left <= 0) { OTP.frozen = sec(15 * 60 - 1); OTP.code = ''; OTP.err = ''; otpIn.blur(); renderOtp(); return; }
-  if (OTP.left === 2) { OTP.st = 'err1'; OTP.err = OTP.code; }
-  else { OTP.st = 'err2'; OTP.err = ''; }
-  OTP.code = ''; otpIn.value = ''; renderOtp();
-}
-otpIn.addEventListener('input', () => otpSet(otpIn.value));
-$('#otp-kb').addEventListener('click', e => {
-  const k = e.target.closest('[data-k]'); if (!k) return;
-  otpSet(k.dataset.k === 'del' ? OTP.code.slice(0, -1) : OTP.code + k.dataset.k);
-});
-P.on('otp-fill', () => { hidePush(); otpSet(DEMO_CODE); });
-P.on('otp-resend', () => {
-  OTP.sends++; OTP.sec = sec(59); OTP.code = ''; OTP.err = '';
-  OTP.st = OTP.ch === 'push' && OTP.sends >= 2 ? 'nocode' : 'cool';
-  renderOtp(); sendCode(); if (canFocus()) otpIn.focus({ preventScroll: true });
-});
-P.on('otp-nocode', () => { stopOtp(); openPin(); });
-P.on('otp-back', () => { stopOtp(); P.back(); });
-
-/* ---------- Пароль ---------- */
-const PIN = { code: '', fails: 0, state: '' };
-function renderPin() {
-  const s = $('#s-pin');
-  ['error', 'frozen', 'overflow'].forEach(k => s.classList.toggle('is-' + k, PIN.state === k));
-  $$('.dot', s).forEach((d, i) => d.classList.toggle('on', i < PIN.code.length));
-  $('#pin-msg').textContent = PIN.state === 'overflow' ? 'Превышено количество попыток. Ввод PIN временно заблокирован' : 'Неверный пароль, попробуйте еще раз ';
-}
-function openPin(o = {}) {
-  Object.assign(PIN, { code: '', fails: 0, state: '' }, o);
-  if (P.current === 'form') P.go('pin'); else if (P.current !== 'pin') P.replace('pin', 'push');
-  renderPin();
-}
-$('#s-pin .pin-kb').addEventListener('click', e => {
-  const k = e.target.closest('[data-pin]'); if (!k || PIN.state === 'frozen' || PIN.state === 'overflow') return;
-  if (PIN.state === 'error') { PIN.state = ''; PIN.code = ''; }
-  if (k.dataset.pin === 'del') PIN.code = PIN.code.slice(0, -1);
-  else if (PIN.code.length < 4) PIN.code += k.dataset.pin;
-  renderPin();
-  if (PIN.code.length === 4) later(300, () => {
-    if (SIM.pin === 'ok') return success();
-    PIN.fails++;
-    if (PIN.fails >= 3) return openOtp('sms');
-    PIN.state = 'error'; renderPin();
-  });
-});
-P.on('pin-sms', () => openOtp('sms'));
-P.on('pin-back', () => P.back());
+P.on('myid-back', () => { clearFlow(); P.back(); });
 
 /* ---------- Выполнено ---------- */
 function fillSuccess(o = {}) {
@@ -697,55 +357,28 @@ function fillSuccess(o = {}) {
   const ic = c.form === 'avo' ? '<div class="bank-logo bank-avo"><img class="bg" src="assets/avo-plastic.svg" alt=""><i class="abs"><img src="assets/avo-logo-card.svg" alt=""></i></div>' : LOGO[c.form];
   $('#ok-src').innerHTML = `<span class="src-ic">${ic}</span><span>${o.srcName || c.name.replace(' digital', '')}</span>`;
 }
-function success() { stopOtp(); fillSuccess(); if (P.current === 'form') P.go('success', 'fade'); else P.replace('success', 'fade'); }
-P.on('done', () => restart());
-
-
-/* ================= Сначала: пустая форма, сценарий с предупреждением ================= */
+function success() { fillSuccess(); P.replace('success', 'fade'); }
 function restart() {
-  clearFlow(); faceFails = 0; closeSheet0(true); P.hideNotifications(); $('#faceid').classList.remove('is-on', 'is-done'); setLoading(false);
+  clearFlow(); closeSheet0(true); setLoading(false);
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-  SIM.scn = 'warn'; F.src = null; F.amount = 0; renderForm(true); P.reset('form', null);
+  F.src = null; F.amount = 0; renderForm(true); P.reset('form', null);
 }
+P.on('done', restart);
 
-/* ================= Состояния = кадры Figma ================= */
-function base(o = {}) { clearFlow(); closeSheet0(true); $('#faceid').classList.remove('is-on', 'is-done'); setLoading(false); Object.assign(F, { src: null, amount: 0 }, o); renderForm(true); }
+/* ================= Состояния ================= */
+function base(o = {}) { clearFlow(); closeSheet0(true); setLoading(false); Object.assign(F, { src: null, amount: 0 }, o); renderForm(true); }
 const filled = () => base({ src: 'platinum', amount: 10000000 });
-function otpState(ch, o) { filled(); P.reset('otp', null); openOtp(ch, { static: true, ...o }); $('#s-otp').classList.toggle('sb-hidden', !!o.sbHidden); }
-function pinState(o) { filled(); P.reset('pin', null); openPin(o); }
-const st = (id, group, title, figma, node, apply, extra) => ({ id, group, title, figma, node, height: 844, apply, ...extra });
+const st = (id, title, figma, node, apply) => ({ id, group: 'Перевод с предупреждением и MyID', title, figma, node, height: 844, apply });
 P.states([
-  st('warn-check', 'Предупреждение антифрода', 'Проверка перевода', '', '', () => { filled(); SIM.scn = 'warn'; P.reset('form', null); setLoading(true); }),
-  st('warn-sheet', 'Предупреждение антифрода', 'Предупреждение', 'modalNotification ДС', '', () => { filled(); SIM.scn = 'warn'; P.reset('form', null); setLoading(true); fillWarn(); P.openSheet('warn'); }),
-  st('warn-otp', 'Предупреждение антифрода', 'Код в приложении', 'OTP', '', () => { otpState('push', {}); SIM.scn = 'warn'; }),
-  st('form-empty', 'Перевод', 'Форма: пусто', '435310', '67283:137395', () => { base(); P.reset('form', null); }),
-  st('form-picker', 'Перевод', 'Откуда перевести', '435311', '67283:137405', () => { base(); P.reset('form', null); P.openSheet('source'); }),
-  st('form-filled', 'Перевод', 'Форма: заполнено', '435309', '67283:137383', () => { filled(); P.reset('form', null); }),
-  st('faceid-scan', 'Face/Touch ID', 'Face ID: проверка', '435092', '67283:137419', () => { filled(); P.reset('form', null); setLoading(true); $('#faceid').classList.add('is-on'); }),
-  st('faceid-done', 'Face/Touch ID', 'Face ID: распознан', '435093', '67283:137433', () => { filled(); P.reset('form', null); setLoading(true); $('#faceid').classList.add('is-on', 'is-done'); }),
-  st('success', 'Face/Touch ID', 'Выполнено', 'Payment-status-card', '67283:137394', () => { filled(); fillSuccess({ fee: '150', card: '•••• 0342' }); P.reset('success', null); }),
-  st('push-empty', 'Push OTP', 'Код в приложении', 'OTP', '67283:137497', () => otpState('push', {})),
-  st('push-arrived', 'Push OTP', 'Пришёл пуш с кодом', 'Frame 1000004636', '67283:137537', () => { otpState('push', { suggest: true }); renderOtp(); P.notify('code', { delay: 0, hide: 0 }); }),
-  st('push-loading', 'Push OTP', 'Код введён, проверка', 'OTP', '67283:137517', () => otpState('push', { code: DEMO_CODE, loading: true })),
-  st('push-err1', 'Push OTP', 'Неверный код: осталось 2', 'OTP', '67283:137542', () => otpState('push', { err: '166666', left: 2, st: 'err1' })),
-  st('push-err2', 'Push OTP', 'Неверный код: осталась 1', 'OTP', '67283:137593', () => { otpState('push', { left: 1, st: 'err2', sec: 0, suggest: true, sbHidden: true }); $('#ks-code').textContent = '1ABGRT'; }),
-  st('push-freeze', 'Push OTP', 'Заморозка 15 минут', 'OTP', '67283:137562', () => otpState('push', { left: 0, frozen: 15 * 60 - 1 })),
-  st('push-nocode', 'Push OTP', 'Не получил код', 'OTP', '67283:137594', () => otpState('push', { sends: 2, st: 'nocode' })),
-  st('pin-empty', 'Пароль', 'Пароль', 'Код для входа', '67283:137661', () => pinState({})),
-  st('pin-filled', 'Пароль', 'Пароль введён', 'Код для входа', '67283:137672', () => pinState({ code: '1234' })),
-  st('pin-error', 'Пароль', 'Неверный пароль', 'Код для входа', '67283:137685', () => pinState({ code: '1234', state: 'error', fails: 1 })),
-  st('pin-freeze', 'Пароль', 'Заморозка 15 минут', 'Код для входа', '67588:117618', () => pinState({ state: 'frozen' })),
-  st('pin-overflow', 'Пароль', 'Превышено количество попыток', 'Код для входа', '67704:158114', () => pinState({ code: '1234', state: 'overflow' })),
-  st('sms-empty', 'SMS OTP', 'Код из SMS', 'OTP', '67283:137766', () => otpState('sms', { sec: 58 })),
-  st('sms-arrived', 'SMS OTP', 'Пришло SMS с кодом', 'Frame 1000004635', '67283:137786', () => { otpState('sms', { sec: 58, suggest: true }); renderOtp(); P.notify('code', { delay: 0, hide: 0 }); }),
-  st('sms-loading', 'SMS OTP', 'Код введён, проверка', 'OTP', '67283:137790', () => otpState('sms', { sec: 58, code: DEMO_CODE, loading: true })),
-  st('sms-err1', 'SMS OTP', 'Неверный код: осталось 2', 'OTP', '67283:137823', () => otpState('sms', { err: '166666', left: 2, st: 'err1' })),
-  st('sms-freeze', 'SMS OTP', 'Заморозка 15 минут', 'OTP', '67283:137843', () => otpState('sms', { left: 0, frozen: 15 * 60 - 1 })),
+  st('form-empty', 'Форма: пусто', '435310', '67283:137395', () => { base(); P.reset('form', null); }),
+  st('form-picker', 'Откуда перевести', '435311', '67283:137405', () => { base(); P.reset('form', null); P.openSheet('source'); }),
+  st('form-filled', 'Форма: заполнено', '435309', '67283:137383', () => { filled(); P.reset('form', null); }),
+  st('check', 'Проверка перевода', '', '', () => { filled(); P.reset('form', null); setLoading(true); }),
+  st('warning', 'Предупреждение антифрода', 'modalNotification ДС', '', () => { filled(); P.reset('form', null); setLoading(true); fillWarn(); P.openSheet('warn'); }),
+  st('myid', 'MyID: подтверждение по лицу', 'MyID', '14052:34700', () => { filled(); P.reset('myid', null); }),
+  st('success', 'Выполнено', 'Payment-status-card', '67283:137394', () => { filled(); fillSuccess({ fee: '150', card: '•••• 0342' }); P.reset('success', null); }),
 ]);
-const applyState0 = P.applyState;
-P.applyState = id => { $('#s-otp').classList.remove('sb-hidden'); $('#ks-code').textContent = DEMO_CODE; return applyState0(id); };
 
-document.addEventListener('proto:enter', e => { if (e.target.id !== 's-otp') stopOtp(); });
 renderForm(true);
 P.start('form');
 </script>
