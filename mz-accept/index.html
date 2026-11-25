@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Акцепт микрозайма</title>
 <meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
-<link rel="stylesheet" href="kit/tokens.css?v=1794998415">
-<link rel="stylesheet" href="kit/proto.css?v=1794998415">
-<link rel="stylesheet" href="kit/components.css?v=1794998415">
+<link rel="stylesheet" href="kit/tokens.css?v=1795607435">
+<link rel="stylesheet" href="kit/proto.css?v=1795607435">
+<link rel="stylesheet" href="kit/components.css?v=1795607435">
 <link rel="stylesheet" href="css/calc.css">
 <link rel="stylesheet" href="css/offer.css">
 <link rel="stylesheet" href="css/last-step.css">
@@ -40,7 +40,7 @@
         <div class="input">
           <label class="input-label" for="amount">Одобреная сумма</label>
           <div class="input-text no-hint">
-            <input id="amount" type="text" inputmode="numeric" data-kb="numeric" autocomplete="off" enterkeyhint="done" maxlength="15" value="7 000 000">
+            <input id="amount" type="text" inputmode="numeric" data-kb="numeric" autocomplete="off" enterkeyhint="done" maxlength="15" value="10 000 000">
             <span class="it-icon"><img src="assets/calc-edit.svg" alt=""></span>
           </div>
         </div>
@@ -76,21 +76,21 @@
         <div class="of-hero">
           <div class="of-banner"><img src="assets/offer-banner.png" alt=""></div>
           <div class="of-limit">
-            <div class="of-sum"><p class="title-large-h1 c-950 nowrap">50 000 000</p><div class="of-cur"><p class="title-large-h3 c-950 nowrap">UZS</p></div></div>
+            <div class="of-sum"><p class="title-large-h1 c-950 nowrap" id="of-amount">50 000 000</p><div class="of-cur"><p class="title-large-h3 c-950 nowrap">UZS</p></div></div>
             <p class="body-small-l-regular c-600 nowrap">Сумма к получению</p>
           </div>
         </div>
         <!-- offerCard × 2 -->
         <div class="of-cards">
           <div class="of-card"><p class="title-medium-semibold c-950 nowrap">Без процентов</p><p class="of-card-sub body-small-l-regular c-600">при погашении <br>в первый месяц</p></div>
-          <div class="of-card"><p class="title-medium-semibold c-950 nowrap">12 месяцев</p><p class="of-card-sub body-small-l-regular c-600">срок использования <br>займа</p></div>
+          <div class="of-card"><p class="title-medium-semibold c-950 nowrap" id="of-term">12 месяцев</p><p class="of-card-sub body-small-l-regular c-600">срок использования <br>займа</p></div>
         </div>
         <!-- услуга «Для своих»: offerCard + tags «Деньги под защитой» -->
         <div class="of-service">
           <button class="of-service-card pressable" type="button" data-sheet="service">
             <span class="of-sc-text">
               <span class="of-sc-title title-medium-semibold c-950">60 дней без штрафов и пени</span>
-              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br>7 700 000 UZS</span>
+              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br><span class="js-service-sum">7 700 000</span> UZS</span>
             </span>
             <img class="of-chevron" src="assets/offer-chevron-right.svg" width="22" height="22" alt="">
           </button>
@@ -101,7 +101,7 @@
           <div class="title-action"><p class="ta-title c-950">Основные условия</p></div>
           <div class="dl of-dl">
             <div class="dl-item"><div class="dl-title is-center"><p>Льготный период до</p><img class="ic16" src="assets/offer-info.svg" alt=""></div><div class="dl-value"><p> 21.02.2026</p></div></div>
-            <div class="dl-item"><div class="dl-title"><p>Ежемесячный платеж</p></div><div class="dl-value"><p>4 583 000</p><p>UZS</p></div></div>
+            <div class="dl-item"><div class="dl-title"><p>Ежемесячный платеж</p></div><div class="dl-value"><p id="of-pay">4 583 000</p><p>UZS</p></div></div>
             <div class="dl-item"><div class="dl-title"><p>Дата платежа</p></div><div class="dl-value"><p>21.02.2026</p></div></div>
             <div class="dl-item"><div class="dl-title"><p>Процентная ставка</p></div><div class="dl-value"><p>34,9 %</p></div></div>
           </div>
@@ -310,7 +310,7 @@
             </div>
             <div class="acc-main">
               <p class="body-small-l-regular c-600">Доступный баланс</p>
-              <div class="acc-sum"><span class="title-large-h1">50 000 000</span><span class="acc-cur title-large-h3">UZS</span></div>
+              <div class="acc-sum"><span class="title-large-h1" id="acc-amount">50 000 000</span><span class="acc-cur title-large-h3">UZS</span></div>
             </div>
           </div>
           <div class="divider"></div>
@@ -343,7 +343,7 @@
               <div class="sv-card">
                 <div class="sv-text">
                   <p class="title-small-semibold c-950">60 дней без штрафов и пени</p>
-                  <p class="body-small-l-regular c-600 sv-sub">Сумма к получению с учетом услуги <br>7 700 000 UZS</p>
+                  <p class="body-small-l-regular c-600 sv-sub">Сумма к получению с учетом услуги <br><span class="js-service-sum">7 700 000</span> UZS</p>
                 </div>
                 <!-- Switcher: в Figma только вариант isOn=true; услугу выключить нельзя — тост сверху -->
                 <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="60 дней без штрафов и пени"><img src="assets/offer-switch-on.svg" width="43" height="26.137" alt=""></button>
@@ -396,13 +396,14 @@
   <div class="toast" id="toast-unavailable" role="status"><div class="toast-pill is-alert"><p class="body-large-l-regular nowrap">Действие недоступно</p></div></div>
 </div>
 
-<script src="kit/proto.js?v=1794998415"></script>
+<script src="kit/proto.js?v=1795607435"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
 /* ---------- 1. Калькулятор (кадр 14598:32260, копия выгрузки «сумма 7 000 000») ----------
+   Стартовая сумма — максимальная сумма оффера, 10 000 000 (решение Ника 25.11.2026; в кадре Figma — 7 000 000).
    Сроки по сумме — правила «Rule dev» Калькулятора 3.0, как в прототипе microloan-calc.
    Платежи кадра: 336 000 и 427 000 на 7 000 000; короткие сроки — в той же пропорции, что в 3.0 (144/307/370/711). */
 const K36 = 336000 / 7000000, K24 = 427000 / 7000000;
@@ -417,8 +418,8 @@ const APPROVED = 10000000;
 const termsFor = a => TERMS.filter(t => a <= t.max);
 const payFor = (t, a) => Math.round(a * t.k / 1000) * 1000;
 // Срок не предвыбран: его выбирает клиент, «Получить деньги» неактивна до выбора (решение Ника 18.11.2026).
-// Сумма предзаполнена одобренной.
-const S = { amount: 7000000, term: null, loading: false, editing: false, checks: [false, false, false, false, false] };
+// Сумма предзаполнена одобренной — максимальной суммой оффера.
+const S = { amount: APPROVED, term: null, loading: false, editing: false, checks: [false, false, false, false, false] };
 let lastValid = S.amount;
 const input = $('#amount');
 
@@ -441,6 +442,20 @@ function renderCalc() {
     </div>`;
   });
   $('#get-money').disabled = S.loading || !S.term;
+  renderFlow();
+}
+
+/* Сумма и срок, выбранные на калькуляторе, идут дальше по флоу (решение Ника 23.11.2026): оффер, попап услуги, счёт.
+   В кадрах Figma там свои демо-цифры (50 000 000, 12 месяцев, платёж 4 583 000) — прототип их не берёт.
+   Платёж — тот же, что клиент видел на карточке срока. Сумма с услугой — пропорция кадра: 7 000 000 → 7 700 000 (+10 %). */
+const SERVICE_K = 7700000 / 7000000;
+function renderFlow() {
+  const a = S.amount || lastValid, t = TERMS.find(x => x.m === S.term);
+  $('#of-amount').textContent = P.fmt(a);
+  $('#of-term').textContent = t ? t.label : '';
+  $('#of-pay').textContent = t ? P.fmt(payFor(t, a)) : '';
+  $$('.js-service-sum').forEach(el => { el.textContent = P.fmt(Math.round(a * SERVICE_K)); });
+  $('#acc-amount').textContent = P.fmt(a);
 }
 function loadPayments(ms = 900) {
   S.loading = true; renderCalc();
@@ -452,6 +467,9 @@ input.addEventListener('input', () => {
   let v = P.num(input.value); if (v > APPROVED) v = APPROVED;
   S.amount = v; input.value = v ? P.fmt(v) : '';
   $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(v)} UZS`;
+  // Кнопку можно нажать, не дожидаясь пересчёта: срок, которого нет для новой суммы, сбрасываем сразу, иначе он уйдёт в оффер.
+  if (S.term && v && !termsFor(v).some(t => t.m === S.term)) { S.term = null; $('#get-money').disabled = true; }
+  renderFlow();
   clearTimeout(input._d); input._d = setTimeout(applyAmount, 500);
 });
 input.addEventListener('proto:done', () => {
@@ -497,21 +515,25 @@ P.on('close-crediting', () => P.go('account', 'fade'));
 P.on('close-flow', () => { S.checks = S.checks.map(() => false); renderChecks(); P.reset('calc'); });
 
 /* ---------- состояния: карта экранов и сверка ---------- */
-const reset = o => { Object.assign(S, { amount: 7000000, term: null, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
+const reset = o => { Object.assign(S, { amount: APPROVED, term: null, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
 const at = (id, o, before) => () => { reset(o); P.reset('calc', null); if (before) before.forEach(b => P.go(b, null)); if (id !== 'calc') P.go(id, null); };
+// Состояния после калькулятора открываются со стартовой суммой 10 000 000 и сроком 36 месяцев.
+// Кадр калькулятора Figma (7 000 000, 36 мес.) сверяется отдельным состоянием calc-term.
+const PICK = { term: 36 };
+const FIGMA_CALC = { amount: 7000000, term: 36 };
 P.states([
-  { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение: срок не выбран', figma: '14598:32260', height: 844, apply: at('calc') },
-  { id: 'calc-term', group: 'Выбор суммы', title: 'Срок выбран (в кадре Figma — по умолчанию)', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc', { term: 36 }) },
-  { id: 'offer', group: 'Оффер', title: 'Принять условия кредита', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer') },
-  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer')(); p.openSheet('service'); } },
-  { id: 'service-toast', group: 'Оффер', title: 'Действие недоступно (тост сверху)', figma: '14603:37837', node: '14603:37837', height: 1572, selector: '#toast-unavailable .toast-pill', apply: p => { at('offer')(); p.openSheet('service'); p.toast('unavailable', 2e9); } },
-  { id: 'last-step', group: 'Оффер', title: 'Последний шаг', figma: '435401', node: '14598:32273', height: 844, apply: at('last-step', null, ['offer']) },
-  { id: 'last-step-ready', group: 'Оффер', title: 'Последний шаг — всё принято', figma: '435402', node: '14598:32317', height: 844, apply: at('last-step', { checks: [true, true, true, true, true] }, ['offer']) },
-  { id: 'myid', group: 'Выдача', title: 'Пожалуйста, улыбнитесь', figma: 'MyID', node: '14598:32306', height: 844, apply: at('myid', null, ['offer', 'last-step']) },
-  { id: 'processing', group: 'Выдача', title: 'Обрабатываем ваши данные', figma: '14598:32350', node: '14598:32350', height: 844, apply: at('processing') },
-  { id: 'activate', group: 'Выдача', title: 'Активируйте кредит', figma: '14598:32359', node: '14598:32359', height: 844, apply: at('activate') },
-  { id: 'crediting', group: 'Выдача', title: 'Зачисляем кредит на счет', figma: '14598:32373', node: '14598:32373', height: 844, apply: at('crediting') },
-  { id: 'account', group: 'Выдача', title: 'Деньги на счёте', figma: '435403', node: '14598:32384', height: 844, apply: p => { at('account')(); p.openSheet('congrats'); } },
+  { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение: 10 000 000, срок не выбран', figma: '14598:32260', height: 844, apply: at('calc') },
+  { id: 'calc-term', group: 'Выбор суммы', title: 'Как в кадре Figma: 7 000 000, срок выбран', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc', FIGMA_CALC) },
+  { id: 'offer', group: 'Оффер', title: 'Принять условия кредита: сумма и срок из калькулятора', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer', PICK) },
+  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer', PICK)(); p.openSheet('service'); } },
+  { id: 'service-toast', group: 'Оффер', title: 'Действие недоступно (тост сверху)', figma: '14603:37837', node: '14603:37837', height: 1572, selector: '#toast-unavailable .toast-pill', apply: p => { at('offer', PICK)(); p.openSheet('service'); p.toast('unavailable', 2e9); } },
+  { id: 'last-step', group: 'Оффер', title: 'Последний шаг', figma: '435401', node: '14598:32273', height: 844, apply: at('last-step', PICK, ['offer']) },
+  { id: 'last-step-ready', group: 'Оффер', title: 'Последний шаг — всё принято', figma: '435402', node: '14598:32317', height: 844, apply: at('last-step', { ...PICK, checks: [true, true, true, true, true] }, ['offer']) },
+  { id: 'myid', group: 'Выдача', title: 'Пожалуйста, улыбнитесь', figma: 'MyID', node: '14598:32306', height: 844, apply: at('myid', PICK, ['offer', 'last-step']) },
+  { id: 'processing', group: 'Выдача', title: 'Обрабатываем ваши данные', figma: '14598:32350', node: '14598:32350', height: 844, apply: at('processing', PICK) },
+  { id: 'activate', group: 'Выдача', title: 'Активируйте кредит', figma: '14598:32359', node: '14598:32359', height: 844, apply: at('activate', PICK) },
+  { id: 'crediting', group: 'Выдача', title: 'Зачисляем кредит на счет', figma: '14598:32373', node: '14598:32373', height: 844, apply: at('crediting', PICK) },
+  { id: 'account', group: 'Выдача', title: 'Деньги на счёте: сумма из калькулятора', figma: '435403', node: '14598:32384', height: 844, apply: p => { at('account', PICK)(); p.openSheet('congrats'); } },
 ]);
 renderCalc(); renderChecks();
 P.start('calc');
