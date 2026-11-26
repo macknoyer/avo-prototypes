@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Калькулятор микрозайма 4.0</title>
 <meta name="description" content="Калькулятор микрозайма 4.0: одобренная сумма, ввод суммы, выбор срока. Прототип 1:1 по Figma «Калькулятор 4.0».">
-<link rel="stylesheet" href="kit/tokens.css?v=1794998447">
-<link rel="stylesheet" href="kit/proto.css?v=1794998447">
-<link rel="stylesheet" href="kit/components.css?v=1794998447">
+<link rel="stylesheet" href="kit/tokens.css?v=1795688908">
+<link rel="stylesheet" href="kit/proto.css?v=1795688908">
+<link rel="stylesheet" href="kit/components.css?v=1795688908">
 <style>
   html{--frame-r:30px}
   /* KL_offer */
@@ -56,7 +56,7 @@
     </div>
     <div class="footer btn-combo is-white">
       <div class="btn-combo-buttons">
-        <p class="slot" id="slot">Вы оформляете микрозайм на сумму {сумма} UZS</p>
+        <!-- строка «Вы оформляете микрозайм на сумму …» убрана (решение Ника 26.11.2026), в кадрах Figma она есть -->
         <div class="btn-group-v"><button class="btn btn-l btn-primary" id="get-money">Получить деньги</button></div>
         <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
       </div>
@@ -65,7 +65,7 @@
   </section>
 </div>
 
-<script src="kit/proto.js?v=1794998447"></script>
+<script src="kit/proto.js?v=1795688908"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
@@ -94,7 +94,6 @@ function render() {
   const sc = SCEN[S.scen];
   $('#approved-title').textContent = `${P.fmt(sc.approved)} UZS уже одобрены!`;
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
   const list = termsFor(S.amount);
   if (S.term && !list.some(t => t.m === S.term)) S.term = null;   // выбранный срок пропал после смены суммы — клиент выбирает заново
   P.list($('#terms'), list, t => t.m, t => {
@@ -126,7 +125,6 @@ input.addEventListener('input', () => {
   if (v > max) v = max;
   S.amount = v;
   input.value = v ? P.fmt(v) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(v)} UZS`;
   // «Сроки показываем сразу» (Rule dev 3.0): пересчёт без закрытия клавиатуры, через 0,5 с после последней цифры
   clearTimeout(input._d); input._d = setTimeout(applyAmount, 500);
 });
