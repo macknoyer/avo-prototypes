@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Акцепт микрозайма</title>
 <meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
-<link rel="stylesheet" href="kit/tokens.css?v=1795607435">
-<link rel="stylesheet" href="kit/proto.css?v=1795607435">
-<link rel="stylesheet" href="kit/components.css?v=1795607435">
+<link rel="stylesheet" href="kit/tokens.css?v=1795686065">
+<link rel="stylesheet" href="kit/proto.css?v=1795686065">
+<link rel="stylesheet" href="kit/components.css?v=1795686065">
 <link rel="stylesheet" href="css/calc.css">
 <link rel="stylesheet" href="css/offer.css">
 <link rel="stylesheet" href="css/last-step.css">
@@ -52,7 +52,7 @@
     </div>
     <div class="footer btn-combo is-white">
       <div class="btn-combo-buttons">
-        <p class="slot" id="slot">Вы оформляете микрозайм на сумму {сумма} UZS</p>
+        <p class="slot" id="slot">Вы оформляете микрозайм на сумму 11 000 000 UZS</p>
         <div class="btn-group-v"><button class="btn btn-l btn-primary" id="get-money" data-go="offer">Получить деньги</button></div>
         <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
       </div>
@@ -72,36 +72,26 @@
     </header>
     <div class="scroll">
       <div class="of-body">
-        <!-- KL_offer: баннер + сумма -->
+        <!-- KL_offer 14724:5505: баннер, «Сумма к получению», сумма, бейдж услуги (tags) — тап открывает попап услуги -->
         <div class="of-hero">
           <div class="of-banner"><img src="assets/offer-banner.png" alt=""></div>
           <div class="of-limit">
-            <div class="of-sum"><p class="title-large-h1 c-950 nowrap" id="of-amount">50 000 000</p><div class="of-cur"><p class="title-large-h3 c-950 nowrap">UZS</p></div></div>
             <p class="body-small-l-regular c-600 nowrap">Сумма к получению</p>
+            <div class="of-sum"><p class="title-large-h1 c-950 nowrap" id="of-amount">10 000 000</p><div class="of-cur"><p class="title-large-h3 c-950 nowrap">UZS</p></div></div>
+            <button class="of-tag tag tag-m tag-positive pressable" type="button" data-sheet="service"><img class="ic16" src="assets/offer-safe.svg" alt="">Деньги под защитой<img class="ic16" src="assets/offer-tag-chevron.svg" alt=""></button>
           </div>
         </div>
         <!-- offerCard × 2 -->
         <div class="of-cards">
-          <div class="of-card"><p class="title-medium-semibold c-950 nowrap">Без процентов</p><p class="of-card-sub body-small-l-regular c-600">при погашении <br>в первый месяц</p></div>
-          <div class="of-card"><p class="title-medium-semibold c-950 nowrap" id="of-term">12 месяцев</p><p class="of-card-sub body-small-l-regular c-600">срок использования <br>займа</p></div>
-        </div>
-        <!-- услуга «Для своих»: offerCard + tags «Деньги под защитой» -->
-        <div class="of-service">
-          <button class="of-service-card pressable" type="button" data-sheet="service">
-            <span class="of-sc-text">
-              <span class="of-sc-title title-medium-semibold c-950">60 дней без штрафов и пени</span>
-              <span class="of-sc-sub body-small-l-regular c-600">Сумма к получению с учетом услуги <br><span class="js-service-sum">7 700 000</span> UZS</span>
-            </span>
-            <img class="of-chevron" src="assets/offer-chevron-right.svg" width="22" height="22" alt="">
-          </button>
-          <span class="of-tag tag tag-m tag-positive"><img class="ic16" src="assets/offer-safe.svg" alt="">Деньги под защитой</span>
+          <div class="of-card"><p class="title-medium-semibold c-950 nowrap"><span id="of-card-pay">336 000</span> UZS</p><p class="of-card-sub body-small-l-regular c-600">Ежемесячный <br>платеж</p></div>
+          <div class="of-card"><p class="title-medium-semibold c-950 nowrap" id="of-term">36 месяцев</p><p class="of-card-sub body-small-l-regular c-600">срок использования <br>займа</p></div>
         </div>
         <!-- Offer conditions: основные условия -->
         <div class="of-block">
           <div class="title-action"><p class="ta-title c-950">Основные условия</p></div>
           <div class="dl of-dl">
             <div class="dl-item"><div class="dl-title is-center"><p>Льготный период до</p><img class="ic16" src="assets/offer-info.svg" alt=""></div><div class="dl-value"><p> 21.02.2026</p></div></div>
-            <div class="dl-item"><div class="dl-title"><p>Ежемесячный платеж</p></div><div class="dl-value"><p id="of-pay">4 583 000</p><p>UZS</p></div></div>
+            <div class="dl-item"><div class="dl-title"><p>Ежемесячный платеж</p></div><div class="dl-value"><p id="of-pay">336 000</p><p>UZS</p></div></div>
             <div class="dl-item"><div class="dl-title"><p>Дата платежа</p></div><div class="dl-value"><p>21.02.2026</p></div></div>
             <div class="dl-item"><div class="dl-title"><p>Процентная ставка</p></div><div class="dl-value"><p>34,9 %</p></div></div>
           </div>
@@ -310,7 +300,7 @@
             </div>
             <div class="acc-main">
               <p class="body-small-l-regular c-600">Доступный баланс</p>
-              <div class="acc-sum"><span class="title-large-h1" id="acc-amount">50 000 000</span><span class="acc-cur title-large-h3">UZS</span></div>
+              <div class="acc-sum"><span class="title-large-h1" id="acc-amount">10 000 000</span><span class="acc-cur title-large-h3">UZS</span></div>
             </div>
           </div>
           <div class="divider"></div>
@@ -330,7 +320,7 @@
     <div class="footer"><div class="home-indicator"></div></div>
   </section>
 
-  <!-- ============ 14605:38039 · modalNotification «60 дней без штрафов и пени» (обновлён 17.11) ============ -->
+  <!-- ============ 14605:38039 · modalNotification · Услуга «Деньги под защитой» (обновлён 26.11) ============ -->
   <div class="sheet-layer" id="sheet-service">
     <div class="sheet-scrim"></div>
     <div class="sheet">
@@ -338,20 +328,15 @@
         <div class="grabber"></div>
         <div class="sv-main">
           <div class="sv-content">
-            <!-- offerCard + тег «Деньги под защитой» (тег поверх карточки, как в Figma) -->
-            <div class="sv-offer">
-              <div class="sv-card">
-                <div class="sv-text">
-                  <p class="title-small-semibold c-950">60 дней без штрафов и пени</p>
-                  <p class="body-small-l-regular c-600 sv-sub">Сумма к получению с учетом услуги <br><span class="js-service-sum">7 700 000</span> UZS</p>
-                </div>
-                <!-- Switcher: в Figma только вариант isOn=true; услугу выключить нельзя — тост сверху -->
-                <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="60 дней без штрафов и пени"><img src="assets/offer-switch-on.svg" width="43" height="26.137" alt=""></button>
+            <div class="sv-card">
+              <div class="sv-text">
+                <p class="title-small-semibold c-950 sv-title">Услуга<span class="sv-sp"> </span><span class="sv-q">«</span>Деньги под защитой<span class="sv-q">»</span></p>
+                <p class="body-small-l-regular c-600 sv-sub">Сумма к получению с учетом услуги <br><span class="js-service-sum">11 000 000</span> UZS</p>
               </div>
-              <span class="tag tag-m tag-positive sv-tag"><img class="ic16" src="assets/offer-safe.svg" alt="">Деньги под защитой</span>
+              <!-- Switcher: в Figma только isOn=true; услугу выключить нельзя — тост сверху -->
+              <button class="sv-switch" type="button" data-act="service-toggle" aria-pressed="true" aria-label="Услуга «Деньги под защитой»"><img src="assets/offer-switch-on.svg" width="43" height="26.137" alt=""></button>
             </div>
             <div class="sv-bullets">
-              <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">30 дней без процентов</p></div>
               <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">Мгновенное зачисление средств</p></div>
               <div class="bullet-item"><img class="ic24" src="assets/offer-check.svg" alt=""><p class="bi-text">60 дней без штрафов</p></div>
             </div>
@@ -396,17 +381,18 @@
   <div class="toast" id="toast-unavailable" role="status"><div class="toast-pill is-alert"><p class="body-large-l-regular nowrap">Действие недоступно</p></div></div>
 </div>
 
-<script src="kit/proto.js?v=1795607435"></script>
+<script src="kit/proto.js?v=1795686065"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-/* ---------- 1. Калькулятор (кадр 14598:32260, копия выгрузки «сумма 7 000 000») ----------
-   Стартовая сумма — максимальная сумма оффера, 10 000 000 (решение Ника 25.11.2026; в кадре Figma — 7 000 000).
+/* ---------- 1. Калькулятор (кадр 14598:32260) ----------
+   Стартовая сумма — максимальная сумма оффера, 10 000 000 (решение Ника 25.11.2026, с 26.11 так и в кадре Figma).
    Сроки по сумме — правила «Rule dev» Калькулятора 3.0, как в прототипе microloan-calc.
-   Платежи кадра: 336 000 и 427 000 на 7 000 000; короткие сроки — в той же пропорции, что в 3.0 (144/307/370/711). */
-const K36 = 336000 / 7000000, K24 = 427000 / 7000000;
+   Платежи кадра: 336 000 и 427 000 на 10 000 000 (до 26.11 те же цифры стояли на 7 000 000);
+   короткие сроки — в той же пропорции, что в 3.0 (144/307/370/711). */
+const K36 = 336000 / 10000000, K24 = 427000 / 10000000;
 const TERMS = [
   { m: 36, label: '36 месяцев', k: K36, max: Infinity },
   { m: 24, label: '24 месяца', k: K24, max: 10000000 },
@@ -425,7 +411,7 @@ const input = $('#amount');
 
 function renderCalc() {
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(S.amount || 0)} UZS`;
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(withService(S.amount || 0))} UZS`;
   const list = termsFor(S.amount);
   if (S.term && !list.some(t => t.m === S.term)) S.term = null;   // выбранный срок пропал после смены суммы — клиент выбирает заново
   P.list($('#terms'), list, t => t.m, t => {
@@ -446,15 +432,18 @@ function renderCalc() {
 }
 
 /* Сумма и срок, выбранные на калькуляторе, идут дальше по флоу (решение Ника 23.11.2026): оффер, попап услуги, счёт.
-   В кадрах Figma там свои демо-цифры (50 000 000, 12 месяцев, платёж 4 583 000) — прототип их не берёт.
-   Платёж — тот же, что клиент видел на карточке срока. Сумма с услугой — пропорция кадра: 7 000 000 → 7 700 000 (+10 %). */
-const SERVICE_K = 7700000 / 7000000;
+   В кадрах Figma там свои демо-цифры (платёж 4 583 000 в условиях, 7 700 000 в попапе, 50 000 000 на счёте) — прототип их не берёт.
+   Платёж — тот же, что клиент видел на карточке срока (карточка оффера и «Основные условия»).
+   Сумма с услугой = сумма +10 %: так в макете дважды — попап 7 000 000 → 7 700 000, калькулятор 10 000 000 → 11 000 000. */
+const SERVICE_K = 1.1;
+function withService(a) { return Math.round(a * SERVICE_K); }
 function renderFlow() {
   const a = S.amount || lastValid, t = TERMS.find(x => x.m === S.term);
   $('#of-amount').textContent = P.fmt(a);
   $('#of-term').textContent = t ? t.label : '';
+  $('#of-card-pay').textContent = t ? P.fmt(payFor(t, a)) : '';
   $('#of-pay').textContent = t ? P.fmt(payFor(t, a)) : '';
-  $$('.js-service-sum').forEach(el => { el.textContent = P.fmt(Math.round(a * SERVICE_K)); });
+  $$('.js-service-sum').forEach(el => { el.textContent = P.fmt(withService(a)); });
   $('#acc-amount').textContent = P.fmt(a);
 }
 function loadPayments(ms = 900) {
@@ -466,7 +455,7 @@ input.addEventListener('focus', () => { if (!S.editing) { S.editing = true; rend
 input.addEventListener('input', () => {
   let v = P.num(input.value); if (v > APPROVED) v = APPROVED;
   S.amount = v; input.value = v ? P.fmt(v) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(v)} UZS`;
+  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(withService(v))} UZS`;
   // Кнопку можно нажать, не дожидаясь пересчёта: срок, которого нет для новой суммы, сбрасываем сразу, иначе он уйдёт в оффер.
   if (S.term && v && !termsFor(v).some(t => t.m === S.term)) { S.term = null; $('#get-money').disabled = true; }
   renderFlow();
@@ -481,7 +470,7 @@ input.addEventListener('proto:done', () => {
 $('#s-calc .input-text').addEventListener('click', () => input.focus());
 P.on('term', el => { S.term = Number(el.dataset.m); renderCalc(); });
 
-/* ---------- 2. Оффер: услуга «Для своих» не отключается — подсказка «Действие недоступно» ---------- */
+/* ---------- 2. Оффер: бейдж «Деньги под защитой» открывает попап услуги; услуга не отключается — тост «Действие недоступно» ---------- */
 P.on('service-toggle', () => P.toast('unavailable'));
 
 /* ---------- 3. Последний шаг (435401 → 435402) ---------- */
@@ -517,15 +506,13 @@ P.on('close-flow', () => { S.checks = S.checks.map(() => false); renderChecks();
 /* ---------- состояния: карта экранов и сверка ---------- */
 const reset = o => { Object.assign(S, { amount: APPROVED, term: null, loading: false, editing: false, checks: [false, false, false, false, false] }, o || {}); lastValid = S.amount; renderCalc(); renderChecks(); };
 const at = (id, o, before) => () => { reset(o); P.reset('calc', null); if (before) before.forEach(b => P.go(b, null)); if (id !== 'calc') P.go(id, null); };
-// Состояния после калькулятора открываются со стартовой суммой 10 000 000 и сроком 36 месяцев.
-// Кадр калькулятора Figma (7 000 000, 36 мес.) сверяется отдельным состоянием calc-term.
+// Состояния после калькулятора открываются со стартовой суммой 10 000 000 и сроком 36 месяцев — как в кадре Figma.
 const PICK = { term: 36 };
-const FIGMA_CALC = { amount: 7000000, term: 36 };
 P.states([
   { id: 'calc', group: 'Выбор суммы', title: 'Ваше предложение: 10 000 000, срок не выбран', figma: '14598:32260', height: 844, apply: at('calc') },
-  { id: 'calc-term', group: 'Выбор суммы', title: 'Как в кадре Figma: 7 000 000, срок выбран', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc', FIGMA_CALC) },
+  { id: 'calc-term', group: 'Выбор суммы', title: 'Срок выбран (как в кадре Figma)', figma: '14598:32260', node: '14598:32260', height: 844, apply: at('calc', PICK) },
   { id: 'offer', group: 'Оффер', title: 'Принять условия кредита: сумма и срок из калькулятора', figma: '14598:34809', node: '14598:34809', height: 1572, apply: at('offer', PICK) },
-  { id: 'service', group: 'Оффер', title: '60 дней без штрафов и пени (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer', PICK)(); p.openSheet('service'); } },
+  { id: 'service', group: 'Оффер', title: 'Услуга «Деньги под защитой» (попап)', figma: '14605:38039', node: '14605:38039', height: 1572, selector: '#sheet-service .sheet > :first-child', apply: p => { at('offer', PICK)(); p.openSheet('service'); } },
   { id: 'service-toast', group: 'Оффер', title: 'Действие недоступно (тост сверху)', figma: '14603:37837', node: '14603:37837', height: 1572, selector: '#toast-unavailable .toast-pill', apply: p => { at('offer', PICK)(); p.openSheet('service'); p.toast('unavailable', 2e9); } },
   { id: 'last-step', group: 'Оффер', title: 'Последний шаг', figma: '435401', node: '14598:32273', height: 844, apply: at('last-step', PICK, ['offer']) },
   { id: 'last-step-ready', group: 'Оффер', title: 'Последний шаг — всё принято', figma: '435402', node: '14598:32317', height: 844, apply: at('last-step', { ...PICK, checks: [true, true, true, true, true] }, ['offer']) },

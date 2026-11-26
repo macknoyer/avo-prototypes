@@ -11,23 +11,17 @@
   /* Img_banner/242*144: картинка 170×144 по центру */
   #s-offer .of-banner{position:relative;width:242px;height:144px;border-radius:12px;overflow:hidden;flex:none}
   #s-offer .of-banner img{position:absolute;left:50%;top:50%;width:170px;height:144px;transform:translate(-50%,-50%);object-fit:cover}
-  /* Limit: сумма 32/36 + UZS 24/28 (контейнер 32), подпись 12/16 */
+  /* Limit (14724:5507): подпись 12/16, сумма 32/36 + UZS 24/28 (контейнер 32), бейдж услуги tags M; gap 2 */
   #s-offer .of-limit{display:flex;flex-direction:column;gap:2px;align-items:center;width:100%}
+  /* бейдж «Деньги под защитой ›» — кнопка: открывает попап услуги */
+  #s-offer .of-tag{font-family:inherit;border:0;cursor:pointer}
   #s-offer .of-sum{display:flex;gap:4px;align-items:flex-end;justify-content:center;height:36px;width:100%}
   #s-offer .of-cur{display:flex;align-items:center;height:32px}
 
-  /* offerCard × 2: flex 1, py 20, px 10, gap 4 */
+  /* offerCard × 2 (14598:34812): ежемесячный платеж и срок; flex 1, py 20, px 10, gap 4 */
   #s-offer .of-cards{display:flex;gap:12px;align-items:flex-start;width:100%}
   #s-offer .of-card{flex:1;min-width:1px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;padding:20px 10px;border-radius:16px;background:var(--bg-neutral-calm100)}
   #s-offer .of-card-sub{text-align:center;white-space:nowrap}
-
-  /* услуга: блок 115, карточка 102 прижата к низу, тег absolute bottom 89 / left 16 */
-  #s-offer .of-service{position:relative;width:100%;padding-top:13px}
-  #s-offer .of-service-card{display:flex;gap:12px;align-items:center;width:100%;padding:24px 16px 20px;border-radius:16px;background:var(--bg-neutral-calm100);text-align:left}
-  #s-offer .of-sc-text{flex:1;min-width:1px;display:flex;flex-direction:column;gap:4px;align-items:flex-start}
-  #s-offer .of-sc-title,#s-offer .of-sc-sub{display:block;width:100%}
-  #s-offer .of-chevron{width:22px;height:22px;flex:none}
-  #s-offer .of-tag{position:absolute;left:16px;top:0;pointer-events:none}
 
   /* Offer conditions: bg calm050, pt 16, pb 24, px 16, gap 8 */
   #s-offer .of-block{display:flex;flex-direction:column;gap:8px;align-items:flex-start;width:100%;padding:16px 16px 24px;border-radius:16px;background:var(--bg-neutral-calm050)}
@@ -56,15 +50,16 @@
   #s-offer .of-c700{color:var(--text-neutral-bold700)}
   #s-offer .of-cs700{color:var(--text-neutral-static-bold700)}
 
-  /* 14605:38039 — новый попап услуги */
+  /* 14605:38039 — попап «Услуга «Деньги под защитой»» (26.11: без тега над карточкой, два пункта) */
   #sheet-service .sv-main{display:flex;flex-direction:column;align-items:center;width:100%;padding:24px 24px 0}
   #sheet-service .sv-content{display:flex;flex-direction:column;gap:16px;align-items:center;width:100%}
-  #sheet-service .sv-offer{position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:113px;width:100%}
   #sheet-service .sv-card{display:flex;gap:12px;align-items:center;width:100%;padding:24px 16px 20px;border-radius:16px;background:var(--bg-neutral-calm100)}
   #sheet-service .sv-text{display:flex;flex-direction:column;gap:4px;flex:none}
+  /* заголовок: в Figma пробел -0.16, кавычки -0.48 */
+  #sheet-service .sv-sp{letter-spacing:-.16px}
+  #sheet-service .sv-q{letter-spacing:-.48px}
   #sheet-service .sv-sub{white-space:pre-wrap}
   #sheet-service .sv-switch{position:relative;flex:1;min-width:1px;height:26.137px;overflow:hidden}
   #sheet-service .sv-switch img{position:absolute;right:0;top:50%;transform:translateY(-50%);width:43px;height:26.137px}
-  #sheet-service .sv-tag{position:absolute;left:16px;bottom:87px}
   #sheet-service .sv-bullets{display:flex;flex-direction:column;gap:16px;width:326px}
   #sheet-service .sv-close{font-weight:600}
