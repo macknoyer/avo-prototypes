@@ -11,9 +11,9 @@
 <meta name="theme-color" content="#f1f2f5">
 <title>Акцепт микрозайма</title>
 <meta name="description" content="Новый флоу акцепта микрозайма: калькулятор, оффер, последний шаг, MyID, выдача. Прототип 1:1 по Figma «Section 1».">
-<link rel="stylesheet" href="kit/tokens.css?v=1795686065">
-<link rel="stylesheet" href="kit/proto.css?v=1795686065">
-<link rel="stylesheet" href="kit/components.css?v=1795686065">
+<link rel="stylesheet" href="kit/tokens.css?v=1795688873">
+<link rel="stylesheet" href="kit/proto.css?v=1795688873">
+<link rel="stylesheet" href="kit/components.css?v=1795688873">
 <link rel="stylesheet" href="css/calc.css">
 <link rel="stylesheet" href="css/offer.css">
 <link rel="stylesheet" href="css/last-step.css">
@@ -52,7 +52,7 @@
     </div>
     <div class="footer btn-combo is-white">
       <div class="btn-combo-buttons">
-        <p class="slot" id="slot">Вы оформляете микрозайм на сумму 11 000 000 UZS</p>
+        <!-- строка «Вы оформляете микрозайм на сумму …» убрана (решение Ника 26.11.2026), в кадре Figma она есть -->
         <div class="btn-group-v"><button class="btn btn-l btn-primary" id="get-money" data-go="offer">Получить деньги</button></div>
         <p class="checkbox-confirm">Нажимая кнопку {buttonName} я даю согласие на <a>получение кредитного отчета из кредитного бюро</a></p>
       </div>
@@ -381,7 +381,7 @@
   <div class="toast" id="toast-unavailable" role="status"><div class="toast-pill is-alert"><p class="body-large-l-regular nowrap">Действие недоступно</p></div></div>
 </div>
 
-<script src="kit/proto.js?v=1795686065"></script>
+<script src="kit/proto.js?v=1795688873"></script>
 <script>
 const P = Proto;
 const $ = s => document.querySelector(s);
@@ -411,7 +411,6 @@ const input = $('#amount');
 
 function renderCalc() {
   if (document.activeElement !== input) input.value = S.amount ? P.fmt(S.amount) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(withService(S.amount || 0))} UZS`;
   const list = termsFor(S.amount);
   if (S.term && !list.some(t => t.m === S.term)) S.term = null;   // выбранный срок пропал после смены суммы — клиент выбирает заново
   P.list($('#terms'), list, t => t.m, t => {
@@ -455,7 +454,6 @@ input.addEventListener('focus', () => { if (!S.editing) { S.editing = true; rend
 input.addEventListener('input', () => {
   let v = P.num(input.value); if (v > APPROVED) v = APPROVED;
   S.amount = v; input.value = v ? P.fmt(v) : '';
-  $('#slot').textContent = `Вы оформляете микрозайм на сумму ${P.fmt(withService(v))} UZS`;
   // Кнопку можно нажать, не дожидаясь пересчёта: срок, которого нет для новой суммы, сбрасываем сразу, иначе он уйдёт в оффер.
   if (S.term && v && !termsFor(v).some(t => t.m === S.term)) { S.term = null; $('#get-money').disabled = true; }
   renderFlow();
